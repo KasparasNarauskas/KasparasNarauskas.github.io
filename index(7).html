@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kasparas Narauskas — Story Artist</title>
+<meta name="description" content="Portfolio of Kasparas Narauskas — story artist, concept art, and 2D FX animation. WDKA Rotterdam.">
+<meta property="og:title" content="Kasparas Narauskas — Story Artist">
+<meta property="og:description" content="Storyboards, animatics, concept art, and 2D FX animation.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Jost:ital,wght@0,200;0,300;0,400;1,200;1,300&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:    #0f0f0f;
+  --bg2:   #161616;
+  --bg3:   #1c1c1c;
+  --rule:  #2a2a2a;
+  --dim:   #444;
+  --mid:   #6a6a6a;
+  --light: #b0a99e;
+  --paper: #f0ebe0;
+  --cream: #b0a99e;
+  --ls-tight: 0.08em;
+  --ls-label: 0.28em;
+  --ls-wide:  0.4em;
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --display: 'Bebas Neue', sans-serif;
+  --body:    'Jost', sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--paper);
+  font-family: var(--body);
+  font-size: 13px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ── SPLASH ── */
+#splash {
+  position: fixed; inset: 0; z-index: 999;
+  cursor: pointer;
+  background: #0f0f0f;
+  display: flex; align-items: center; justify-content: center; flex-direction: column;
+  transition: opacity 0.9s var(--ease);
+}
+#splash.gone { opacity: 0; pointer-events: none; }
+.splash-top {
+  font-family: var(--body); font-weight: 200; font-size: 11px;
+  letter-spacing: var(--ls-wide); text-transform: uppercase; color: var(--mid);
+  opacity: 0; animation: fadeup 0.6s ease 0.1s forwards; margin-bottom: 14px;
+}
+.splash-big {
+  font-family: var(--display); font-size: clamp(38px, 7.5vw, 96px);
+  letter-spacing: var(--ls-tight); color: var(--paper);
+  opacity: 0; line-height: 1; animation: fadeup 0.7s ease 0.3s forwards; text-align: center;
+  padding: 0 20px;
+}
+.splash-line {
+  width: 48px; height: 1px; background: var(--dim);
+  margin: 22px auto 0; opacity: 0; animation: fadein 0.5s ease 0.85s forwards;
+}
+.splash-disc {
+  font-family: var(--body); font-weight: 200; font-size: 10px;
+  letter-spacing: var(--ls-wide); text-transform: uppercase; color: var(--mid);
+  margin-top: 18px; opacity: 0; animation: fadein 0.5s ease 1s forwards; text-align: center;
+}
+@keyframes fadeup { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+@keyframes fadein { to { opacity:1; } }
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 52px; height: 60px;
+  background: rgba(15,15,15,0.97);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--rule);
+}
+.nav-name {
+  font-family: var(--display); font-size: 22px; letter-spacing: var(--ls-tight);
+  color: var(--paper); cursor: pointer; text-decoration: none; user-select: none;
+}
+.nav-links { display: flex; list-style: none; align-items: center; }
+.nav-link {
+  font-family: var(--body); font-size: 10px; font-weight: 300;
+  letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--mid);
+  background: none; border: none; border-bottom: 1px solid transparent;
+  padding: 6px 18px; cursor: pointer; transition: color 0.2s var(--ease), border-color 0.2s var(--ease);
+}
+.nav-link:hover { color: var(--light); }
+.nav-link.active { color: var(--paper); border-bottom-color: var(--paper); }
+
+/* ── MAIN ── */
+main { padding-top: 60px; }
+
+/* ── SECTION ── */
+.port-section {
+  padding: 96px 52px 112px;
+  border-bottom: 1px solid var(--rule);
+  max-width: 1240px; margin: 0 auto;
+}
+.port-section:last-child { border-bottom: none; }
+
+/* ── SECTION HEADER ── */
+.s-head { display: flex; align-items: center; gap: 20px; margin-bottom: 60px; }
+.s-num {
+  font-family: var(--body); font-weight: 200; font-size: 11px;
+  letter-spacing: var(--ls-label); color: var(--dim); padding-top: 6px;
+}
+.s-title {
+  font-family: var(--display); font-size: clamp(36px, 5.5vw, 72px);
+  letter-spacing: var(--ls-tight); color: var(--paper); line-height: 1;
+}
+.s-rule { flex: 1; height: 1px; background: var(--rule); }
+
+/* ── PROJECT BLOCK ── */
+.project-block { margin-bottom: 88px; }
+.project-block:last-child { margin-bottom: 0; }
+
+.project-label {
+  font-family: var(--display); font-size: 22px; letter-spacing: var(--ls-tight);
+  color: var(--light); margin-bottom: 28px;
+}
+
+.project-divider {
+  width: 100%; height: 1px; background: var(--rule); margin-bottom: 88px;
+}
+
+/* ── VIDEO SLOT ── */
+.video-slot {
+  width: 100%; max-width: 900px; margin: 0 auto 32px;
+  background: var(--bg2); border: 1px solid var(--rule);
+  aspect-ratio: 16/9; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 14px;
+  cursor: pointer; position: relative; overflow: hidden;
+  transition: border-color 0.2s var(--ease);
+}
+.video-slot:hover { border-color: var(--dim); }
+.video-slot::after {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: var(--paper); transform: scaleX(0); transform-origin: left;
+  transition: transform 0.35s var(--ease);
+}
+.video-slot:hover::after { transform: scaleX(1); }
+.play-ring {
+  width: 52px; height: 52px; border: 1px solid var(--dim); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color 0.2s var(--ease);
+}
+.video-slot:hover .play-ring { border-color: var(--light); }
+.play-ring svg { width: 14px; height: 14px; fill: var(--mid); margin-left: 3px; transition: fill 0.2s var(--ease); }
+.video-slot:hover .play-ring svg { fill: var(--paper); }
+.video-slot-label {
+  font-family: var(--body); font-weight: 200; font-size: 10px;
+  letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--dim);
+}
+
+/* ── PANEL VIEWER ── */
+.panel-viewer {
+  width: 100%; max-width: 900px; margin: 0 auto 48px;
+  position: relative;
+}
+.panel-stage {
+  background: var(--bg2); border: 1px solid var(--rule);
+  aspect-ratio: 16/9; width: 100%; position: relative;
+  overflow: hidden; display: flex; align-items: center; justify-content: center;
+}
+.panel-slide {
+  position: absolute; inset: 0; display: none;
+  align-items: center; justify-content: center;
+  background: var(--bg2);
+}
+.panel-slide.active { display: flex; }
+.panel-slide-num {
+  font-family: var(--display); font-size: 120px; letter-spacing: var(--ls-tight);
+  color: var(--rule); user-select: none; line-height: 1;
+}
+/* real images in slides */
+.panel-slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.panel-controls {
+  display: flex; align-items: center; justify-content: center;
+  gap: 24px; margin-top: 16px;
+}
+.panel-btn {
+  font-family: var(--body); font-weight: 200; font-size: 10px;
+  letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--mid);
+  background: none; border: none; cursor: pointer;
+  padding: 8px 20px; border: 1px solid var(--rule);
+  transition: color 0.2s var(--ease), border-color 0.2s var(--ease);
+}
+.panel-btn:hover { color: var(--paper); border-color: var(--light); }
+.panel-counter {
+  font-family: var(--body); font-weight: 200; font-size: 11px;
+  letter-spacing: var(--ls-label); color: var(--dim);
+  min-width: 60px; text-align: center;
+}
+
+/* ── VIS DEV SLOTS (16:9, stacked centered) ── */
+.visdev-stack {
+  display: flex; flex-direction: column; gap: 4px;
+  width: 100%; max-width: 900px; margin: 0 auto 0;
+}
+.visdev-slot {
+  background: var(--bg2); border: 1px solid var(--rule);
+  aspect-ratio: 16/9; width: 100%;
+  display: flex; align-items: flex-end; justify-content: flex-end;
+  padding: 12px 14px; cursor: pointer; position: relative; overflow: hidden;
+  transition: background 0.2s var(--ease);
+}
+.visdev-slot:hover { background: var(--bg3); }
+.visdev-slot::after {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: var(--paper); transform: scaleX(0); transform-origin: left;
+  transition: transform 0.3s var(--ease);
+}
+.visdev-slot:hover::after { transform: scaleX(1); }
+.visdev-slot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.visdev-tag {
+  font-family: var(--body); font-weight: 200; font-size: 10px;
+  letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--dim);
+  position: relative; z-index: 1; transition: color 0.2s var(--ease);
+}
+.visdev-slot:hover .visdev-tag { color: var(--light); }
+
+/* ── ROUGH PANELS PAIR ── */
+.rough-pair {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 4px;
+  width: 100%; max-width: 900px; margin: 20px auto 0;
+}
+.rough-slot {
+  background: var(--bg2); border: 1px solid var(--rule);
+  aspect-ratio: 4/3; cursor: pointer; position: relative; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s var(--ease);
+}
+.rough-slot:hover { background: var(--bg3); }
+.rough-slot::after {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: var(--paper); transform: scaleX(0); transform-origin: left;
+  transition: transform 0.3s var(--ease);
+}
+.rough-slot:hover::after { transform: scaleX(1); }
+.rough-slot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.rough-ph {
+  font-family: var(--display); font-size: 13px; letter-spacing: var(--ls-label);
+  color: var(--dim); text-transform: uppercase;
+}
+
+/* ── FX SECTION ── */
+.fx-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px;
+}
+.fx-cell {
+  background: var(--bg2); aspect-ratio: 16/9;
+  cursor: pointer; position: relative; overflow: hidden;
+  transition: background 0.2s var(--ease);
+}
+.fx-cell:hover { background: var(--bg3); }
+.fx-cell::after {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: var(--paper); transform: scaleX(0); transform-origin: left;
+  transition: transform 0.3s var(--ease);
+}
+.fx-cell:hover::after { transform: scaleX(1); }
+.fx-cell img, .fx-cell video {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+}
+/* gif placeholder */
+.fx-ph {
+  position: absolute; inset: 0; display: flex;
+  align-items: center; justify-content: center;
+  flex-direction: column; gap: 8px;
+}
+.fx-ph-glyph {
+  font-family: var(--display); font-size: 44px; letter-spacing: var(--ls-tight);
+  color: var(--rule); transition: color 0.2s var(--ease); line-height: 1;
+}
+.fx-cell:hover .fx-ph-glyph { color: var(--dim); }
+.fx-ph-label {
+  font-family: var(--body); font-weight: 200; font-size: 10px;
+  letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--dim);
+  transition: color 0.2s var(--ease);
+}
+.fx-cell:hover .fx-ph-label { color: var(--mid); }
+
+/* ── FX LIGHTBOX ── */
+#fx-lightbox {
+  position: fixed; inset: 0; z-index: 500;
+  background: rgba(0,0,0,0); pointer-events: none;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.3s var(--ease);
+}
+#fx-lightbox.open {
+  background: rgba(0,0,0,0.88); pointer-events: all;
+}
+.lb-inner {
+  width: min(900px, 92vw); max-height: 90vh;
+  background: var(--bg2); border: 1px solid var(--rule);
+  position: relative; overflow: hidden;
+  opacity: 0; transform: scale(0.96);
+  transition: opacity 0.25s var(--ease), transform 0.25s var(--ease);
+}
+#fx-lightbox.open .lb-inner { opacity: 1; transform: scale(1); }
+.lb-inner img, .lb-inner video {
+  width: 100%; display: block; aspect-ratio: 16/9; object-fit: cover;
+}
+.lb-ph {
+  width: 100%; aspect-ratio: 16/9;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 12px;
+}
+.lb-ph span {
+  font-family: var(--display); font-size: 72px; letter-spacing: var(--ls-tight); color: var(--dim);
+}
+.lb-close {
+  position: absolute; top: 14px; right: 16px;
+  font-family: var(--body); font-weight: 200; font-size: 10px;
+  letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--mid);
+  background: none; border: none; cursor: pointer;
+  transition: color 0.2s var(--ease);
+}
+.lb-close:hover { color: var(--paper); }
+.lb-title {
+  padding: 14px 18px; border-top: 1px solid var(--rule);
+  font-family: var(--display); font-size: 20px; letter-spacing: var(--ls-tight); color: var(--mid);
+}
+
+/* ── MOODBOARD ── */
+.moodboard-upload {
+  display: none; /* builder tool: visible only with ?edit in the URL */
+  border: 1px dashed var(--dim); padding: 24px;
+  text-align: center; margin-bottom: 24px; cursor: pointer;
+  transition: border-color 0.2s var(--ease);
+}
+.moodboard-upload:hover { border-color: var(--mid); }
+.moodboard-upload input { display: none; }
+.moodboard-upload-label {
+  font-family: var(--body); font-weight: 200; font-size: 10px;
+  letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--mid);
+  cursor: pointer;
+}
+.moodboard-grid {
+  columns: 3; column-gap: 4px;
+}
+.moodboard-item {
+  break-inside: avoid; margin-bottom: 4px;
+  cursor: pointer; position: relative; overflow: hidden;
+  display: block;
+}
+.moodboard-item img {
+  width: 100%; display: block;
+  transition: opacity 0.2s var(--ease);
+}
+.moodboard-item:hover img { opacity: 0.85; }
+.moodboard-remove {
+  position: absolute; top: 6px; right: 6px;
+  width: 22px; height: 22px;
+  background: rgba(0,0,0,0.7); border: 1px solid var(--dim);
+  font-family: var(--body); font-size: 12px; color: var(--mid);
+  display: none; align-items: center; justify-content: center;
+  cursor: pointer; transition: color 0.2s var(--ease);
+}
+.moodboard-item:hover .moodboard-remove { display: flex; }
+.moodboard-remove:hover { color: var(--paper); }
+
+/* ── ABOUT ── */
+.about-layout { display: grid; grid-template-columns: 1fr 1.6fr; gap: 80px; align-items: start; }
+.about-photo {
+  background: var(--bg2); border: 1px solid var(--rule);
+  aspect-ratio: 2/3; display: flex; align-items: flex-end; justify-content: flex-start;
+  padding: 18px; position: relative; overflow: hidden;
+}
+.about-photo-bg {
+  position: absolute; bottom: -18px; right: -6px;
+  font-family: var(--display); font-size: 180px; letter-spacing: var(--ls-tight);
+  color: var(--rule); line-height: 1; user-select: none;
+}
+.about-photo-label {
+  font-family: var(--body); font-weight: 200; font-size: 10px;
+  letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--dim);
+  position: relative; z-index: 1;
+}
+.about-name {
+  font-family: var(--display); font-size: clamp(42px, 6vw, 76px);
+  letter-spacing: var(--ls-tight); color: var(--paper); line-height: 1.05; margin-bottom: 32px;
+}
+.about-body {
+  font-family: var(--body); font-weight: 300; font-size: 14px;
+  color: var(--mid); line-height: 1.95; margin-bottom: 40px;
+}
+.about-body p + p { margin-top: 16px; }
+.about-facts {
+  display: flex; flex-direction: column; gap: 13px;
+  padding-top: 28px; border-top: 1px solid var(--rule); margin-bottom: 40px;
+}
+.fact { display: grid; grid-template-columns: 84px 1fr; gap: 16px; align-items: baseline; }
+.fact-key {
+  font-family: var(--body); font-weight: 200; font-size: 10px;
+  letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--dim);
+}
+.fact-val {
+  font-family: var(--body); font-weight: 300; font-size: 13px;
+  letter-spacing: var(--ls-tight); color: var(--mid);
+}
+.about-links { display: flex; gap: 24px; padding-top: 24px; border-top: 1px solid var(--rule); }
+.about-link {
+  font-family: var(--body); font-weight: 300; font-size: 10px;
+  letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--mid);
+  text-decoration: none; transition: color 0.2s var(--ease);
+}
+.about-link:hover { color: var(--paper); }
+
+/* ── FOOTER ── */
+footer {
+  border-top: 1px solid var(--rule); padding: 22px 52px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.footer-sig { font-family: var(--display); font-size: 15px; letter-spacing: var(--ls-tight); color: var(--dim); }
+.footer-links { display: flex; gap: 22px; }
+.footer-link {
+  font-family: var(--body); font-weight: 200; font-size: 10px;
+  letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--dim);
+  text-decoration: none; transition: color 0.2s var(--ease);
+}
+.footer-link:hover { color: var(--light); }
+
+
+/* ── ACCESSIBILITY ── */
+:focus-visible {
+  outline: 1px solid var(--paper);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  html { scroll-behavior: auto; }
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  nav { padding: 0 28px; }
+  .port-section { padding: 64px 24px 80px; }
+  .about-layout { grid-template-columns: 1fr; gap: 36px; }
+  .about-photo { aspect-ratio: 16/9; }
+  .moodboard-grid { columns: 2; }
+  footer { padding: 18px 24px; flex-direction: column; gap: 12px; align-items: flex-start; }
+}
+@media (max-width: 600px) {
+  nav { padding: 0 18px; height: 52px; }
+  .nav-name { font-size: 17px; }
+  .nav-link { padding: 6px 9px; font-size: 10px; letter-spacing: var(--ls-label); }
+  .port-section { padding: 44px 18px 56px; }
+  main { padding-top: 52px; }
+  .moodboard-grid { columns: 1; }
+  .fx-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- SPLASH -->
+<div id="splash">
+  <!-- thin construction-line graphic -->
+  <svg class="splash-lines" viewBox="0 0 420 420" fill="none" xmlns="http://www.w3.org/2000/svg"
+    style="position:absolute;width:min(420px,80vw);height:min(420px,80vw);opacity:0;animation:fadein 1s ease 0.6s forwards;pointer-events:none;">
+    <!-- outer circle -->
+    <circle cx="210" cy="210" r="180" stroke="#f0ebe0" stroke-width="0.5" opacity="0.1"/>
+    <!-- inner circle -->
+    <circle cx="210" cy="210" r="110" stroke="#f0ebe0" stroke-width="0.5" opacity="0.07"/>
+    <!-- diagonal construction lines through centre -->
+    <line x1="60" y1="60" x2="360" y2="360" stroke="#f0ebe0" stroke-width="0.5" opacity="0.08"/>
+    <line x1="360" y1="60" x2="60" y2="360" stroke="#f0ebe0" stroke-width="0.5" opacity="0.08"/>
+    <!-- horizontal and vertical axis -->
+    <line x1="30" y1="210" x2="390" y2="210" stroke="#f0ebe0" stroke-width="0.5" opacity="0.06"/>
+    <line x1="210" y1="30" x2="210" y2="390" stroke="#f0ebe0" stroke-width="0.5" opacity="0.06"/>
+    <!-- triangle / A-shape construction -->
+    <line x1="210" y1="80" x2="100" y2="310" stroke="#f0ebe0" stroke-width="0.6" opacity="0.14"/>
+    <line x1="210" y1="80" x2="320" y2="310" stroke="#f0ebe0" stroke-width="0.6" opacity="0.14"/>
+    <line x1="130" y1="260" x2="290" y2="260" stroke="#f0ebe0" stroke-width="0.6" opacity="0.14"/>
+    <!-- small crosshair at centre -->
+    <line x1="204" y1="210" x2="216" y2="210" stroke="#f0ebe0" stroke-width="0.8" opacity="0.28"/>
+    <line x1="210" y1="204" x2="210" y2="216" stroke="#f0ebe0" stroke-width="0.8" opacity="0.28"/>
+  </svg>
+  <div class="splash-top">The work of</div>
+  <div class="splash-big">KASPARAS NARAUSKAS</div>
+  <div class="splash-line"></div>
+  <div class="splash-disc">Story Artist &nbsp;&nbsp;·&nbsp;&nbsp; Concept &nbsp;&nbsp;·&nbsp;&nbsp; FX Animation</div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-name" id="nav-home">KASPARAS NARAUSKAS</a>
+  <ul class="nav-links">
+    <li><button class="nav-link active" data-target="story">Story / Concept</button></li>
+    <li><button class="nav-link" data-target="fx">FX Work</button></li>
+    <li><button class="nav-link" data-target="personal">Personal Work</button></li>
+    <li><button class="nav-link" data-target="about">About</button></li>
+  </ul>
+</nav>
+
+<main>
+
+<!-- ══════════════════════════════════════════
+     STORY / VIS DEV
+══════════════════════════════════════════ -->
+<section class="port-section" id="story">
+  <div class="s-head">
+    <span class="s-num">01</span>
+    <h2 class="s-title">STORY / CONCEPT</h2>
+    <div class="s-rule"></div>
+  </div>
+
+  <!-- PROJECT 1: THE VAROKARN -->
+  <div class="project-block">
+    <div class="project-label">THE VAROKARN</div>
+
+    <!-- Animatic video -->
+    <div class="video-slot" id="vid-varokarn">
+      <div class="play-ring"><svg viewBox="0 0 16 16"><polygon points="3,1 15,8 3,15"/></svg></div>
+      <span class="video-slot-label">Animatic — drop video file or paste embed</span>
+    </div>
+
+    <!-- Panel viewer -->
+    <div class="panel-viewer" id="viewer-varokarn">
+      <div class="panel-stage">
+        <div class="panel-slide active"><span class="panel-slide-num">01</span></div>
+        <div class="panel-slide"><span class="panel-slide-num">02</span></div>
+        <div class="panel-slide"><span class="panel-slide-num">03</span></div>
+        <div class="panel-slide"><span class="panel-slide-num">04</span></div>
+        <div class="panel-slide"><span class="panel-slide-num">05</span></div>
+        <div class="panel-slide"><span class="panel-slide-num">06</span></div>
+        <div class="panel-slide"><span class="panel-slide-num">07</span></div>
+        <div class="panel-slide"><span class="panel-slide-num">08</span></div>
+      </div>
+      <div class="panel-controls">
+        <button class="panel-btn" onclick="prevPanel('viewer-varokarn')">← Prev</button>
+        <span class="panel-counter" id="counter-viewer-varokarn">1 / 8</span>
+        <button class="panel-btn" onclick="nextPanel('viewer-varokarn')">Next →</button>
+      </div>
+    </div>
+
+    <!-- Vis dev: 5 × 16:9 -->
+    <div class="visdev-stack" style="margin-top: 32px;">
+      <div class="visdev-slot"><span class="visdev-tag">Concept 01</span></div>
+      <div class="visdev-slot"><span class="visdev-tag">Concept 02</span></div>
+      <div class="visdev-slot"><span class="visdev-tag">Concept 03</span></div>
+      <div class="visdev-slot"><span class="visdev-tag">Concept 04</span></div>
+      <div class="visdev-slot"><span class="visdev-tag">Concept 05</span></div>
+    </div>
+  </div>
+
+  <div class="project-divider"></div>
+
+  <!-- PROJECT 2 -->
+  <div class="project-block">
+    <div class="project-label">PROJECT 2</div>
+
+    <div class="video-slot">
+      <div class="play-ring"><svg viewBox="0 0 16 16"><polygon points="3,1 15,8 3,15"/></svg></div>
+      <span class="video-slot-label">Animatic</span>
+    </div>
+
+    <div class="panel-viewer" id="viewer-p2">
+      <div class="panel-stage">
+        <div class="panel-slide active"><span class="panel-slide-num">01</span></div>
+        <div class="panel-slide"><span class="panel-slide-num">02</span></div>
+        <div class="panel-slide"><span class="panel-slide-num">03</span></div>
+        <div class="panel-slide"><span class="panel-slide-num">04</span></div>
+        <div class="panel-slide"><span class="panel-slide-num">05</span></div>
+        <div class="panel-slide"><span class="panel-slide-num">06</span></div>
+      </div>
+      <div class="panel-controls">
+        <button class="panel-btn" onclick="prevPanel('viewer-p2')">← Prev</button>
+        <span class="panel-counter" id="counter-viewer-p2">1 / 6</span>
+        <button class="panel-btn" onclick="nextPanel('viewer-p2')">Next →</button>
+      </div>
+    </div>
+
+    <!-- Two rough panel pictures side by side -->
+    <div class="rough-pair">
+      <div class="rough-slot"><span class="rough-ph">Rough Panels</span></div>
+      <div class="rough-slot"><span class="rough-ph">Rough Panels</span></div>
+    </div>
+  </div>
+
+  <div class="project-divider"></div>
+
+  <!-- PROJECT 3 -->
+  <div class="project-block">
+    <div class="project-label">PROJECT 3</div>
+
+    <div class="video-slot">
+      <div class="play-ring"><svg viewBox="0 0 16 16"><polygon points="3,1 15,8 3,15"/></svg></div>
+      <span class="video-slot-label">Animatic</span>
+    </div>
+
+    <div class="panel-viewer" id="viewer-p3">
+      <div class="panel-stage">
+        <div class="panel-slide active"><span class="panel-slide-num">01</span></div>
+        <div class="panel-slide"><span class="panel-slide-num">02</span></div>
+        <div class="panel-slide"><span class="panel-slide-num">03</span></div>
+        <div class="panel-slide"><span class="panel-slide-num">04</span></div>
+        <div class="panel-slide"><span class="panel-slide-num">05</span></div>
+        <div class="panel-slide"><span class="panel-slide-num">06</span></div>
+      </div>
+      <div class="panel-controls">
+        <button class="panel-btn" onclick="prevPanel('viewer-p3')">← Prev</button>
+        <span class="panel-counter" id="counter-viewer-p3">1 / 6</span>
+        <button class="panel-btn" onclick="nextPanel('viewer-p3')">Next →</button>
+      </div>
+    </div>
+
+    <!-- 5 vis dev ArtStation-style panels -->
+    <div class="visdev-stack" style="margin-top: 32px;">
+      <div class="visdev-slot"><span class="visdev-tag">Concept 01</span></div>
+      <div class="visdev-slot"><span class="visdev-tag">Concept 02</span></div>
+      <div class="visdev-slot"><span class="visdev-tag">Concept 03</span></div>
+      <div class="visdev-slot"><span class="visdev-tag">Concept 04</span></div>
+      <div class="visdev-slot"><span class="visdev-tag">Concept 05</span></div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ══════════════════════════════════════════
+     FX WORK
+══════════════════════════════════════════ -->
+<section class="port-section" id="fx">
+  <div class="s-head">
+    <span class="s-num">02</span>
+    <h2 class="s-title">FX WORK</h2>
+    <div class="s-rule"></div>
+  </div>
+
+  <div class="fx-grid" id="fx-grid">
+    <!-- 12 cells (2 col × 6 row) — swap the ph divs for <img> or <video autoplay loop muted playsinline> -->
+    <div class="fx-cell" onclick="openLightbox(0)"><div class="fx-ph"><span class="fx-ph-glyph">FX</span><span class="fx-ph-label">Fire Study 01</span></div></div>
+    <div class="fx-cell" onclick="openLightbox(1)"><div class="fx-ph"><span class="fx-ph-glyph">FX</span><span class="fx-ph-label">Water Rig 02</span></div></div>
+    <div class="fx-cell" onclick="openLightbox(2)"><div class="fx-ph"><span class="fx-ph-glyph">FX</span><span class="fx-ph-label">Smoke Loop 01</span></div></div>
+    <div class="fx-cell" onclick="openLightbox(3)"><div class="fx-ph"><span class="fx-ph-glyph">FX</span><span class="fx-ph-label">Destruction</span></div></div>
+    <div class="fx-cell" onclick="openLightbox(4)"><div class="fx-ph"><span class="fx-ph-glyph">FX</span><span class="fx-ph-label">Lightning 01</span></div></div>
+    <div class="fx-cell" onclick="openLightbox(5)"><div class="fx-ph"><span class="fx-ph-glyph">FX</span><span class="fx-ph-label">Dust Kick</span></div></div>
+    <div class="fx-cell" onclick="openLightbox(6)"><div class="fx-ph"><span class="fx-ph-glyph">FX</span><span class="fx-ph-label">Splash</span></div></div>
+    <div class="fx-cell" onclick="openLightbox(7)"><div class="fx-ph"><span class="fx-ph-glyph">FX</span><span class="fx-ph-label">Explosion 01</span></div></div>
+    <div class="fx-cell" onclick="openLightbox(8)"><div class="fx-ph"><span class="fx-ph-glyph">FX</span><span class="fx-ph-label">Wind Slash</span></div></div>
+    <div class="fx-cell" onclick="openLightbox(9)"><div class="fx-ph"><span class="fx-ph-glyph">FX</span><span class="fx-ph-label">Rain</span></div></div>
+    <div class="fx-cell" onclick="openLightbox(10)"><div class="fx-ph"><span class="fx-ph-glyph">FX</span><span class="fx-ph-label">Ice Shatter</span></div></div>
+    <div class="fx-cell" onclick="openLightbox(11)"><div class="fx-ph"><span class="fx-ph-glyph">FX</span><span class="fx-ph-label">Magic Rune</span></div></div>
+  </div>
+</section>
+
+<!-- FX LIGHTBOX -->
+<div id="fx-lightbox" onclick="closeLightbox(event)">
+  <div class="lb-inner" id="lb-inner">
+    <button class="lb-close" onclick="closeLightbox()">Close ×</button>
+    <div class="lb-ph" id="lb-media"><span>FX</span></div>
+    <div class="lb-title" id="lb-title">—</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PERSONAL WORK (MOODBOARD)
+══════════════════════════════════════════ -->
+<section class="port-section" id="personal">
+  <div class="s-head">
+    <span class="s-num">03</span>
+    <h2 class="s-title">PERSONAL WORK</h2>
+    <div class="s-rule"></div>
+  </div>
+
+  <div class="moodboard-upload" onclick="document.getElementById('mb-input').click()">
+    <input type="file" id="mb-input" multiple accept="image/*">
+    <span class="moodboard-upload-label">Click to add images — drag or drop freely</span>
+  </div>
+
+  <div class="moodboard-grid" id="moodboard-grid">
+    <!-- images appear here -->
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     ABOUT
+══════════════════════════════════════════ -->
+<section class="port-section" id="about">
+  <div class="s-head">
+    <span class="s-num">04</span>
+    <h2 class="s-title">ABOUT</h2>
+    <div class="s-rule"></div>
+  </div>
+  <div class="about-layout">
+    <div class="about-photo">
+      <span class="about-photo-bg">KN</span>
+      <!-- construction lines watermark -->
+      <svg style="position:absolute;inset:0;width:100%;height:100%;opacity:0.07;pointer-events:none;" viewBox="0 0 200 300" fill="none">
+        <circle cx="100" cy="150" r="90" stroke="#f0ebe0" stroke-width="0.6"/>
+        <circle cx="100" cy="150" r="50" stroke="#f0ebe0" stroke-width="0.5"/>
+        <line x1="10" y1="150" x2="190" y2="150" stroke="#f0ebe0" stroke-width="0.5"/>
+        <line x1="100" y1="10" x2="100" y2="290" stroke="#f0ebe0" stroke-width="0.5"/>
+        <line x1="20" y1="20" x2="180" y2="280" stroke="#f0ebe0" stroke-width="0.5"/>
+        <line x1="180" y1="20" x2="20" y2="280" stroke="#f0ebe0" stroke-width="0.5"/>
+      </svg>
+      <span class="about-photo-label">Photo</span>
+    </div>
+    <div class="about-text">
+      <div class="about-name">KASPARAS<br>NARAUSKAS</div>
+      <div class="about-body">
+        <p>Second-year animation student at WDKA Rotterdam, working toward a career as a story artist. My focus is storyboards, animatics, and concept art — building narrative through camera, staging, and light.</p>
+        <p>Alongside story work I develop FX animation as a secondary discipline, drawn to the intersection of designed motion and world-building. Currently building out a personal world project, The Varokarn.</p>
+      </div>
+      <div class="about-facts">
+        <div class="fact"><span class="fact-key">Based</span><span class="fact-val">Rotterdam, NL</span></div>
+        <div class="fact"><span class="fact-key">School</span><span class="fact-val">WDKA — Willem de Kooning</span></div>
+        <div class="fact"><span class="fact-key">Focus</span><span class="fact-val">Story Artist · Concept · FX</span></div>
+        <div class="fact"><span class="fact-key">Available</span><span class="fact-val">Internship — Semester 2, Year 3</span></div>
+      </div>
+      <div class="about-links">
+        <a href="mailto:hello@kasparasnarauskas.com" class="about-link">Email</a>
+        <!-- Add when live: <a href="https://instagram.com/USERNAME" class="about-link">Instagram</a> -->
+        <!-- Add when live: <a href="https://linkedin.com/in/USERNAME" class="about-link">LinkedIn</a> -->
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <span class="footer-sig">KASPARAS NARAUSKAS</span>
+  <div class="footer-links">
+    <a href="mailto:hello@kasparasnarauskas.com" class="footer-link">Email</a>
+    <!-- Add when live: <a href="https://instagram.com/USERNAME" class="footer-link">Instagram</a> -->
+    <!-- Add when live: <a href="https://linkedin.com/in/USERNAME" class="footer-link">LinkedIn</a> -->
+  </div>
+</footer>
+
+<script>
+// ── SPLASH ──
+// Shows once per browser session; click anywhere to skip; honors reduced-motion.
+(function() {
+  const s = document.getElementById('splash');
+  const dismiss = () => {
+    s.classList.add('gone');
+    setTimeout(() => s.style.display = 'none', 950);
+  };
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (sessionStorage.getItem('splashSeen') || reducedMotion) {
+    s.style.display = 'none';
+    return;
+  }
+  sessionStorage.setItem('splashSeen', '1');
+  s.addEventListener('click', dismiss, { once: true });
+  window.addEventListener('load', () => setTimeout(dismiss, 2000));
+})();
+
+// ── NAV ──
+document.getElementById('nav-home').addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+document.querySelectorAll('.nav-link').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const el = document.getElementById(btn.dataset.target);
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  });
+});
+
+const spy = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      document.querySelectorAll('.nav-link').forEach(l =>
+        l.classList.toggle('active', l.dataset.target === e.target.id)
+      );
+    }
+  });
+}, { rootMargin: '-30% 0px -65% 0px', threshold: 0 });
+document.querySelectorAll('.port-section').forEach(s => spy.observe(s));
+
+// ── PANEL VIEWER ──
+function prevPanel(id) {
+  const viewer = document.getElementById(id);
+  const slides = viewer.querySelectorAll('.panel-slide');
+  let cur = [...slides].findIndex(s => s.classList.contains('active'));
+  slides[cur].classList.remove('active');
+  cur = (cur - 1 + slides.length) % slides.length;
+  slides[cur].classList.add('active');
+  updateCounter(id, cur + 1, slides.length);
+}
+function nextPanel(id) {
+  const viewer = document.getElementById(id);
+  const slides = viewer.querySelectorAll('.panel-slide');
+  let cur = [...slides].findIndex(s => s.classList.contains('active'));
+  slides[cur].classList.remove('active');
+  cur = (cur + 1) % slides.length;
+  slides[cur].classList.add('active');
+  updateCounter(id, cur + 1, slides.length);
+}
+function updateCounter(id, cur, total) {
+  const el = document.getElementById('counter-' + id);
+  if (el) el.textContent = cur + ' / ' + total;
+}
+
+// keyboard nav — works on whichever viewer was last clicked
+let activeViewer = null;
+document.querySelectorAll('.panel-viewer').forEach(v => {
+  v.addEventListener('click', () => { activeViewer = v.id; });
+});
+document.addEventListener('keydown', e => {
+  if (!activeViewer) return;
+  if (e.key === 'ArrowLeft') prevPanel(activeViewer);
+  if (e.key === 'ArrowRight') nextPanel(activeViewer);
+});
+
+// ── FX LIGHTBOX ──
+const fxLabels = [
+  'Fire Study 01','Water Rig 02','Smoke Loop 01','Destruction',
+  'Lightning 01','Dust Kick','Splash','Explosion 01',
+  'Wind Slash','Rain','Ice Shatter','Magic Rune'
+];
+
+function openLightbox(idx) {
+  const lb = document.getElementById('fx-lightbox');
+  document.getElementById('lb-title').textContent = fxLabels[idx] || '—';
+  // swap lb-media content: if you have real media, replace the placeholder here
+  lb.classList.add('open');
+}
+
+function closeLightbox(e) {
+  if (!e || e.target === document.getElementById('fx-lightbox') || e.target.classList.contains('lb-close')) {
+    document.getElementById('fx-lightbox').classList.remove('open');
+  }
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') document.getElementById('fx-lightbox').classList.remove('open');
+});
+
+// ── MOODBOARD UPLOAD ──
+// The upload box is a builder tool, not for visitors. Open the site with
+// ?edit appended to the URL (index.html?edit) to arrange images, then
+// hardcode the final <img> tags into #moodboard-grid before publishing.
+if (new URLSearchParams(location.search).has('edit')) {
+  document.querySelector('.moodboard-upload').style.display = 'block';
+}
+document.getElementById('mb-input').addEventListener('change', function() {
+  [...this.files].forEach(file => addMoodboardImage(file));
+  this.value = '';
+});
+
+// drag and drop onto moodboard section
+const mbSection = document.getElementById('personal');
+mbSection.addEventListener('dragover', e => { e.preventDefault(); });
+mbSection.addEventListener('drop', e => {
+  e.preventDefault();
+  [...e.dataTransfer.files].filter(f => f.type.startsWith('image/')).forEach(addMoodboardImage);
+});
+
+function addMoodboardImage(file) {
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const grid = document.getElementById('moodboard-grid');
+    const item = document.createElement('div');
+    item.className = 'moodboard-item';
+    const img = document.createElement('img');
+    img.src = ev.target.result;
+    const rm = document.createElement('button');
+    rm.className = 'moodboard-remove';
+    rm.textContent = '×';
+    rm.addEventListener('click', e => { e.stopPropagation(); item.remove(); });
+    item.appendChild(img);
+    item.appendChild(rm);
+    grid.appendChild(item);
+  };
+  reader.readAsDataURL(file);
+}
+</script>
+</body>
+</html>
