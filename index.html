@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kasparas Narauskas — Story Artist</title>
-<meta name="description" content="Portfolio of Kasparas Narauskas — story artist, concept art, and 2D FX animation. WDKA Rotterdam.">
-<meta property="og:title" content="Kasparas Narauskas — Story Artist">
+<title>Kasparas Narauskas · Story Artist</title>
+<meta name="description" content="Portfolio of Kasparas Narauskas, story artist working in concept art and 2D FX animation. WDKA Rotterdam.">
+<meta property="og:title" content="Kasparas Narauskas, Story Artist">
 <meta property="og:description" content="Storyboards, animatics, concept art, and 2D FX animation.">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -334,20 +334,89 @@ main { padding-top: 60px; }
   font-family: var(--display); font-size: 20px; letter-spacing: var(--ls-tight); color: var(--mid);
 }
 
-/* ── MOODBOARD ── */
-.moodboard-upload {
-  display: none; /* builder tool: visible only with ?edit in the URL */
-  border: 1px dashed var(--dim); padding: 24px;
-  text-align: center; margin-bottom: 24px; cursor: pointer;
-  transition: border-color 0.2s var(--ease);
+/* ── EDIT MODE (visible only with ?edit in the URL) ── */
+#edit-banner {
+  display: none;
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 300;
+  background: rgba(15,15,15,0.97);
+  border-top: 1px solid var(--rule);
+  padding: 12px 24px;
+  align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
 }
-.moodboard-upload:hover { border-color: var(--mid); }
-.moodboard-upload input { display: none; }
-.moodboard-upload-label {
+body.edit-mode #edit-banner { display: flex; }
+body.edit-mode { padding-bottom: 72px; }
+.eb-left { display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; min-width: 0; }
+.eb-title {
+  font-family: var(--display); font-size: 16px; letter-spacing: var(--ls-tight); color: var(--paper);
+  white-space: nowrap;
+}
+.eb-steps {
+  font-family: var(--body); font-weight: 300; font-size: 11px;
+  color: var(--mid); letter-spacing: 0.02em; line-height: 1.5;
+}
+.eb-actions { display: flex; gap: 8px; }
+.eb-actions button {
+  background: var(--bg3); border: 1px solid var(--rule); color: var(--mid);
+  font-family: var(--body); font-weight: 300; font-size: 10px;
+  letter-spacing: var(--ls-label); text-transform: uppercase;
+  padding: 9px 14px; cursor: pointer;
+  transition: color 0.2s var(--ease), border-color 0.2s var(--ease);
+  white-space: nowrap;
+}
+.eb-actions button:hover { color: var(--paper); border-color: var(--mid); }
+
+/* editable slots: dashed outline + action chip, edit mode only */
+body.edit-mode .slot-editable { outline: 1px dashed var(--dim); outline-offset: -1px; }
+.slot-chip {
+  display: none;
+  position: absolute; top: 8px; left: 8px; z-index: 3;
+  background: rgba(15,15,15,0.85); border: 1px solid var(--dim); color: var(--light);
+  font-family: var(--body); font-weight: 300; font-size: 9px;
+  letter-spacing: var(--ls-label); text-transform: uppercase;
+  padding: 6px 10px; cursor: pointer;
+  transition: color 0.2s var(--ease), border-color 0.2s var(--ease);
+}
+body.edit-mode .slot-chip { display: block; }
+.slot-chip:hover { color: var(--paper); border-color: var(--mid); }
+
+/* + tiles at the end of FX grid and moodboard, edit mode only */
+.add-tile {
+  display: none;
+  border: 1px dashed var(--dim);
+  align-items: center; justify-content: center;
   font-family: var(--body); font-weight: 200; font-size: 10px;
   letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--mid);
   cursor: pointer;
+  transition: color 0.2s var(--ease), border-color 0.2s var(--ease);
 }
+body.edit-mode .add-tile { display: flex; }
+.add-tile:hover { color: var(--paper); border-color: var(--mid); }
+#fx-grid .add-tile { aspect-ratio: 16/9; }
+#moodboard-grid .add-tile { padding: 40px 0; break-inside: avoid; margin-bottom: 4px; }
+
+/* remove buttons on grid items, edit mode only */
+.cell-remove {
+  display: none;
+  position: absolute; top: 6px; right: 6px; z-index: 3;
+  width: 24px; height: 24px;
+  background: rgba(15,15,15,0.85); border: 1px solid var(--dim); color: var(--mid);
+  font-family: var(--body); font-size: 13px; line-height: 1;
+  align-items: center; justify-content: center; cursor: pointer;
+}
+body.edit-mode .cell-remove { display: flex; }
+.cell-remove:hover { color: var(--paper); border-color: var(--mid); }
+
+/* media fills its slot */
+.visdev-slot img, .visdev-slot video, .visdev-slot iframe,
+.rough-slot img, .rough-slot video,
+.video-slot video, .video-slot iframe,
+.about-photo img {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; border: 0; display: block; z-index: 1;
+}
+.moodboard-item { position: relative; }
+
+/* ── MOODBOARD ── */
 .moodboard-grid {
   columns: 3; column-gap: 4px;
 }
@@ -361,16 +430,6 @@ main { padding-top: 60px; }
   transition: opacity 0.2s var(--ease);
 }
 .moodboard-item:hover img { opacity: 0.85; }
-.moodboard-remove {
-  position: absolute; top: 6px; right: 6px;
-  width: 22px; height: 22px;
-  background: rgba(0,0,0,0.7); border: 1px solid var(--dim);
-  font-family: var(--body); font-size: 12px; color: var(--mid);
-  display: none; align-items: center; justify-content: center;
-  cursor: pointer; transition: color 0.2s var(--ease);
-}
-.moodboard-item:hover .moodboard-remove { display: flex; }
-.moodboard-remove:hover { color: var(--paper); }
 
 /* ── ABOUT ── */
 .about-layout { display: grid; grid-template-columns: 1fr 1.6fr; gap: 80px; align-items: start; }
@@ -510,6 +569,19 @@ footer {
   </ul>
 </nav>
 
+<!-- EDIT MODE BAR (visible only with ?edit in the URL) -->
+<div id="edit-banner">
+  <div class="eb-left">
+    <span class="eb-title">Edit mode</span>
+    <span class="eb-steps">1. Upload media to Cloudinary, copy its URL &nbsp;&nbsp;2. Click any ADD MEDIA slot or + tile, paste the URL &nbsp;&nbsp;3. Click COPY SITE CODE, then on GitHub: index.html &rarr; pencil &rarr; select all &rarr; paste &rarr; Commit</span>
+  </div>
+  <div class="eb-actions">
+    <button onclick="exportSiteCode()">Copy site code</button>
+    <button onclick="resetLocalEdits()">Reset edits</button>
+    <button onclick="location.href=location.pathname">Exit</button>
+  </div>
+</div>
+
 <main>
 
 <!-- ══════════════════════════════════════════
@@ -526,42 +598,21 @@ footer {
   <div class="project-block">
     <div class="project-label">THE VAROKARN</div>
 
-    <!-- Animatic video -->
-    <div class="video-slot" id="vid-varokarn">
-      <div class="play-ring"><svg viewBox="0 0 16 16"><polygon points="3,1 15,8 3,15"/></svg></div>
-      <span class="video-slot-label">Animatic — drop video file or paste embed</span>
+    <!-- Concept art: 7 × 16:9, logo/logline last -->
+    <div class="visdev-stack">
+      <div class="visdev-slot slot-editable" data-slot="vk-concept-1"><span class="visdev-tag">Concept 01</span></div>
+      <div class="visdev-slot slot-editable" data-slot="vk-concept-2"><span class="visdev-tag">Concept 02</span></div>
+      <div class="visdev-slot slot-editable" data-slot="vk-concept-3"><span class="visdev-tag">Concept 03</span></div>
+      <div class="visdev-slot slot-editable" data-slot="vk-concept-4"><span class="visdev-tag">Concept 04</span></div>
+      <div class="visdev-slot slot-editable" data-slot="vk-concept-5"><span class="visdev-tag">Concept 05</span></div>
+      <div class="visdev-slot slot-editable" data-slot="vk-concept-6"><span class="visdev-tag">Concept 06</span></div>
+      <div class="visdev-slot slot-editable" data-slot="vk-concept-7"><span class="visdev-tag">Concept 07</span></div>
+      <div class="visdev-slot slot-editable" data-slot="vk-logo"><span class="visdev-tag">Logo / Logline</span></div>
     </div>
 
-    <!-- Panel viewer -->
-    <div class="panel-viewer" id="viewer-varokarn">
-      <div class="panel-stage">
-        <div class="panel-slide active"><span class="panel-slide-num">01</span></div>
-        <div class="panel-slide"><span class="panel-slide-num">02</span></div>
-        <div class="panel-slide"><span class="panel-slide-num">03</span></div>
-        <div class="panel-slide"><span class="panel-slide-num">04</span></div>
-        <div class="panel-slide"><span class="panel-slide-num">05</span></div>
-        <div class="panel-slide"><span class="panel-slide-num">06</span></div>
-        <div class="panel-slide"><span class="panel-slide-num">07</span></div>
-        <div class="panel-slide"><span class="panel-slide-num">08</span></div>
-      </div>
-      <div class="panel-controls">
-        <button class="panel-btn" onclick="prevPanel('viewer-varokarn')">← Prev</button>
-        <span class="panel-counter" id="counter-viewer-varokarn">1 / 8</span>
-        <button class="panel-btn" onclick="nextPanel('viewer-varokarn')">Next →</button>
-      </div>
-    </div>
-
-    <!-- Concept art: 8 × 16:9, logo/logline last -->
-    <div class="visdev-stack" style="margin-top: 32px;">
-      <div class="visdev-slot"><span class="visdev-tag">Concept 01</span></div>
-      <div class="visdev-slot"><span class="visdev-tag">Concept 02</span></div>
-      <div class="visdev-slot"><span class="visdev-tag">Concept 03</span></div>
-      <div class="visdev-slot"><span class="visdev-tag">Concept 04</span></div>
-      <div class="visdev-slot"><span class="visdev-tag">Concept 05</span></div>
-      <div class="visdev-slot"><span class="visdev-tag">Concept 06</span></div>
-      <div class="visdev-slot"><span class="visdev-tag">Concept 07</span></div>
-      <div class="visdev-slot"><span class="visdev-tag">Concept 08</span></div>
-      <div class="visdev-slot"><span class="visdev-tag">Logo / Logline</span></div>
+    <!-- Animatic video, placeholder until ready -->
+    <div class="video-slot slot-editable" data-slot="vk-video" id="vid-varokarn" style="margin-top: 32px; cursor: default;">
+      <span class="video-slot-label">Animatic in progress</span>
     </div>
   </div>
 
@@ -571,31 +622,14 @@ footer {
   <div class="project-block">
     <div class="project-label">PROJECT 2</div>
 
-    <div class="video-slot">
+    <div class="video-slot slot-editable" data-slot="p2-video">
       <div class="play-ring"><svg viewBox="0 0 16 16"><polygon points="3,1 15,8 3,15"/></svg></div>
       <span class="video-slot-label">Animatic</span>
     </div>
 
-    <div class="panel-viewer" id="viewer-p2">
-      <div class="panel-stage">
-        <div class="panel-slide active"><span class="panel-slide-num">01</span></div>
-        <div class="panel-slide"><span class="panel-slide-num">02</span></div>
-        <div class="panel-slide"><span class="panel-slide-num">03</span></div>
-        <div class="panel-slide"><span class="panel-slide-num">04</span></div>
-        <div class="panel-slide"><span class="panel-slide-num">05</span></div>
-        <div class="panel-slide"><span class="panel-slide-num">06</span></div>
-      </div>
-      <div class="panel-controls">
-        <button class="panel-btn" onclick="prevPanel('viewer-p2')">← Prev</button>
-        <span class="panel-counter" id="counter-viewer-p2">1 / 6</span>
-        <button class="panel-btn" onclick="nextPanel('viewer-p2')">Next →</button>
-      </div>
-    </div>
-
-    <!-- Two rough panel pictures side by side -->
-    <div class="rough-pair">
-      <div class="rough-slot"><span class="rough-ph">Rough Panels</span></div>
-      <div class="rough-slot"><span class="rough-ph">Rough Panels</span></div>
+    <!-- One rough panel photo -->
+    <div class="rough-pair" style="grid-template-columns: 1fr; max-width: 460px;">
+      <div class="rough-slot slot-editable" data-slot="p2-rough"><span class="rough-ph">Rough Panels</span></div>
     </div>
   </div>
 
@@ -605,34 +639,16 @@ footer {
   <div class="project-block">
     <div class="project-label">PROJECT 3</div>
 
-    <div class="video-slot">
+    <div class="video-slot slot-editable" data-slot="p3-video">
       <div class="play-ring"><svg viewBox="0 0 16 16"><polygon points="3,1 15,8 3,15"/></svg></div>
       <span class="video-slot-label">Animatic</span>
     </div>
 
-    <div class="panel-viewer" id="viewer-p3">
-      <div class="panel-stage">
-        <div class="panel-slide active"><span class="panel-slide-num">01</span></div>
-        <div class="panel-slide"><span class="panel-slide-num">02</span></div>
-        <div class="panel-slide"><span class="panel-slide-num">03</span></div>
-        <div class="panel-slide"><span class="panel-slide-num">04</span></div>
-        <div class="panel-slide"><span class="panel-slide-num">05</span></div>
-        <div class="panel-slide"><span class="panel-slide-num">06</span></div>
-      </div>
-      <div class="panel-controls">
-        <button class="panel-btn" onclick="prevPanel('viewer-p3')">← Prev</button>
-        <span class="panel-counter" id="counter-viewer-p3">1 / 6</span>
-        <button class="panel-btn" onclick="nextPanel('viewer-p3')">Next →</button>
-      </div>
-    </div>
-
-    <!-- 5 vis dev ArtStation-style panels -->
+    <!-- 3 gif/video slots -->
     <div class="visdev-stack" style="margin-top: 32px;">
-      <div class="visdev-slot"><span class="visdev-tag">Concept 01</span></div>
-      <div class="visdev-slot"><span class="visdev-tag">Concept 02</span></div>
-      <div class="visdev-slot"><span class="visdev-tag">Concept 03</span></div>
-      <div class="visdev-slot"><span class="visdev-tag">Concept 04</span></div>
-      <div class="visdev-slot"><span class="visdev-tag">Concept 05</span></div>
+      <div class="visdev-slot slot-editable" data-slot="p3-media-1"><span class="visdev-tag">GIF / Video 01</span></div>
+      <div class="visdev-slot slot-editable" data-slot="p3-media-2"><span class="visdev-tag">GIF / Video 02</span></div>
+      <div class="visdev-slot slot-editable" data-slot="p3-media-3"><span class="visdev-tag">GIF / Video 03</span></div>
     </div>
   </div>
 
@@ -649,19 +665,7 @@ footer {
   </div>
 
   <div class="fx-grid" id="fx-grid">
-    <!-- 12 cells (2 col × 6 row) — swap the ph divs for <img> or <video autoplay loop muted playsinline> -->
-    <div class="fx-cell" onclick="openLightbox(0)"><div class="fx-ph"><span class="fx-ph-glyph">FX</span><span class="fx-ph-label">Fire Study 01</span></div></div>
-    <div class="fx-cell" onclick="openLightbox(1)"><div class="fx-ph"><span class="fx-ph-glyph">FX</span><span class="fx-ph-label">Water Rig 02</span></div></div>
-    <div class="fx-cell" onclick="openLightbox(2)"><div class="fx-ph"><span class="fx-ph-glyph">FX</span><span class="fx-ph-label">Smoke Loop 01</span></div></div>
-    <div class="fx-cell" onclick="openLightbox(3)"><div class="fx-ph"><span class="fx-ph-glyph">FX</span><span class="fx-ph-label">Destruction</span></div></div>
-    <div class="fx-cell" onclick="openLightbox(4)"><div class="fx-ph"><span class="fx-ph-glyph">FX</span><span class="fx-ph-label">Lightning 01</span></div></div>
-    <div class="fx-cell" onclick="openLightbox(5)"><div class="fx-ph"><span class="fx-ph-glyph">FX</span><span class="fx-ph-label">Dust Kick</span></div></div>
-    <div class="fx-cell" onclick="openLightbox(6)"><div class="fx-ph"><span class="fx-ph-glyph">FX</span><span class="fx-ph-label">Splash</span></div></div>
-    <div class="fx-cell" onclick="openLightbox(7)"><div class="fx-ph"><span class="fx-ph-glyph">FX</span><span class="fx-ph-label">Explosion 01</span></div></div>
-    <div class="fx-cell" onclick="openLightbox(8)"><div class="fx-ph"><span class="fx-ph-glyph">FX</span><span class="fx-ph-label">Wind Slash</span></div></div>
-    <div class="fx-cell" onclick="openLightbox(9)"><div class="fx-ph"><span class="fx-ph-glyph">FX</span><span class="fx-ph-label">Rain</span></div></div>
-    <div class="fx-cell" onclick="openLightbox(10)"><div class="fx-ph"><span class="fx-ph-glyph">FX</span><span class="fx-ph-label">Ice Shatter</span></div></div>
-    <div class="fx-cell" onclick="openLightbox(11)"><div class="fx-ph"><span class="fx-ph-glyph">FX</span><span class="fx-ph-label">Magic Rune</span></div></div>
+    <!-- fx cells live here; add them in ?edit mode -->
   </div>
 </section>
 
@@ -670,7 +674,7 @@ footer {
   <div class="lb-inner" id="lb-inner">
     <button class="lb-close" onclick="closeLightbox()">Close ×</button>
     <div class="lb-ph" id="lb-media"><span>FX</span></div>
-    <div class="lb-title" id="lb-title">—</div>
+    <div class="lb-title" id="lb-title"></div>
   </div>
 </div>
 
@@ -684,13 +688,8 @@ footer {
     <div class="s-rule"></div>
   </div>
 
-  <div class="moodboard-upload" onclick="document.getElementById('mb-input').click()">
-    <input type="file" id="mb-input" multiple accept="image/*">
-    <span class="moodboard-upload-label">Click to add images — drag or drop freely</span>
-  </div>
-
   <div class="moodboard-grid" id="moodboard-grid">
-    <!-- images appear here -->
+    <!-- moodboard images live here; add them in ?edit mode -->
   </div>
 </section>
 
@@ -704,7 +703,7 @@ footer {
     <div class="s-rule"></div>
   </div>
   <div class="about-layout">
-    <div class="about-photo">
+    <div class="about-photo slot-editable" data-slot="about-photo">
       <span class="about-photo-bg">KN</span>
       <!-- construction lines watermark -->
       <svg style="position:absolute;inset:0;width:100%;height:100%;opacity:0.07;pointer-events:none;" viewBox="0 0 200 300" fill="none">
@@ -720,14 +719,14 @@ footer {
     <div class="about-text">
       <div class="about-name">KASPARAS<br>NARAUSKAS</div>
       <div class="about-body">
-        <p>Second-year animation student at WDKA Rotterdam, working toward a career as a story artist. My focus is storyboards, animatics, and concept art — building narrative through camera, staging, and light.</p>
+        <p>Second-year animation student at WDKA Rotterdam, working toward a career as a story artist. My focus is storyboards, animatics, and concept art, building narrative through camera, staging, and light.</p>
         <p>Alongside story work I develop FX animation as a secondary discipline, drawn to the intersection of designed motion and world-building. Currently building out a personal world project, The Varokarn.</p>
       </div>
       <div class="about-facts">
         <div class="fact"><span class="fact-key">Based</span><span class="fact-val">Rotterdam, NL</span></div>
-        <div class="fact"><span class="fact-key">School</span><span class="fact-val">WDKA — Willem de Kooning</span></div>
+        <div class="fact"><span class="fact-key">School</span><span class="fact-val">WDKA, Willem de Kooning</span></div>
         <div class="fact"><span class="fact-key">Focus</span><span class="fact-val">Story Artist · Concept · FX</span></div>
-        <div class="fact"><span class="fact-key">Available</span><span class="fact-val">Internship — Semester 2, Year 3</span></div>
+        <div class="fact"><span class="fact-key">Available</span><span class="fact-val">Internship, Semester 2, Year 3</span></div>
       </div>
       <div class="about-links">
         <a href="mailto:hello@kasparasnarauskas.com" class="about-link">Email</a>
@@ -826,68 +825,173 @@ document.addEventListener('keydown', e => {
   if (e.key === 'ArrowRight') nextPanel(activeViewer);
 });
 
-// ── FX LIGHTBOX ──
-const fxLabels = [
-  'Fire Study 01','Water Rig 02','Smoke Loop 01','Destruction',
-  'Lightning 01','Dust Kick','Splash','Explosion 01',
-  'Wind Slash','Rain','Ice Shatter','Magic Rune'
-];
+// ═══════════════════════════════════════════════════════════
+// EDIT SYSTEM
+// Open the site with ?edit at the end of the URL to fill slots
+// and grids visually. Changes save in this browser only, until
+// you click "Copy site code" and commit it on GitHub.
+// ═══════════════════════════════════════════════════════════
+const editMode = new URLSearchParams(location.search).has('edit');
+if (editMode) document.body.classList.add('edit-mode');
 
-function openLightbox(idx) {
+const STORE_KEY = 'kn-site-edits-v1';
+let edits = { slots: {}, fx: [], mood: [] };
+try { edits = Object.assign(edits, JSON.parse(localStorage.getItem(STORE_KEY) || '{}')); } catch (err) {}
+
+function saveEdits() { localStorage.setItem(STORE_KEY, JSON.stringify(edits)); }
+
+// Build the right embed for a URL: Vimeo/YouTube iframe, video file, or image
+function mediaHTML(url, caption) {
+  const u = (url || '').trim();
+  const vm = u.match(/vimeo\.com\/(\d+)/);
+  const yt = u.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+)/);
+  if (vm) return '<iframe src="https://player.vimeo.com/video/' + vm[1] + '" allow="fullscreen" allowfullscreen loading="lazy"></iframe>';
+  if (yt) return '<iframe src="https://www.youtube.com/embed/' + yt[1] + '" allow="fullscreen" allowfullscreen loading="lazy"></iframe>';
+  if (/\.(mp4|webm|mov)(\?|$)/i.test(u)) return '<video src="' + u + '" autoplay loop muted playsinline></video>';
+  return '<img src="' + u + '" alt="' + (caption || '') + '" loading="lazy">';
+}
+
+// ── Single slots (concept pieces, videos, rough panels, about photo) ──
+const slotPlaceholders = {};
+document.querySelectorAll('.slot-editable').forEach(slot => {
+  slotPlaceholders[slot.dataset.slot] = slot.innerHTML;
+});
+
+function renderSlot(slot) {
+  const id = slot.dataset.slot;
+  const url = edits.slots[id];
+  slot.innerHTML = url ? mediaHTML(url) : slotPlaceholders[id];
+  if (editMode) {
+    const chip = document.createElement('button');
+    chip.className = 'slot-chip';
+    chip.textContent = url ? 'Edit media' : 'Add media';
+    chip.onclick = (e) => { e.stopPropagation(); editSlot(slot); };
+    slot.appendChild(chip);
+  }
+}
+
+function editSlot(slot) {
+  const id = slot.dataset.slot;
+  const current = edits.slots[id] || '';
+  const input = prompt(
+    'Paste the media URL for this slot (Cloudinary, Vimeo, or YouTube).\n' +
+    'To clear the slot, delete the text and press OK.', current);
+  if (input === null) return;
+  const url = input.trim();
+  if (url) edits.slots[id] = url; else delete edits.slots[id];
+  saveEdits();
+  renderSlot(slot);
+}
+
+document.querySelectorAll('.slot-editable').forEach(renderSlot);
+
+// ── FX grid + Personal moodboard (growing galleries) ──
+// On first load, absorb any committed cells from the HTML so they can be
+// edited or removed; afterwards the grids render from saved data.
+function absorbCommitted(gridId, listName, itemClass) {
+  if (edits[listName].length) return;
+  document.querySelectorAll('#' + gridId + ' .' + itemClass + '[data-url]').forEach(el => {
+    edits[listName].push({ url: el.dataset.url, caption: el.dataset.caption || '' });
+  });
+}
+absorbCommitted('fx-grid', 'fx', 'fx-cell');
+absorbCommitted('moodboard-grid', 'mood', 'moodboard-item');
+
+function renderGrid(gridId, listName, itemClass, addLabel) {
+  const grid = document.getElementById(gridId);
+  grid.innerHTML = '';
+  edits[listName].forEach((item, i) => {
+    const el = document.createElement('div');
+    el.className = itemClass;
+    el.dataset.url = item.url;
+    if (item.caption) el.dataset.caption = item.caption;
+    el.innerHTML = mediaHTML(item.url, item.caption);
+    el.onclick = (e) => {
+      if (e.target.classList.contains('cell-remove')) return;
+      openLightbox(item.url, item.caption);
+    };
+    if (editMode) {
+      const rm = document.createElement('button');
+      rm.className = 'cell-remove';
+      rm.textContent = '\u00d7';
+      rm.onclick = (e) => {
+        e.stopPropagation();
+        edits[listName].splice(i, 1);
+        saveEdits();
+        renderGrid(gridId, listName, itemClass, addLabel);
+      };
+      el.appendChild(rm);
+    }
+    grid.appendChild(el);
+  });
+  if (editMode) {
+    const add = document.createElement('div');
+    add.className = 'add-tile';
+    add.textContent = addLabel;
+    add.onclick = () => {
+      const url = prompt('Paste the media URL (Cloudinary, Vimeo, or YouTube):');
+      if (!url || !url.trim()) return;
+      let caption = '';
+      if (listName === 'fx') caption = (prompt('Caption (optional):') || '').trim();
+      edits[listName].push({ url: url.trim(), caption });
+      saveEdits();
+      renderGrid(gridId, listName, itemClass, addLabel);
+    };
+    grid.appendChild(add);
+  }
+}
+
+renderGrid('fx-grid', 'fx', 'fx-cell', '+ Add FX piece');
+renderGrid('moodboard-grid', 'mood', 'moodboard-item', '+ Add image');
+
+// ── Lightbox (shared by FX and Personal) ──
+function openLightbox(url, caption) {
   const lb = document.getElementById('fx-lightbox');
-  document.getElementById('lb-title').textContent = fxLabels[idx] || '—';
-  // swap lb-media content: if you have real media, replace the placeholder here
+  const media = document.getElementById('lb-media');
+  media.innerHTML = /\.(mp4|webm|mov)(\?|$)/i.test(url)
+    ? '<video src="' + url + '" autoplay loop muted playsinline controls></video>'
+    : mediaHTML(url, caption);
+  document.getElementById('lb-title').textContent = caption || '';
   lb.classList.add('open');
 }
 
 function closeLightbox(e) {
   if (!e || e.target === document.getElementById('fx-lightbox') || e.target.classList.contains('lb-close')) {
     document.getElementById('fx-lightbox').classList.remove('open');
+    document.getElementById('lb-media').innerHTML = '';
   }
 }
 
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') document.getElementById('fx-lightbox').classList.remove('open');
+  if (e.key === 'Escape') closeLightbox();
 });
 
-// ── MOODBOARD UPLOAD ──
-// The upload box is a builder tool, not for visitors. Open the site with
-// ?edit appended to the URL (index.html?edit) to arrange images, then
-// hardcode the final <img> tags into #moodboard-grid before publishing.
-if (new URLSearchParams(location.search).has('edit')) {
-  document.querySelector('.moodboard-upload').style.display = 'block';
+// ── Export: copy the entire updated site as one HTML file ──
+function exportSiteCode() {
+  const clone = document.documentElement.cloneNode(true);
+  const banner = clone.querySelector('#edit-banner');
+  if (banner) banner.remove();
+  clone.querySelectorAll('.slot-chip, .cell-remove, .add-tile').forEach(el => el.remove());
+  const body = clone.querySelector('body');
+  body.classList.remove('edit-mode');
+  const splash = clone.querySelector('#splash');
+  if (splash) { splash.removeAttribute('style'); splash.classList.remove('gone'); }
+  const lb = clone.querySelector('#fx-lightbox');
+  if (lb) { lb.classList.remove('open'); }
+  const lbm = clone.querySelector('#lb-media');
+  if (lbm) { lbm.innerHTML = '<span>FX</span>'; }
+  const html = '<!DOCTYPE html>\n' + clone.outerHTML;
+  navigator.clipboard.writeText(html).then(() =>
+    alert('Full site code copied.\n\nOn GitHub: open index.html, click the pencil icon, select all (Ctrl+A), paste, then Commit changes.')
+  ).catch(() => alert('Could not access the clipboard. Try a different browser.'));
 }
-document.getElementById('mb-input').addEventListener('change', function() {
-  [...this.files].forEach(file => addMoodboardImage(file));
-  this.value = '';
-});
 
-// drag and drop onto moodboard section
-const mbSection = document.getElementById('personal');
-mbSection.addEventListener('dragover', e => { e.preventDefault(); });
-mbSection.addEventListener('drop', e => {
-  e.preventDefault();
-  [...e.dataTransfer.files].filter(f => f.type.startsWith('image/')).forEach(addMoodboardImage);
-});
-
-function addMoodboardImage(file) {
-  const reader = new FileReader();
-  reader.onload = ev => {
-    const grid = document.getElementById('moodboard-grid');
-    const item = document.createElement('div');
-    item.className = 'moodboard-item';
-    const img = document.createElement('img');
-    img.src = ev.target.result;
-    const rm = document.createElement('button');
-    rm.className = 'moodboard-remove';
-    rm.textContent = '×';
-    rm.addEventListener('click', e => { e.stopPropagation(); item.remove(); });
-    item.appendChild(img);
-    item.appendChild(rm);
-    grid.appendChild(item);
-  };
-  reader.readAsDataURL(file);
+function resetLocalEdits() {
+  if (!confirm('Clear all local edits in this browser? Anything already committed on GitHub stays.')) return;
+  localStorage.removeItem(STORE_KEY);
+  location.reload();
 }
+
 </script>
 </body>
 </html>
