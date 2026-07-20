@@ -414,6 +414,10 @@ body.edit-mode .cell-remove { display: flex; }
   position: absolute; inset: 0; width: 100%; height: 100%;
   object-fit: cover; border: 0; display: block; z-index: 1;
 }
+.no-crop img, .no-crop video {
+  object-fit: contain !important;
+  background: var(--bg2);
+}
 .moodboard-item { position: relative; }
 
 /* ── MOODBOARD ── */
@@ -600,7 +604,7 @@ footer {
 
     <!-- Concept art: 7 × 16:9, logo/logline last -->
     <div class="visdev-stack">
-      <div class="visdev-slot slot-editable" data-slot="vk-logo"><img src="https://res.cloudinary.com/twplcz62/image/upload/v1784566080/Varokarn_logo_logline_wwcjek.jpg" alt="The Varokarn, logo and logline"></div>
+      <div class="visdev-slot slot-editable no-crop" data-slot="vk-logo"><img src="https://res.cloudinary.com/twplcz62/image/upload/v1784566080/Varokarn_logo_logline_wwcjek.jpg" alt="The Varokarn, logo and logline"></div>
       <div class="visdev-slot slot-editable" data-slot="vk-concept-1"><img src="https://res.cloudinary.com/twplcz62/image/upload/v1784404070/varokarn-concept-07_jpg_xwzmzu.jpg" alt="The Varokarn, concept"></div>
       <div class="visdev-slot slot-editable" data-slot="vk-concept-2"><img src="https://res.cloudinary.com/twplcz62/image/upload/v1784404068/varokarn-concept-01_vvbrym.jpg" alt="The Varokarn, concept"></div>
       <div class="visdev-slot slot-editable" data-slot="vk-concept-3"><img src="https://res.cloudinary.com/twplcz62/image/upload/v1784404067/varokarn-concept-02_hjhwzc.jpg" alt="The Varokarn, concept"></div>
