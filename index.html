@@ -224,6 +224,24 @@ main { padding-top: 60px; }
 }
 .visdev-slot:hover::after { transform: scaleX(1); }
 .visdev-slot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+/* Filled slots show the image at its own aspect ratio: no crop, no letterbox */
+.visdev-slot:has(> img), .visdev-slot:has(> video) {
+  aspect-ratio: auto;
+  display: block;
+  padding: 0;
+}
+.visdev-slot > img, .visdev-slot > video {
+  position: static;
+  width: 100%; height: auto;
+  object-fit: initial;
+  display: block;
+}
+.visdev-slot > iframe {
+  position: absolute; inset: 0; width: 100%; height: 100%; border: 0; z-index: 1;
+}
+.visdev-slot:has(> iframe) { aspect-ratio: 16/9; display: flex; padding: 12px 14px; }
+
 .visdev-tag {
   font-family: var(--body); font-weight: 200; font-size: 10px;
   letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--dim);
@@ -406,17 +424,12 @@ body.edit-mode .add-tile { display: flex; }
 body.edit-mode .cell-remove { display: flex; }
 .cell-remove:hover { color: var(--paper); border-color: var(--mid); }
 
-/* media fills its slot */
-.visdev-slot img, .visdev-slot video, .visdev-slot iframe,
+/* media fills its slot (concept slots are handled separately, natural ratio) */
 .rough-slot img, .rough-slot video,
 .video-slot video, .video-slot iframe,
 .about-photo img {
   position: absolute; inset: 0; width: 100%; height: 100%;
   object-fit: cover; border: 0; display: block; z-index: 1;
-}
-.no-crop img, .no-crop video {
-  object-fit: contain !important;
-  background: var(--bg2);
 }
 .moodboard-item { position: relative; }
 
@@ -604,7 +617,7 @@ footer {
 
     <!-- Concept art: 7 × 16:9, logo/logline last -->
     <div class="visdev-stack">
-      <div class="visdev-slot slot-editable no-crop" data-slot="vk-logo"><img src="https://res.cloudinary.com/twplcz62/image/upload/v1784566080/Varokarn_logo_logline_wwcjek.jpg" alt="The Varokarn, logo and logline"></div>
+      <div class="visdev-slot slot-editable" data-slot="vk-logo"><img src="https://res.cloudinary.com/twplcz62/image/upload/v1784566080/Varokarn_logo_logline_wwcjek.jpg" alt="The Varokarn, logo and logline"></div>
       <div class="visdev-slot slot-editable" data-slot="vk-concept-1"><img src="https://res.cloudinary.com/twplcz62/image/upload/v1784404070/varokarn-concept-07_jpg_xwzmzu.jpg" alt="The Varokarn, concept"></div>
       <div class="visdev-slot slot-editable" data-slot="vk-concept-2"><img src="https://res.cloudinary.com/twplcz62/image/upload/v1784404068/varokarn-concept-01_vvbrym.jpg" alt="The Varokarn, concept"></div>
       <div class="visdev-slot slot-editable" data-slot="vk-concept-3"><img src="https://res.cloudinary.com/twplcz62/image/upload/v1784404067/varokarn-concept-02_hjhwzc.jpg" alt="The Varokarn, concept"></div>
