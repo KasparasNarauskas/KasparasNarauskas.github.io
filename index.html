@@ -267,7 +267,12 @@ main { padding-top: 60px; }
   transition: transform 0.3s var(--ease);
 }
 .rough-slot:hover::after { transform: scaleX(1); }
-.rough-slot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.rough-slot:has(> img), .rough-slot:has(> video) {
+  aspect-ratio: auto; display: block;
+}
+.rough-slot > img, .rough-slot > video {
+  position: static; width: 100%; height: auto; object-fit: initial; display: block;
+}
 .rough-ph {
   font-family: var(--display); font-size: 13px; letter-spacing: var(--ls-label);
   color: var(--dim); text-transform: uppercase;
@@ -424,8 +429,7 @@ body.edit-mode .add-tile { display: flex; }
 body.edit-mode .cell-remove { display: flex; }
 .cell-remove:hover { color: var(--paper); border-color: var(--mid); }
 
-/* media fills its slot (concept slots are handled separately, natural ratio) */
-.rough-slot img, .rough-slot video,
+/* media fills its slot (concept and rough-panel slots are handled separately, natural ratio) */
 .video-slot video, .video-slot iframe,
 .about-photo img {
   position: absolute; inset: 0; width: 100%; height: 100%;
@@ -616,16 +620,15 @@ footer {
 
   <!-- PROJECT 2 -->
   <div class="project-block">
-    <div class="project-label">PROJECT 2</div>
+    <div class="project-label">LIAN, BLENDER ANIMATIC</div>
 
-    <div class="video-slot slot-editable" data-slot="p2-video">
-      <div class="play-ring"><svg viewBox="0 0 16 16"><polygon points="3,1 15,8 3,15"/></svg></div>
-      <span class="video-slot-label">Animatic</span>
+    <div class="video-slot slot-editable" data-slot="p2-video" style="cursor: default;">
+      <video src="https://res.cloudinary.com/twplcz62/video/upload/v1784584194/Lian_Animatic_Fin_i0klbs.mov" controls playsinline></video>
     </div>
 
-    <!-- One rough panel photo -->
-    <div class="rough-pair" style="grid-template-columns: 1fr; max-width: 460px;">
-      <div class="rough-slot slot-editable" data-slot="p2-rough"><span class="rough-ph">Rough Panels</span></div>
+    <!-- Rough panel photo, same width as the video above -->
+    <div class="rough-pair" style="grid-template-columns: 1fr; max-width: 900px;">
+      <div class="rough-slot slot-editable" data-slot="p2-rough"><img src="https://res.cloudinary.com/twplcz62/image/upload/v1784584575/Lian_animatic_paper_storyboard_suy134.jpg" alt="Lian, paper storyboard"></div>
     </div>
   </div>
 
