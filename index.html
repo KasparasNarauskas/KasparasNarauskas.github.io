@@ -145,12 +145,6 @@ main { padding-top: 60px; }
   transition: border-color 0.2s var(--ease);
 }
 .video-slot:hover { border-color: var(--dim); }
-.video-slot::after {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
-  background: var(--paper); transform: scaleX(0); transform-origin: left;
-  transition: transform 0.35s var(--ease);
-}
-.video-slot:hover::after { transform: scaleX(1); }
 .play-ring {
   width: 52px; height: 52px; border: 1px solid var(--dim); border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
@@ -219,12 +213,6 @@ main { padding-top: 60px; }
   transition: background 0.2s var(--ease);
 }
 .visdev-slot:hover { background: var(--bg3); }
-.visdev-slot::after {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
-  background: var(--paper); transform: scaleX(0); transform-origin: left;
-  transition: transform 0.3s var(--ease);
-}
-.visdev-slot:hover::after { transform: scaleX(1); }
 .visdev-slot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 
 /* Filled slots show the image at its own aspect ratio: no crop, no letterbox */
@@ -263,12 +251,6 @@ main { padding-top: 60px; }
   transition: background 0.2s var(--ease);
 }
 .rough-slot:hover { background: var(--bg3); }
-.rough-slot::after {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
-  background: var(--paper); transform: scaleX(0); transform-origin: left;
-  transition: transform 0.3s var(--ease);
-}
-.rough-slot:hover::after { transform: scaleX(1); }
 .rough-slot:has(> img), .rough-slot:has(> video) {
   aspect-ratio: auto; display: block;
 }
@@ -290,12 +272,6 @@ main { padding-top: 60px; }
   transition: background 0.2s var(--ease);
 }
 .fx-cell:hover { background: var(--bg3); }
-.fx-cell::after {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
-  background: var(--paper); transform: scaleX(0); transform-origin: left;
-  transition: transform 0.3s var(--ease);
-}
-.fx-cell:hover::after { transform: scaleX(1); }
 .fx-cell img, .fx-cell video {
   width: 100%; height: 100%; object-fit: cover; display: block;
 }
