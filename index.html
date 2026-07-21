@@ -32,6 +32,7 @@
 }
 
 html { scroll-behavior: smooth; }
+main img, main video:not([controls]) { cursor: zoom-in; }
 
 body {
   background: var(--bg);
@@ -904,10 +905,6 @@ function renderGrid(gridId, listName, itemClass, addLabel) {
     el.dataset.url = item.url;
     if (item.caption) el.dataset.caption = item.caption;
     el.innerHTML = mediaHTML(item.url, item.caption);
-    el.onclick = (e) => {
-      if (e.target.classList.contains('cell-remove')) return;
-      openLightbox(item.url, item.caption);
-    };
     if (editMode) {
       const rm = document.createElement('button');
       rm.className = 'cell-remove';
@@ -959,6 +956,21 @@ function closeLightbox(e) {
     document.getElementById('lb-media').innerHTML = '';
   }
 }
+
+// Click any image, or any video without its own play controls (FX loops,
+// concept art, storyboard photos, the About photo, etc.), to open it larger
+// with the background dimmed. Videos that already have native controls
+// (like a real animatic player) are left alone so clicking play works normally.
+document.addEventListener('click', (e) => {
+  const t = e.target;
+  if (t.closest('#splash') || t.closest('nav') || t.closest('#edit-banner') || t.closest('#fx-lightbox')) return;
+  if (t.tagName === 'IMG') {
+    openLightbox(t.currentSrc || t.src, t.alt || '');
+  } else if (t.tagName === 'VIDEO' && !t.hasAttribute('controls')) {
+    const src = t.currentSrc || t.src || (t.querySelector('source') && t.querySelector('source').src);
+    if (src) openLightbox(src, '');
+  }
+});
 
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') closeLightbox();
