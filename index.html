@@ -210,6 +210,7 @@ main { padding-top: 60px; }
   display: flex; flex-direction: column; gap: 4px;
   width: 100%; max-width: 900px; margin: 0 auto 0;
 }
+#fx .visdev-stack { gap: 14px; }
 .visdev-slot {
   background: var(--bg2); border: 1px solid var(--rule);
   aspect-ratio: 16/9; width: 100%;
@@ -628,6 +629,10 @@ footer {
     <div class="video-slot" style="margin-top: 32px; cursor: default;">
       <video src="https://res.cloudinary.com/twplcz62/video/upload/v1784668534/aztec_fight_animatic_edited_w_text_qcdssl.mov" controls playsinline></video>
     </div>
+
+    <div class="rough-pair" style="grid-template-columns: 1fr; max-width: 900px; margin-top: 32px;">
+      <div class="rough-slot"><img src="https://res.cloudinary.com/twplcz62/image/upload/v1784669248/Aztec_Spirit_Sheet_vfydsy.jpg" alt="Project Temple, spirit sheet"></div>
+    </div>
   </div>
 
   <div class="project-divider"></div>
@@ -655,9 +660,9 @@ footer {
 
   <!-- Large-scale FX pieces, full width, not the condensed grid -->
   <div class="visdev-stack">
-    <div class="visdev-slot"><video src="https://res.cloudinary.com/twplcz62/video/upload/v1784665775/smell_fx_comparison_dzbs9g.mov" autoplay loop muted playsinline></video></div>
-    <div class="visdev-slot"><video src="https://res.cloudinary.com/twplcz62/video/upload/v1784586596/Recording_2026-07-21_012922_jmbip7.mp4" autoplay loop muted playsinline></video></div>
-    <div class="visdev-slot"><img src="https://res.cloudinary.com/twplcz62/image/upload/v1784666229/old_smoke_with_text_ukmdoe.gif" alt="FX, smoke study"></div>
+    <div class="visdev-slot"><video src="https://res.cloudinary.com/twplcz62/video/upload/v1784665775/smell_fx_comparison_dzbs9g.mov" loop muted playsinline preload="metadata" data-fxauto></video></div>
+    <div class="visdev-slot"><video src="https://res.cloudinary.com/twplcz62/video/upload/v1784586596/Recording_2026-07-21_012922_jmbip7.mp4" loop muted playsinline preload="metadata" data-fxauto></video></div>
+    <div class="visdev-slot"><img src="https://res.cloudinary.com/twplcz62/image/upload/v1784666229/old_smoke_with_text_ukmdoe.gif" alt="FX, smoke study" loading="lazy"></div>
   </div>
 
   <div class="fx-grid" id="fx-grid">
@@ -930,6 +935,24 @@ function renderGrid(gridId, listName, itemClass, addLabel) {
 
 renderGrid('fx-grid', 'fx', 'fx-cell', '+ Add FX piece');
 renderGrid('moodboard-grid', 'mood', 'moodboard-item', '+ Add image');
+
+// ── FX video playback: play only while near the middle of the screen ──
+// Keeps several looping videos from all decoding at once and lagging
+// the page. Each pauses again as it scrolls out of the middle band.
+const fxAutoVideos = document.querySelectorAll('video[data-fxauto]');
+if (fxAutoVideos.length) {
+  const fxPlayObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      const v = entry.target;
+      if (entry.isIntersecting) {
+        v.play().catch(() => {});
+      } else {
+        v.pause();
+      }
+    });
+  }, { rootMargin: '-25% 0px -25% 0px', threshold: 0 });
+  fxAutoVideos.forEach(v => fxPlayObserver.observe(v));
+}
 
 // ── Lightbox (shared by FX and Personal) ──
 function openLightbox(url, caption) {
