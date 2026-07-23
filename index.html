@@ -583,7 +583,7 @@ footer {
     <div class="project-label">LIAN, BLENDER ANIMATIC</div>
 
     <div class="video-slot slot-editable" data-slot="p2-video" style="cursor: default;">
-      <video src="https://res.cloudinary.com/twplcz62/video/upload/v1784584194/Lian_Animatic_Fin_i0klbs.mov" controls playsinline preload="metadata"></video>
+      <video src="https://res.cloudinary.com/twplcz62/video/upload/v1784584194/Lian_Animatic_Fin_i0klbs.mp4" poster="https://res.cloudinary.com/twplcz62/video/upload/so_1.5/v1784584194/Lian_Animatic_Fin_i0klbs.jpg" controls playsinline preload="none"></video>
     </div>
 
     <!-- Rough panel photo, reduced width -->
@@ -603,7 +603,7 @@ footer {
     </div>
 
     <div class="video-slot" style="margin-top: 32px; cursor: default;">
-      <video src="https://res.cloudinary.com/twplcz62/video/upload/v1784668534/aztec_fight_animatic_edited_w_text_qcdssl.mov" controls playsinline preload="metadata"></video>
+      <video src="https://res.cloudinary.com/twplcz62/video/upload/v1784668534/aztec_fight_animatic_edited_w_text_qcdssl.mp4" poster="https://res.cloudinary.com/twplcz62/video/upload/so_0/v1784668534/aztec_fight_animatic_edited_w_text_qcdssl.jpg" controls playsinline preload="none"></video>
     </div>
 
     <div class="rough-pair" style="grid-template-columns: 1fr; max-width: 900px; margin-top: 32px;">
@@ -618,7 +618,7 @@ footer {
     <div class="project-label">ANIMATIC FOR &quot;RETURN&quot;</div>
 
     <div class="video-slot" style="cursor: default;">
-      <video src="https://res.cloudinary.com/twplcz62/video/upload/v1784665770/smell_animatic_comparison_ndyzt7.mov" controls playsinline></video>
+      <video src="https://res.cloudinary.com/twplcz62/video/upload/v1784665770/smell_animatic_comparison_ndyzt7.mp4" poster="https://res.cloudinary.com/twplcz62/video/upload/so_1.5/v1784665770/smell_animatic_comparison_ndyzt7.jpg" controls playsinline preload="none"></video>
     </div>
   </div>
 
@@ -636,10 +636,11 @@ footer {
 
   <!-- Large-scale FX pieces, full width, not the condensed grid -->
   <div class="visdev-stack">
-    <div class="visdev-slot"><video src="https://res.cloudinary.com/twplcz62/video/upload/v1784665775/smell_fx_comparison_dzbs9g.mov" loop muted playsinline preload="metadata" data-fxauto></video></div>
+    <div class="visdev-slot"><video src="https://res.cloudinary.com/twplcz62/video/upload/v1784840945/4Arms_Body_Good_lircv0.mp4" loop muted playsinline preload="metadata" data-fxauto></video></div>
+    <div class="visdev-slot"><video src="https://res.cloudinary.com/twplcz62/video/upload/v1784665775/smell_fx_comparison_dzbs9g.mp4" loop muted playsinline preload="metadata" data-fxauto></video></div>
     <div class="visdev-slot"><video src="https://res.cloudinary.com/twplcz62/video/upload/v1784586596/Recording_2026-07-21_012922_jmbip7.mp4" loop muted playsinline preload="metadata" data-fxauto></video></div>
-    <div class="visdev-slot"><video src="https://res.cloudinary.com/twplcz62/video/upload/v1784671328/lightning_flipped_mudbh6.mov" loop muted playsinline preload="metadata" data-fxauto></video></div>
-    <div class="visdev-slot"><video src="https://res.cloudinary.com/twplcz62/video/upload/v1784670771/old_smoke_with_text_o34bt0.mov" loop muted playsinline preload="metadata" data-fxauto></video></div>
+    <div class="visdev-slot"><video src="https://res.cloudinary.com/twplcz62/video/upload/v1784671328/lightning_flipped_mudbh6.mp4" loop muted playsinline preload="metadata" data-fxauto></video></div>
+    <div class="visdev-slot"><video src="https://res.cloudinary.com/twplcz62/video/upload/v1784670771/old_smoke_with_text_o34bt0.mp4" loop muted playsinline preload="metadata" data-fxauto></video></div>
   </div>
 
   <div class="fx-grid" id="fx-grid">
@@ -913,11 +914,26 @@ function renderGrid(gridId, listName, itemClass, addLabel) {
 renderGrid('fx-grid', 'fx', 'fx-cell', '+ Add FX piece');
 renderGrid('moodboard-grid', 'mood', 'moodboard-item', '+ Add image');
 
-// ── FX video playback: play only while near the middle of the screen ──
-// Keeps several looping videos from all decoding at once and lagging
-// the page. Each pauses again as it scrolls out of the middle band.
+// ── FX video playback ──
+// Two stages. First, once a clip is roughly a screen away, quietly buffer
+// the whole file. Second, play it only inside the middle band of the
+// screen and pause it again on the way out. Buffering ahead is what stops
+// the hitch on the first loop: short clips finish downloading long before
+// they are ever asked to play, so the loop point has no gap to fill.
 const fxAutoVideos = document.querySelectorAll('video[data-fxauto]');
 if (fxAutoVideos.length) {
+  const fxPrepObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const v = entry.target;
+      if (v.preload !== 'auto' && v.paused) {
+        v.preload = 'auto';
+        v.load();
+      }
+      fxPrepObserver.unobserve(v);
+    });
+  }, { rootMargin: '150% 0px 150% 0px', threshold: 0 });
+
   const fxPlayObserver = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       const v = entry.target;
@@ -928,7 +944,11 @@ if (fxAutoVideos.length) {
       }
     });
   }, { rootMargin: '-25% 0px -25% 0px', threshold: 0 });
-  fxAutoVideos.forEach(v => fxPlayObserver.observe(v));
+
+  fxAutoVideos.forEach(v => {
+    fxPrepObserver.observe(v);
+    fxPlayObserver.observe(v);
+  });
 }
 
 // ── Lightbox (shared by FX and Personal) ──
