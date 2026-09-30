@@ -102,6 +102,32 @@ nav {
 /* ── MAIN ── */
 main { padding-top: 60px; }
 
+/* ── OPENING REEL ── */
+.reel {
+  position: relative; width: 100%; aspect-ratio: 2.3 / 1;
+  background: var(--bg2); overflow: hidden;
+}
+.reel-video {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; display: block; pointer-events: none; visibility: hidden;
+}
+.reel-video.is-front, .reel-video.is-incoming { visibility: visible; }
+.reel-video.is-incoming { z-index: 1; clip-path: polygon(0 0, -40% 0, -16% 100%, 0 100%); }
+.reel-video.is-incoming.is-wiping {
+  animation: reel-wipe 900ms var(--ease) forwards;
+}
+.reel-divider {
+  position: absolute; z-index: 2; top: 50%; left: -28%;
+  width: 2px; height: 135%; background: #fff;
+  transform: translateY(-50%) rotate(-29deg); pointer-events: none;
+  opacity: 0;
+}
+.reel-divider.is-wiping { opacity: 1; animation: reel-divider 900ms var(--ease) forwards; }
+@keyframes reel-wipe {
+  to { clip-path: polygon(0 0, 116% 0, 140% 100%, 0 100%); }
+}
+@keyframes reel-divider { to { left: 128%; } }
+
 /* ── SECTION ── */
 .port-section {
   padding: 96px 52px 112px;
@@ -486,6 +512,8 @@ footer {
     transition-duration: 0.01ms !important;
   }
   html { scroll-behavior: auto; }
+  .reel-video.is-incoming.is-wiping { clip-path: none; }
+  .reel-divider { display: none; }
 }
 
 /* ── RESPONSIVE ── */
@@ -503,6 +531,7 @@ footer {
   .nav-link { padding: 6px 9px; font-size: 10px; letter-spacing: var(--ls-label); }
   .port-section { padding: 44px 18px 56px; }
   main { padding-top: 52px; }
+  .reel { aspect-ratio: 16 / 9; }
   .moodboard-grid { columns: 1; }
   .fx-grid { grid-template-columns: 1fr; }
 }
@@ -543,6 +572,13 @@ footer {
 </div>
 
 <main>
+
+<!-- Four short muted excerpts. Edit REEL_SHOTS below to replace individual clips. -->
+<section class="reel" id="reel" aria-label="Selected animation showreel">
+  <video class="reel-video" muted playsinline loop preload="auto" aria-hidden="true"></video>
+  <video class="reel-video" muted playsinline loop preload="auto" aria-hidden="true"></video>
+  <div class="reel-divider" aria-hidden="true"></div>
+</section>
 
 <!-- ══════════════════════════════════════════
      STORY / VIS DEV
@@ -739,6 +775,126 @@ footer {
   sessionStorage.setItem('splashSeen', '1');
   s.addEventListener('click', dismiss, { once: true });
   window.addEventListener('load', () => setTimeout(dismiss, 2000));
+})();
+
+// ── OPENING REEL ──
+// Four separate Cloudinary excerpts. Keep the full animatics with audio below.
+// start is seconds into the original clip; startFraction is a share of its duration.
+// hold is time on screen in milliseconds.
+const REEL_SHOTS = [
+  {
+    src: 'https://res.cloudinary.com/twplcz62/video/upload/q_auto,w_1280/v1784840945/4Arms_Body_Good_lircv0.mp4',
+    poster: 'https://res.cloudinary.com/twplcz62/video/upload/so_0/v1784840945/4Arms_Body_Good_lircv0.jpg',
+    start: 0, hold: 3800
+  },
+  {
+    src: 'https://res.cloudinary.com/twplcz62/video/upload/q_auto,w_1280/v1784668534/aztec_fight_animatic_edited_w_text_qcdssl.mp4',
+    poster: 'https://res.cloudinary.com/twplcz62/video/upload/so_1.5/v1784668534/aztec_fight_animatic_edited_w_text_qcdssl.jpg',
+    start: 1.5, hold: 3800
+  },
+  {
+    src: 'https://res.cloudinary.com/twplcz62/video/upload/q_auto,w_1280/v1784584194/Lian_Animatic_Fin_i0klbs.mp4',
+    poster: 'https://res.cloudinary.com/twplcz62/video/upload/so_1.5/v1784584194/Lian_Animatic_Fin_i0klbs.jpg',
+    startFraction: 0.58, hold: 3800
+  },
+  {
+    src: 'https://res.cloudinary.com/twplcz62/video/upload/q_auto,w_1280/v1784586596/Recording_2026-07-21_012922_jmbip7.mp4',
+    poster: 'https://res.cloudinary.com/twplcz62/video/upload/so_1/v1784586596/Recording_2026-07-21_012922_jmbip7.jpg',
+    start: 0, hold: 3800
+  }
+];
+
+(function() {
+  const reel = document.getElementById('reel');
+  const videos = [...reel.querySelectorAll('.reel-video')];
+  const divider = reel.querySelector('.reel-divider');
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let front = 0, shot = 0, timer, visible = false, busy = false;
+
+  function setShot(video, item) {
+    video.pause();
+    video.src = item.src;
+    video.poster = item.poster;
+    video.muted = true;
+    let segmentStart = 0;
+    const seek = () => {
+      if (video.readyState >= 1 && Number.isFinite(video.duration)) {
+        const start = item.startFraction == null
+          ? item.start
+          : Math.min(video.duration * item.startFraction, Math.max(video.duration * 0.5, video.duration - item.hold / 1000 - 0.2));
+        segmentStart = Math.min(start, Math.max(0, video.duration - 0.1));
+        video.currentTime = segmentStart;
+      }
+    };
+    video.ontimeupdate = item.startFraction == null ? null : () => {
+      if (video.currentTime >= video.duration - 0.15) video.currentTime = segmentStart;
+    };
+    video.addEventListener('loadedmetadata', seek, { once: true });
+    video.load();
+  }
+
+  function play(video) {
+    video.muted = true;
+    video.play().catch(() => {});
+  }
+
+  function schedule() {
+    clearTimeout(timer);
+    if (visible && !reducedMotion && !busy) timer = setTimeout(nextShot, REEL_SHOTS[shot].hold);
+  }
+
+  function nextShot() {
+    if (!visible || busy) return;
+    busy = true;
+    const incomingIndex = 1 - front;
+    const incoming = videos[incomingIndex];
+    const nextIndex = (shot + 1) % REEL_SHOTS.length;
+    incoming.classList.add('is-incoming');
+    // Wait for a frame so the clip and diagonal edge start from the left.
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      if (!visible) { incoming.classList.remove('is-incoming'); busy = false; return; }
+      play(incoming);
+      incoming.classList.add('is-wiping');
+      divider.classList.add('is-wiping');
+      setTimeout(() => {
+        videos[front].pause();
+        videos[front].classList.remove('is-front');
+        incoming.classList.remove('is-incoming', 'is-wiping');
+        incoming.classList.add('is-front');
+        divider.classList.remove('is-wiping');
+        front = incomingIndex;
+        shot = nextIndex;
+        busy = false;
+        setShot(videos[1 - front], REEL_SHOTS[(shot + 1) % REEL_SHOTS.length]);
+        if (!visible) incoming.pause();
+        schedule();
+      }, 920);
+    }));
+  }
+
+  setShot(videos[0], REEL_SHOTS[0]);
+  videos[0].classList.add('is-front');
+  if (reducedMotion) return; // Still frame for visitors who limit motion.
+  setShot(videos[1], REEL_SHOTS[1]);
+  const observer = new IntersectionObserver(entries => {
+    visible = entries[0].isIntersecting && !document.hidden;
+    if (visible) {
+      play(videos[front]);
+      schedule();
+    } else {
+      clearTimeout(timer);
+      videos.forEach(video => video.pause());
+    }
+  }, { threshold: 0.1 });
+  observer.observe(reel);
+  document.addEventListener('visibilitychange', () => {
+    visible = !document.hidden && reel.getBoundingClientRect().bottom > 0 &&
+      reel.getBoundingClientRect().top < window.innerHeight;
+    if (visible) { play(videos[front]); schedule(); }
+    else { clearTimeout(timer); videos.forEach(video => video.pause()); }
+  });
+  // A tap can retry autoplay on phones after the first blocked play attempt.
+  reel.addEventListener('pointerdown', () => { if (visible) play(videos[front]); });
 })();
 
 // ── NAV ──
@@ -975,7 +1131,7 @@ function closeLightbox(e) {
 // (like a real animatic player) are left alone so clicking play works normally.
 document.addEventListener('click', (e) => {
   const t = e.target;
-  if (t.closest('#splash') || t.closest('nav') || t.closest('#edit-banner') || t.closest('#fx-lightbox')) return;
+  if (t.closest('#splash') || t.closest('#reel') || t.closest('nav') || t.closest('#edit-banner') || t.closest('#fx-lightbox')) return;
   if (t.tagName === 'IMG') {
     openLightbox(t.currentSrc || t.src, t.alt || '');
   } else if (t.tagName === 'VIDEO' && !t.hasAttribute('controls')) {
@@ -998,6 +1154,14 @@ function exportSiteCode() {
   body.classList.remove('edit-mode');
   const splash = clone.querySelector('#splash');
   if (splash) { splash.removeAttribute('style'); splash.classList.remove('gone'); }
+  const reel = clone.querySelector('#reel');
+  if (reel) {
+    reel.querySelectorAll('video').forEach(video => {
+      video.removeAttribute('src'); video.removeAttribute('poster');
+      video.classList.remove('is-front', 'is-incoming', 'is-wiping');
+    });
+    reel.querySelector('.reel-divider').classList.remove('is-wiping');
+  }
   const lb = clone.querySelector('#fx-lightbox');
   if (lb) { lb.classList.remove('open'); }
   const lbm = clone.querySelector('#lb-media');
