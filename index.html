@@ -9,6 +9,7 @@
 <meta property="og:description" content="Storyboards, animatics, concept art, and 2D FX animation.">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://res.cloudinary.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Jost:ital,wght@0,200;0,300;0,400;1,200;1,300&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -101,6 +102,8 @@ nav {
 
 /* ── MAIN ── */
 main { padding-top: 60px; }
+/* Reserve space until deferred portfolio images finish loading. */
+.visdev-slot:has(> img[data-src]) { aspect-ratio: 16 / 9; }
 
 /* ── OPENING REEL ── */
 .reel {
@@ -595,14 +598,14 @@ footer {
 
     <!-- Concept art: 7 × 16:9, logo/logline last -->
     <div class="visdev-stack">
-      <div class="visdev-slot slot-editable" data-slot="vk-logo"><img src="https://res.cloudinary.com/twplcz62/image/upload/v1784566080/Varokarn_logo_logline_wwcjek.jpg" alt="The Varokarn, logo and logline"></div>
-      <div class="visdev-slot slot-editable" data-slot="vk-concept-1"><img src="https://res.cloudinary.com/twplcz62/image/upload/v1784404070/varokarn-concept-07_jpg_xwzmzu.jpg" alt="The Varokarn, concept"></div>
-      <div class="visdev-slot slot-editable" data-slot="vk-concept-2"><img src="https://res.cloudinary.com/twplcz62/image/upload/v1784404068/varokarn-concept-01_vvbrym.jpg" alt="The Varokarn, concept"></div>
-      <div class="visdev-slot slot-editable" data-slot="vk-concept-3"><img src="https://res.cloudinary.com/twplcz62/image/upload/v1784404067/varokarn-concept-02_hjhwzc.jpg" alt="The Varokarn, concept"></div>
-      <div class="visdev-slot slot-editable" data-slot="vk-concept-4"><img src="https://res.cloudinary.com/twplcz62/image/upload/v1784404067/varokarn-concept-03_ykj24c.jpg" alt="The Varokarn, concept"></div>
-      <div class="visdev-slot slot-editable" data-slot="vk-concept-5"><img src="https://res.cloudinary.com/twplcz62/image/upload/v1784404071/varokarn-concept-06_fyqbyv.jpg" alt="The Varokarn, concept"></div>
-      <div class="visdev-slot slot-editable" data-slot="vk-concept-6"><img src="https://res.cloudinary.com/twplcz62/image/upload/v1784404071/varokarn-concept-04_pe9c8u.jpg" alt="The Varokarn, concept"></div>
-      <div class="visdev-slot slot-editable" data-slot="vk-concept-7"><img src="https://res.cloudinary.com/twplcz62/image/upload/v1784570880/Gann_Plusweek_iterations_o43b15.jpg" alt="The Varokarn, Gann iterations"></div>
+      <div class="visdev-slot slot-editable" data-slot="vk-logo"><img loading="lazy" decoding="async" data-src="https://res.cloudinary.com/twplcz62/image/upload/v1784566080/Varokarn_logo_logline_wwcjek.jpg" alt="The Varokarn, logo and logline"></div>
+      <div class="visdev-slot slot-editable" data-slot="vk-concept-1"><img loading="lazy" decoding="async" data-src="https://res.cloudinary.com/twplcz62/image/upload/v1784404070/varokarn-concept-07_jpg_xwzmzu.jpg" alt="The Varokarn, concept"></div>
+      <div class="visdev-slot slot-editable" data-slot="vk-concept-2"><img loading="lazy" decoding="async" data-src="https://res.cloudinary.com/twplcz62/image/upload/v1784404068/varokarn-concept-01_vvbrym.jpg" alt="The Varokarn, concept"></div>
+      <div class="visdev-slot slot-editable" data-slot="vk-concept-3"><img loading="lazy" decoding="async" data-src="https://res.cloudinary.com/twplcz62/image/upload/v1784404067/varokarn-concept-02_hjhwzc.jpg" alt="The Varokarn, concept"></div>
+      <div class="visdev-slot slot-editable" data-slot="vk-concept-4"><img loading="lazy" decoding="async" data-src="https://res.cloudinary.com/twplcz62/image/upload/v1784404067/varokarn-concept-03_ykj24c.jpg" alt="The Varokarn, concept"></div>
+      <div class="visdev-slot slot-editable" data-slot="vk-concept-5"><img loading="lazy" decoding="async" data-src="https://res.cloudinary.com/twplcz62/image/upload/v1784404071/varokarn-concept-06_fyqbyv.jpg" alt="The Varokarn, concept"></div>
+      <div class="visdev-slot slot-editable" data-slot="vk-concept-6"><img loading="lazy" decoding="async" data-src="https://res.cloudinary.com/twplcz62/image/upload/v1784404071/varokarn-concept-04_pe9c8u.jpg" alt="The Varokarn, concept"></div>
+      <div class="visdev-slot slot-editable" data-slot="vk-concept-7"><img loading="lazy" decoding="async" data-src="https://res.cloudinary.com/twplcz62/image/upload/v1784570880/Gann_Plusweek_iterations_o43b15.jpg" alt="The Varokarn, Gann iterations"></div>
     </div>
 
     <!-- Animatic video, placeholder until ready -->
@@ -618,12 +621,12 @@ footer {
     <div class="project-label">LIAN, BLENDER ANIMATIC</div>
 
     <div class="video-slot slot-editable" data-slot="p2-video" style="cursor: default;">
-      <video src="https://res.cloudinary.com/twplcz62/video/upload/v1784584194/Lian_Animatic_Fin_i0klbs.mp4" poster="https://res.cloudinary.com/twplcz62/video/upload/so_1.5/v1784584194/Lian_Animatic_Fin_i0klbs.jpg" controls playsinline preload="none"></video>
+      <video data-src="https://res.cloudinary.com/twplcz62/video/upload/v1784584194/Lian_Animatic_Fin_i0klbs.mp4" data-poster="https://res.cloudinary.com/twplcz62/video/upload/so_1.5/v1784584194/Lian_Animatic_Fin_i0klbs.jpg" controls playsinline preload="none"></video>
     </div>
 
     <!-- Rough panel photo, reduced width -->
     <div class="rough-pair" style="grid-template-columns: 1fr; max-width: 620px;">
-      <div class="rough-slot slot-editable" data-slot="p2-rough"><img src="https://res.cloudinary.com/twplcz62/image/upload/v1784584575/Lian_animatic_paper_storyboard_suy134.jpg" alt="Lian, paper storyboard"></div>
+      <div class="rough-slot slot-editable" data-slot="p2-rough"><img loading="lazy" decoding="async" data-src="https://res.cloudinary.com/twplcz62/image/upload/v1784584575/Lian_animatic_paper_storyboard_suy134.jpg" alt="Lian, paper storyboard"></div>
     </div>
   </div>
 
@@ -634,7 +637,7 @@ footer {
     <div class="project-label">ANIMATIC FOR &quot;RETURN&quot;</div>
 
     <div class="video-slot" style="cursor: default;">
-      <video src="https://res.cloudinary.com/twplcz62/video/upload/v1784665770/smell_animatic_comparison_ndyzt7.mp4" poster="https://res.cloudinary.com/twplcz62/video/upload/so_1.5/v1784665770/smell_animatic_comparison_ndyzt7.jpg" controls playsinline preload="none"></video>
+      <video data-src="https://res.cloudinary.com/twplcz62/video/upload/v1784665770/smell_animatic_comparison_ndyzt7.mp4" data-poster="https://res.cloudinary.com/twplcz62/video/upload/so_1.5/v1784665770/smell_animatic_comparison_ndyzt7.jpg" controls playsinline preload="none"></video>
     </div>
   </div>
 
@@ -652,12 +655,12 @@ footer {
 
   <!-- Large-scale FX pieces, full width, not the condensed grid -->
   <div class="visdev-stack">
-    <div class="visdev-slot"><video src="https://res.cloudinary.com/twplcz62/video/upload/v1784840945/4Arms_Body_Good_lircv0.mp4" loop muted playsinline preload="metadata" data-fxauto></video></div>
-    <div class="visdev-slot"><video src="https://res.cloudinary.com/twplcz62/video/upload/q_auto,w_1280/v1791211262/Saph_FOX_Fx_Master_inresg.mp4" poster="https://res.cloudinary.com/twplcz62/video/upload/so_0/v1791211262/Saph_FOX_Fx_Master_inresg.jpg" loop muted playsinline preload="metadata" data-fxauto></video></div>
-    <div class="visdev-slot"><video src="https://res.cloudinary.com/twplcz62/video/upload/v1784665775/smell_fx_comparison_dzbs9g.mp4" loop muted playsinline preload="metadata" data-fxauto></video></div>
-    <div class="visdev-slot"><video src="https://res.cloudinary.com/twplcz62/video/upload/v1784586596/Recording_2026-07-21_012922_jmbip7.mp4" loop muted playsinline preload="metadata" data-fxauto></video></div>
-    <div class="visdev-slot"><video src="https://res.cloudinary.com/twplcz62/video/upload/v1784671328/lightning_flipped_mudbh6.mp4" loop muted playsinline preload="metadata" data-fxauto></video></div>
-    <div class="visdev-slot"><video src="https://res.cloudinary.com/twplcz62/video/upload/v1784670771/old_smoke_with_text_o34bt0.mp4" loop muted playsinline preload="metadata" data-fxauto></video></div>
+    <div class="visdev-slot"><video data-src="https://res.cloudinary.com/twplcz62/video/upload/v1784840945/4Arms_Body_Good_lircv0.mp4" loop muted playsinline preload="none" data-fxauto></video></div>
+    <div class="visdev-slot"><video data-src="https://res.cloudinary.com/twplcz62/video/upload/q_auto,w_1280/v1791211262/Saph_FOX_Fx_Master_inresg.mp4" data-poster="https://res.cloudinary.com/twplcz62/video/upload/so_0/v1791211262/Saph_FOX_Fx_Master_inresg.jpg" loop muted playsinline preload="none" data-fxauto></video></div>
+    <div class="visdev-slot"><video data-src="https://res.cloudinary.com/twplcz62/video/upload/v1784665775/smell_fx_comparison_dzbs9g.mp4" loop muted playsinline preload="none" data-fxauto></video></div>
+    <div class="visdev-slot"><video data-src="https://res.cloudinary.com/twplcz62/video/upload/v1784586596/Recording_2026-07-21_012922_jmbip7.mp4" loop muted playsinline preload="none" data-fxauto></video></div>
+    <div class="visdev-slot"><video data-src="https://res.cloudinary.com/twplcz62/video/upload/v1784671328/lightning_flipped_mudbh6.mp4" loop muted playsinline preload="none" data-fxauto></video></div>
+    <div class="visdev-slot"><video data-src="https://res.cloudinary.com/twplcz62/video/upload/v1784670771/old_smoke_with_text_o34bt0.mp4" loop muted playsinline preload="none" data-fxauto></video></div>
   </div>
 
   <div class="fx-grid" id="fx-grid">
@@ -743,7 +746,7 @@ footer {
   }
   sessionStorage.setItem('splashSeen', '1');
   s.addEventListener('click', dismiss, { once: true });
-  window.addEventListener('load', () => setTimeout(dismiss, 2000));
+  setTimeout(dismiss, 2000);
 })();
 
 // ── OPENING REEL ──
@@ -752,7 +755,7 @@ footer {
 // hold is time on screen in milliseconds.
 const REEL_SHOTS = [
   {
-    src: 'https://res.cloudinary.com/twplcz62/video/upload/q_auto,w_1280/v1784840945/4Arms_Body_Good_lircv0.mp4',
+    src: 'https://res.cloudinary.com/twplcz62/video/upload/v1784840945/4Arms_Body_Good_lircv0.mp4',
     poster: 'https://res.cloudinary.com/twplcz62/video/upload/so_0/v1784840945/4Arms_Body_Good_lircv0.jpg',
     start: 0, hold: 3800, playToEnd: true, endMargin: 0.25
   },
@@ -764,7 +767,7 @@ const REEL_SHOTS = [
   {
     src: 'https://res.cloudinary.com/twplcz62/video/upload/q_auto,w_1280/v1784584194/Lian_Animatic_Fin_i0klbs.mp4',
     poster: 'https://res.cloudinary.com/twplcz62/video/upload/so_1.5/v1784584194/Lian_Animatic_Fin_i0klbs.jpg',
-    startFraction: 0.58, startOffset: -2, hold: 3800
+    startFraction: 0.58, startOffset: -4, hold: 3800, playToEnd: true
   }
 ];
 
@@ -796,7 +799,7 @@ const REEL_SHOTS = [
       if (item.playToEnd && item.endMargin && video === videos[front] &&
           visible && !busy && video.currentTime >= video.duration - item.endMargin) {
         nextShot();
-      } else if (item.startFraction != null && video.currentTime >= video.duration - 0.15) {
+      } else if (!item.playToEnd && item.startFraction != null && video.currentTime >= video.duration - 0.15) {
         video.currentTime = segmentStart;
       }
     };
@@ -810,6 +813,7 @@ const REEL_SHOTS = [
   function play(video) {
     video.muted = true;
     video.play().then(() => {
+      window.dispatchEvent(new Event('reelready'));
       if (video === videos[front]) schedule();
     }).catch(() => {});
   }
@@ -824,17 +828,39 @@ const REEL_SHOTS = [
     timer = setTimeout(nextShot, item.hold);
   }
 
-  function nextShot() {
+  function readyFrame(video) {
+    return new Promise((resolve, reject) => {
+      const cleanup = () => ['canplay', 'seeked', 'error'].forEach(event => video.removeEventListener(event, check));
+      const check = () => {
+        if (video.error) { cleanup(); reject(video.error); }
+        else if (video.readyState >= 2 && !video.seeking) { cleanup(); resolve(); }
+      };
+      ['canplay', 'seeked', 'error'].forEach(event => video.addEventListener(event, check));
+      check();
+    });
+  }
+
+  async function nextShot() {
     if (!visible || busy) return;
     busy = true;
     const incomingIndex = 1 - front;
     const incoming = videos[incomingIndex];
     const nextIndex = (shot + 1) % REEL_SHOTS.length;
+    if (!incoming.getAttribute('src')) setShot(incoming, REEL_SHOTS[nextIndex]);
+    try {
+      await readyFrame(incoming);
+      if (!visible) { busy = false; return; }
+      await incoming.play();
+    } catch (error) {
+      busy = false;
+      videos[front].currentTime = 0;
+      if (visible) play(videos[front]);
+      return;
+    }
     incoming.classList.add('is-incoming');
     // Wait for a frame so the clip and diagonal edge start from the left.
     requestAnimationFrame(() => requestAnimationFrame(() => {
       if (!visible) { incoming.classList.remove('is-incoming'); busy = false; return; }
-      play(incoming);
       incoming.classList.add('is-wiping');
       divider.classList.add('is-wiping');
       setTimeout(() => {
@@ -856,7 +882,10 @@ const REEL_SHOTS = [
   setShot(videos[0], REEL_SHOTS[0]);
   videos[0].classList.add('is-front');
   if (reducedMotion) return; // Still frame for visitors who limit motion.
-  setShot(videos[1], REEL_SHOTS[1]);
+  // Give the opening video bandwidth before requesting the next reel clip.
+  videos[0].addEventListener('playing', () => {
+    if (!videos[1].getAttribute('src')) setShot(videos[1], REEL_SHOTS[1]);
+  }, { once: true });
   const observer = new IntersectionObserver(entries => {
     visible = entries[0].isIntersecting && !document.hidden && splashHidden();
     if (visible) {
@@ -957,14 +986,14 @@ try { edits = Object.assign(edits, JSON.parse(localStorage.getItem(STORE_KEY) ||
 function saveEdits() { localStorage.setItem(STORE_KEY, JSON.stringify(edits)); }
 
 // Build the right embed for a URL: Vimeo/YouTube iframe, video file, or image
-function mediaHTML(url, caption) {
+function mediaHTML(url, caption, deferred = false) {
   const u = (url || '').trim();
   const vm = u.match(/vimeo\.com\/(\d+)/);
   const yt = u.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+)/);
   if (vm) return '<iframe src="https://player.vimeo.com/video/' + vm[1] + '" allow="fullscreen" allowfullscreen loading="lazy"></iframe>';
   if (yt) return '<iframe src="https://www.youtube.com/embed/' + yt[1] + '" allow="fullscreen" allowfullscreen loading="lazy"></iframe>';
-  if (/\.(mp4|webm|mov)(\?|$)/i.test(u)) return '<video src="' + u + '" autoplay loop muted playsinline></video>';
-  return '<img src="' + u + '" alt="' + (caption || '') + '" loading="lazy">';
+  if (/\.(mp4|webm|mov)(\?|$)/i.test(u)) return '<video ' + (deferred ? 'data-src' : 'src') + '="' + u + '" autoplay loop muted playsinline preload="none"></video>';
+  return '<img ' + (deferred ? 'data-src' : 'src') + '="' + u + '" alt="' + (caption || '') + '" loading="lazy" decoding="async">';
 }
 
 // ── Single slots (concept pieces, videos, rough panels, about photo) ──
@@ -976,7 +1005,7 @@ document.querySelectorAll('.slot-editable').forEach(slot => {
 function renderSlot(slot) {
   const id = slot.dataset.slot;
   const url = edits.slots[id];
-  slot.innerHTML = url ? mediaHTML(url) : slotPlaceholders[id];
+  slot.innerHTML = url ? mediaHTML(url, '', true) : slotPlaceholders[id];
   if (editMode) {
     const chip = document.createElement('button');
     chip.className = 'slot-chip';
@@ -1021,7 +1050,7 @@ function renderGrid(gridId, listName, itemClass, addLabel) {
     el.className = itemClass;
     el.dataset.url = item.url;
     if (item.caption) el.dataset.caption = item.caption;
-    el.innerHTML = mediaHTML(item.url, item.caption);
+    el.innerHTML = mediaHTML(item.url, item.caption, true);
     if (editMode) {
       const rm = document.createElement('button');
       rm.className = 'cell-remove';
@@ -1055,6 +1084,45 @@ function renderGrid(gridId, listName, itemClass, addLabel) {
 
 renderGrid('fx-grid', 'fx', 'fx-cell', '+ Add FX piece');
 
+// Start portfolio requests after the reel has begun, or when the visitor scrolls.
+function loadPortfolioMedia(media) {
+  if (media.dataset.poster) {
+    media.poster = media.dataset.poster;
+    delete media.dataset.poster;
+  }
+  if (!media.dataset.src || media.getAttribute('src')) return;
+  if (media.tagName === 'IMG') {
+    media.addEventListener('load', () => delete media.dataset.src, { once: true });
+    media.src = media.dataset.src;
+  } else {
+    media.src = media.dataset.src;
+    delete media.dataset.src;
+    media.preload = media.hasAttribute('controls') ? 'none' : 'auto';
+    media.load();
+  }
+}
+let portfolioEnabled = false;
+const portfolioObserver = new IntersectionObserver(entries => {
+  if (!portfolioEnabled) return;
+  entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+    loadPortfolioMedia(entry.target);
+    portfolioObserver.unobserve(entry.target);
+  });
+}, { rootMargin: '200px 0px', threshold: 0 });
+function observePortfolioMedia() {
+  document.querySelectorAll('main img[data-src], main video[data-src]:not([data-fxauto])').forEach(media => portfolioObserver.observe(media));
+}
+function enablePortfolioMedia() {
+  if (portfolioEnabled) return;
+  portfolioEnabled = true;
+  observePortfolioMedia();
+}
+window.addEventListener('reelready', enablePortfolioMedia, { once: true });
+window.addEventListener('scroll', enablePortfolioMedia, { once: true, passive: true });
+new MutationObserver(observePortfolioMedia).observe(document.querySelector('main'), { childList: true, subtree: true });
+if (window.scrollY > 0 || window.matchMedia('(prefers-reduced-motion: reduce)').matches) enablePortfolioMedia();
+
 // ── FX video playback ──
 // Two stages. First, once a clip is roughly a screen away, quietly buffer
 // the whole file. Second, play it only inside the middle band of the
@@ -1067,18 +1135,20 @@ if (fxAutoVideos.length) {
     entries.forEach(entry => {
       if (!entry.isIntersecting) return;
       const v = entry.target;
+      loadPortfolioMedia(v);
       if (v.preload !== 'auto' && v.paused) {
         v.preload = 'auto';
         v.load();
       }
       fxPrepObserver.unobserve(v);
     });
-  }, { rootMargin: '150% 0px 150% 0px', threshold: 0 });
+  }, { rootMargin: '50% 0px 50% 0px', threshold: 0 });
 
   const fxPlayObserver = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       const v = entry.target;
       if (entry.isIntersecting) {
+        loadPortfolioMedia(v);
         v.play().catch(() => {});
       } else {
         v.pause();
@@ -1118,9 +1188,9 @@ document.addEventListener('click', (e) => {
   const t = e.target;
   if (t.closest('#splash') || t.closest('#reel') || t.closest('nav') || t.closest('#edit-banner') || t.closest('#fx-lightbox')) return;
   if (t.tagName === 'IMG') {
-    openLightbox(t.currentSrc || t.src, t.alt || '');
+    openLightbox(t.currentSrc || t.src || t.dataset.src, t.alt || '');
   } else if (t.tagName === 'VIDEO' && !t.hasAttribute('controls')) {
-    const src = t.currentSrc || t.src || (t.querySelector('source') && t.querySelector('source').src);
+    const src = t.currentSrc || t.src || t.dataset.src || (t.querySelector('source') && t.querySelector('source').src);
     if (src) openLightbox(src, '');
   }
 });
@@ -1132,6 +1202,20 @@ document.addEventListener('keydown', e => {
 // ── Export: copy the entire updated site as one HTML file ──
 function exportSiteCode() {
   const clone = document.documentElement.cloneNode(true);
+  // Preserve deferred loading in every exported revision, even after scrolling.
+  clone.querySelectorAll('main img').forEach(img => {
+    if (img.getAttribute('src')) img.dataset.src = img.getAttribute('src');
+    img.removeAttribute('src');
+    img.loading = 'lazy';
+    img.decoding = 'async';
+  });
+  clone.querySelectorAll('main video:not(.reel-video)').forEach(video => {
+    if (video.getAttribute('src')) video.dataset.src = video.getAttribute('src');
+    if (video.getAttribute('poster')) video.dataset.poster = video.getAttribute('poster');
+    video.removeAttribute('src');
+    video.removeAttribute('poster');
+    video.preload = 'none';
+  });
   const banner = clone.querySelector('#edit-banner');
   if (banner) banner.remove();
   clone.querySelectorAll('.slot-chip, .cell-remove, .add-tile').forEach(el => el.remove());
