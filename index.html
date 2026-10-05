@@ -552,8 +552,7 @@ footer {
   <a class="nav-name" id="nav-home">KASPARAS NARAUSKAS</a>
   <ul class="nav-links">
     <li><button class="nav-link active" data-target="story">Story / Concept</button></li>
-    <li><button class="nav-link" data-target="fx">FX Work</button></li>
-    <li><button class="nav-link" data-target="personal">Personal Work</button></li>
+    <li><button class="nav-link" data-target="fx">FX/ ANIMATION</button></li>
     <li><button class="nav-link" data-target="about">About</button></li>
   </ul>
 </nav>
@@ -573,7 +572,7 @@ footer {
 
 <main>
 
-<!-- Four short muted excerpts. Edit REEL_SHOTS below to replace individual clips. -->
+<!-- Three muted clips. Edit REEL_SHOTS below to replace individual clips. -->
 <section class="reel" id="reel" aria-label="Selected animation showreel">
   <video class="reel-video" muted playsinline loop preload="auto" aria-hidden="true"></video>
   <video class="reel-video" muted playsinline loop preload="auto" aria-hidden="true"></video>
@@ -630,25 +629,6 @@ footer {
 
   <div class="project-divider"></div>
 
-  <!-- PROJECT "TEMPLE" -->
-  <div class="project-block">
-    <div class="project-label">PROJECT &quot;TEMPLE&quot;</div>
-
-    <div class="rough-pair" style="grid-template-columns: 1fr; max-width: 900px;">
-      <div class="rough-slot"><img src="https://res.cloudinary.com/twplcz62/image/upload/v1784668529/Aztec_storyboard_full_w3nmbg.jpg" alt="Project Temple, storyboard"></div>
-    </div>
-
-    <div class="video-slot" style="margin-top: 32px; cursor: default;">
-      <video src="https://res.cloudinary.com/twplcz62/video/upload/v1784668534/aztec_fight_animatic_edited_w_text_qcdssl.mp4" poster="https://res.cloudinary.com/twplcz62/video/upload/so_0/v1784668534/aztec_fight_animatic_edited_w_text_qcdssl.jpg" controls playsinline preload="none"></video>
-    </div>
-
-    <div class="rough-pair" style="grid-template-columns: 1fr; max-width: 900px; margin-top: 32px;">
-      <div class="rough-slot"><img src="https://res.cloudinary.com/twplcz62/image/upload/v1784669248/Aztec_Spirit_Sheet_vfydsy.jpg" alt="Project Temple, spirit sheet"></div>
-    </div>
-  </div>
-
-  <div class="project-divider"></div>
-
   <!-- ANIMATIC FOR "RETURN" -->
   <div class="project-block">
     <div class="project-label">ANIMATIC FOR &quot;RETURN&quot;</div>
@@ -661,18 +641,19 @@ footer {
 </section>
 
 <!-- ══════════════════════════════════════════
-     FX WORK
+     FX/ ANIMATION
 ══════════════════════════════════════════ -->
 <section class="port-section" id="fx">
   <div class="s-head">
     <span class="s-num">02</span>
-    <h2 class="s-title">FX WORK</h2>
+    <h2 class="s-title">FX/ ANIMATION</h2>
     <div class="s-rule"></div>
   </div>
 
   <!-- Large-scale FX pieces, full width, not the condensed grid -->
   <div class="visdev-stack">
     <div class="visdev-slot"><video src="https://res.cloudinary.com/twplcz62/video/upload/v1784840945/4Arms_Body_Good_lircv0.mp4" loop muted playsinline preload="metadata" data-fxauto></video></div>
+    <div class="visdev-slot"><video src="https://res.cloudinary.com/twplcz62/video/upload/q_auto,w_1280/v1791211262/Saph_FOX_Fx_Master_inresg.mp4" poster="https://res.cloudinary.com/twplcz62/video/upload/so_0/v1791211262/Saph_FOX_Fx_Master_inresg.jpg" loop muted playsinline preload="metadata" data-fxauto></video></div>
     <div class="visdev-slot"><video src="https://res.cloudinary.com/twplcz62/video/upload/v1784665775/smell_fx_comparison_dzbs9g.mp4" loop muted playsinline preload="metadata" data-fxauto></video></div>
     <div class="visdev-slot"><video src="https://res.cloudinary.com/twplcz62/video/upload/v1784586596/Recording_2026-07-21_012922_jmbip7.mp4" loop muted playsinline preload="metadata" data-fxauto></video></div>
     <div class="visdev-slot"><video src="https://res.cloudinary.com/twplcz62/video/upload/v1784671328/lightning_flipped_mudbh6.mp4" loop muted playsinline preload="metadata" data-fxauto></video></div>
@@ -690,26 +671,11 @@ footer {
 </div>
 
 <!-- ══════════════════════════════════════════
-     PERSONAL WORK (MOODBOARD)
-══════════════════════════════════════════ -->
-<section class="port-section" id="personal">
-  <div class="s-head">
-    <span class="s-num">03</span>
-    <h2 class="s-title">PERSONAL WORK</h2>
-    <div class="s-rule"></div>
-  </div>
-
-  <div class="moodboard-grid" id="moodboard-grid">
-    <!-- moodboard images live here; add them in ?edit mode -->
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════════
      ABOUT
 ══════════════════════════════════════════ -->
 <section class="port-section" id="about">
   <div class="s-head">
-    <span class="s-num">04</span>
+    <span class="s-num">03</span>
     <h2 class="s-title">ABOUT</h2>
     <div class="s-rule"></div>
   </div>
@@ -765,7 +731,10 @@ footer {
   const s = document.getElementById('splash');
   const dismiss = () => {
     s.classList.add('gone');
-    setTimeout(() => s.style.display = 'none', 950);
+    setTimeout(() => {
+      s.style.display = 'none';
+      window.dispatchEvent(new Event('splashdismissed'));
+    }, 950);
   };
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (sessionStorage.getItem('splashSeen') || reducedMotion) {
@@ -778,29 +747,24 @@ footer {
 })();
 
 // ── OPENING REEL ──
-// Four separate Cloudinary excerpts. Keep the full animatics with audio below.
+// Three separate Cloudinary clips. Keep the full animatics with audio below.
 // start is seconds into the original clip; startFraction is a share of its duration.
 // hold is time on screen in milliseconds.
 const REEL_SHOTS = [
   {
     src: 'https://res.cloudinary.com/twplcz62/video/upload/q_auto,w_1280/v1784840945/4Arms_Body_Good_lircv0.mp4',
     poster: 'https://res.cloudinary.com/twplcz62/video/upload/so_0/v1784840945/4Arms_Body_Good_lircv0.jpg',
-    start: 0, hold: 3800
+    start: 0, hold: 3800, playToEnd: true, endMargin: 0.25
   },
   {
-    src: 'https://res.cloudinary.com/twplcz62/video/upload/q_auto,w_1280/v1784668534/aztec_fight_animatic_edited_w_text_qcdssl.mp4',
-    poster: 'https://res.cloudinary.com/twplcz62/video/upload/so_1.5/v1784668534/aztec_fight_animatic_edited_w_text_qcdssl.jpg',
-    start: 1.5, hold: 3800
+    src: 'https://res.cloudinary.com/twplcz62/video/upload/q_auto,w_1280/v1791211262/Saph_FOX_Fx_Master_inresg.mp4',
+    poster: 'https://res.cloudinary.com/twplcz62/video/upload/so_0/v1791211262/Saph_FOX_Fx_Master_inresg.jpg',
+    start: 0, hold: 3800, playToEnd: true
   },
   {
     src: 'https://res.cloudinary.com/twplcz62/video/upload/q_auto,w_1280/v1784584194/Lian_Animatic_Fin_i0klbs.mp4',
     poster: 'https://res.cloudinary.com/twplcz62/video/upload/so_1.5/v1784584194/Lian_Animatic_Fin_i0klbs.jpg',
-    startFraction: 0.58, hold: 3800
-  },
-  {
-    src: 'https://res.cloudinary.com/twplcz62/video/upload/q_auto,w_1280/v1784586596/Recording_2026-07-21_012922_jmbip7.mp4',
-    poster: 'https://res.cloudinary.com/twplcz62/video/upload/so_1/v1784586596/Recording_2026-07-21_012922_jmbip7.jpg',
-    start: 0, hold: 3800
+    startFraction: 0.58, startOffset: -2, hold: 3800
   }
 ];
 
@@ -810,24 +774,34 @@ const REEL_SHOTS = [
   const divider = reel.querySelector('.reel-divider');
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   let front = 0, shot = 0, timer, visible = false, busy = false;
+  const splashHidden = () => document.getElementById('splash').style.display === 'none';
 
   function setShot(video, item) {
     video.pause();
     video.src = item.src;
     video.poster = item.poster;
     video.muted = true;
+    video.loop = !item.playToEnd;
     let segmentStart = 0;
     const seek = () => {
       if (video.readyState >= 1 && Number.isFinite(video.duration)) {
         const start = item.startFraction == null
           ? item.start
           : Math.min(video.duration * item.startFraction, Math.max(video.duration * 0.5, video.duration - item.hold / 1000 - 0.2));
-        segmentStart = Math.min(start, Math.max(0, video.duration - 0.1));
+        segmentStart = Math.max(0, Math.min(start + (item.startOffset || 0), Math.max(0, video.duration - 0.1)));
         video.currentTime = segmentStart;
       }
     };
-    video.ontimeupdate = item.startFraction == null ? null : () => {
-      if (video.currentTime >= video.duration - 0.15) video.currentTime = segmentStart;
+    video.ontimeupdate = () => {
+      if (item.playToEnd && item.endMargin && video === videos[front] &&
+          visible && !busy && video.currentTime >= video.duration - item.endMargin) {
+        nextShot();
+      } else if (item.startFraction != null && video.currentTime >= video.duration - 0.15) {
+        video.currentTime = segmentStart;
+      }
+    };
+    video.onended = () => {
+      if (item.playToEnd && video === videos[front]) nextShot();
     };
     video.addEventListener('loadedmetadata', seek, { once: true });
     video.load();
@@ -835,12 +809,19 @@ const REEL_SHOTS = [
 
   function play(video) {
     video.muted = true;
-    video.play().catch(() => {});
+    video.play().then(() => {
+      if (video === videos[front]) schedule();
+    }).catch(() => {});
   }
 
   function schedule() {
     clearTimeout(timer);
-    if (visible && !reducedMotion && !busy) timer = setTimeout(nextShot, REEL_SHOTS[shot].hold);
+    const video = videos[front];
+    if (!visible || reducedMotion || busy || video.paused || video.readyState < 2) return;
+    const item = REEL_SHOTS[shot];
+    // Full clips advance with playback events, so buffering never cuts them short.
+    if (item.playToEnd) return;
+    timer = setTimeout(nextShot, item.hold);
   }
 
   function nextShot() {
@@ -877,7 +858,7 @@ const REEL_SHOTS = [
   if (reducedMotion) return; // Still frame for visitors who limit motion.
   setShot(videos[1], REEL_SHOTS[1]);
   const observer = new IntersectionObserver(entries => {
-    visible = entries[0].isIntersecting && !document.hidden;
+    visible = entries[0].isIntersecting && !document.hidden && splashHidden();
     if (visible) {
       play(videos[front]);
       schedule();
@@ -888,10 +869,15 @@ const REEL_SHOTS = [
   }, { threshold: 0.1 });
   observer.observe(reel);
   document.addEventListener('visibilitychange', () => {
-    visible = !document.hidden && reel.getBoundingClientRect().bottom > 0 &&
+    visible = !document.hidden && splashHidden() && reel.getBoundingClientRect().bottom > 0 &&
       reel.getBoundingClientRect().top < window.innerHeight;
     if (visible) { play(videos[front]); schedule(); }
     else { clearTimeout(timer); videos.forEach(video => video.pause()); }
+  });
+  window.addEventListener('splashdismissed', () => {
+    visible = !document.hidden && reel.getBoundingClientRect().bottom > 0 &&
+      reel.getBoundingClientRect().top < window.innerHeight;
+    if (visible) play(videos[front]);
   });
   // A tap can retry autoplay on phones after the first blocked play attempt.
   reel.addEventListener('pointerdown', () => { if (visible) play(videos[front]); });
@@ -1068,7 +1054,6 @@ function renderGrid(gridId, listName, itemClass, addLabel) {
 }
 
 renderGrid('fx-grid', 'fx', 'fx-cell', '+ Add FX piece');
-renderGrid('moodboard-grid', 'mood', 'moodboard-item', '+ Add image');
 
 // ── FX video playback ──
 // Two stages. First, once a clip is roughly a screen away, quietly buffer
