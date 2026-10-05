@@ -117,7 +117,7 @@ main { padding-top: 60px; }
 .reel-video.is-front, .reel-video.is-incoming { visibility: visible; }
 .reel-video.is-incoming { z-index: 1; clip-path: polygon(0 0, -40% 0, -16% 100%, 0 100%); }
 .reel-video.is-incoming.is-wiping {
-  animation: reel-wipe 900ms var(--ease) forwards;
+  animation: reel-wipe var(--reel-wipe-duration, 900ms) var(--ease) forwards;
 }
 .reel-divider {
   position: absolute; z-index: 2; top: 50%; left: -28%;
@@ -125,7 +125,7 @@ main { padding-top: 60px; }
   transform: translateY(-50%) rotate(-29deg); pointer-events: none;
   opacity: 0;
 }
-.reel-divider.is-wiping { opacity: 1; animation: reel-divider 900ms var(--ease) forwards; }
+.reel-divider.is-wiping { opacity: 1; animation: reel-divider var(--reel-wipe-duration, 900ms) var(--ease) forwards; }
 @keyframes reel-wipe {
   to { clip-path: polygon(0 0, 116% 0, 140% 100%, 0 100%); }
 }
@@ -624,10 +624,6 @@ footer {
       <video data-src="https://res.cloudinary.com/twplcz62/video/upload/v1784584194/Lian_Animatic_Fin_i0klbs.mp4" data-poster="https://res.cloudinary.com/twplcz62/video/upload/so_1.5/v1784584194/Lian_Animatic_Fin_i0klbs.jpg" controls playsinline preload="none"></video>
     </div>
 
-    <!-- Rough panel photo, reduced width -->
-    <div class="rough-pair" style="grid-template-columns: 1fr; max-width: 620px;">
-      <div class="rough-slot slot-editable" data-slot="p2-rough"><img loading="lazy" decoding="async" data-src="https://res.cloudinary.com/twplcz62/image/upload/v1784584575/Lian_animatic_paper_storyboard_suy134.jpg" alt="Lian, paper storyboard"></div>
-    </div>
   </div>
 
   <div class="project-divider"></div>
@@ -756,12 +752,12 @@ const REEL_SHOTS = [
   {
     src: 'https://res.cloudinary.com/twplcz62/video/upload/v1784840945/4Arms_Body_Good_lircv0.mp4',
     poster: 'https://res.cloudinary.com/twplcz62/video/upload/so_0/v1784840945/4Arms_Body_Good_lircv0.jpg',
-    start: 0, hold: 3800, playToEnd: true, endMargin: 0.25
+    start: 0, hold: 3800, playToEnd: true, endMargin: 0.05, wipeDuration: 300
   },
   {
     src: 'https://res.cloudinary.com/twplcz62/video/upload/q_auto,w_1280/v1791211262/Saph_FOX_Fx_Master_inresg.mp4',
     poster: 'https://res.cloudinary.com/twplcz62/video/upload/so_0/v1791211262/Saph_FOX_Fx_Master_inresg.jpg',
-    start: 0, hold: 3800, playToEnd: true, endMargin: 0.5
+    start: 0, hold: 3800, playToEnd: true, endMargin: 0.05, wipeDuration: 300
   },
   {
     src: 'https://res.cloudinary.com/twplcz62/video/upload/q_auto,w_1280/v1784584194/Lian_Animatic_Fin_i0klbs.mp4',
@@ -770,13 +766,13 @@ const REEL_SHOTS = [
   }
 ];
 
-// Cut points use media time. Begin the 0.9-second wipe before the cut point.
+// Cut points use media time. Keep each wipe within the outgoing clip's end point.
 function reelWindow(item, duration) {
   const base = item.startFraction == null ? item.start
     : Math.min(duration * item.startFraction, Math.max(duration * 0.5, duration - item.hold / 1000 - 0.2));
   const end = Math.max(0.1, duration - (item.endMargin || 0));
   const start = Math.max(0, Math.min(base + (item.startOffset || 0), end - 0.1));
-  return { start, end, wipeAt: Math.max(start, end - 0.9) };
+  return { start, end, wipeAt: Math.max(start, end - (item.wipeDuration || 900) / 1000) };
 }
 
 (function() {
@@ -871,6 +867,8 @@ function reelWindow(item, duration) {
     const incomingIndex = 1 - front;
     const incoming = videos[incomingIndex];
     const nextIndex = (shot + 1) % REEL_SHOTS.length;
+    const wipeDuration = REEL_SHOTS[shot].wipeDuration || 900;
+    reel.style.setProperty('--reel-wipe-duration', wipeDuration + 'ms');
     if (!incoming.getAttribute('src')) setShot(incoming, REEL_SHOTS[nextIndex]);
     try {
       await readyFrame(incoming);
@@ -899,7 +897,7 @@ function reelWindow(item, duration) {
         setShot(videos[1 - front], REEL_SHOTS[(shot + 1) % REEL_SHOTS.length]);
         if (!visible) incoming.pause();
         schedule();
-      }, 920);
+      }, wipeDuration);
     }));
   }
 
