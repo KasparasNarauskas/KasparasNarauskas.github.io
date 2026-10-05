@@ -657,6 +657,7 @@ footer {
   <div class="visdev-stack">
     <div class="visdev-slot"><video data-src="https://res.cloudinary.com/twplcz62/video/upload/v1784840945/4Arms_Body_Good_lircv0.mp4" loop muted playsinline preload="none" data-fxauto></video></div>
     <div class="visdev-slot"><video data-src="https://res.cloudinary.com/twplcz62/video/upload/q_auto,w_1280/v1791211262/Saph_FOX_Fx_Master_inresg.mp4" data-poster="https://res.cloudinary.com/twplcz62/video/upload/so_0/v1791211262/Saph_FOX_Fx_Master_inresg.jpg" loop muted playsinline preload="none" data-fxauto></video></div>
+    <div class="visdev-slot"><video data-src="https://res.cloudinary.com/twplcz62/video/upload/q_auto,w_1280/v1791216219/tunnel_project_reel_gfh8eh.mp4" data-poster="https://res.cloudinary.com/twplcz62/video/upload/so_0/v1791216219/tunnel_project_reel_gfh8eh.jpg" loop muted playsinline preload="none" data-fxauto></video></div>
     <div class="visdev-slot"><video data-src="https://res.cloudinary.com/twplcz62/video/upload/v1784665775/smell_fx_comparison_dzbs9g.mp4" loop muted playsinline preload="none" data-fxauto></video></div>
     <div class="visdev-slot"><video data-src="https://res.cloudinary.com/twplcz62/video/upload/v1784586596/Recording_2026-07-21_012922_jmbip7.mp4" loop muted playsinline preload="none" data-fxauto></video></div>
     <div class="visdev-slot"><video data-src="https://res.cloudinary.com/twplcz62/video/upload/v1784671328/lightning_flipped_mudbh6.mp4" loop muted playsinline preload="none" data-fxauto></video></div>
@@ -762,7 +763,7 @@ const REEL_SHOTS = [
   {
     src: 'https://res.cloudinary.com/twplcz62/video/upload/q_auto,w_1280/v1791211262/Saph_FOX_Fx_Master_inresg.mp4',
     poster: 'https://res.cloudinary.com/twplcz62/video/upload/so_0/v1791211262/Saph_FOX_Fx_Master_inresg.jpg',
-    start: 0, hold: 3800, playToEnd: true
+    start: 0, hold: 3800, playToEnd: true, endMargin: 0.5
   },
   {
     src: 'https://res.cloudinary.com/twplcz62/video/upload/q_auto,w_1280/v1784584194/Lian_Animatic_Fin_i0klbs.mp4',
@@ -771,40 +772,58 @@ const REEL_SHOTS = [
   }
 ];
 
+// Cut points use media time. Begin the 0.9-second wipe before the cut point.
+function reelWindow(item, duration) {
+  const base = item.startFraction == null ? item.start
+    : Math.min(duration * item.startFraction, Math.max(duration * 0.5, duration - item.hold / 1000 - 0.2));
+  const end = Math.max(0.1, duration - (item.endMargin || 0));
+  const start = Math.max(0, Math.min(base + (item.startOffset || 0), end - 0.1));
+  return { start, end, wipeAt: Math.max(start, end - 0.9) };
+}
+
 (function() {
   const reel = document.getElementById('reel');
   const videos = [...reel.querySelectorAll('.reel-video')];
   const divider = reel.querySelector('.reel-divider');
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   let front = 0, shot = 0, timer, visible = false, busy = false;
+  const frameHandles = new WeakMap();
   const splashHidden = () => document.getElementById('splash').style.display === 'none';
 
   function setShot(video, item) {
     video.pause();
+    if (video.cancelVideoFrameCallback && frameHandles.has(video)) {
+      video.cancelVideoFrameCallback(frameHandles.get(video));
+    }
     video.src = item.src;
     video.poster = item.poster;
     video.muted = true;
-    video.loop = !item.playToEnd;
-    let segmentStart = 0;
+    video.loop = false;
+    let bounds = { start: 0, end: Infinity, wipeAt: Infinity };
     const seek = () => {
       if (video.readyState >= 1 && Number.isFinite(video.duration)) {
-        const start = item.startFraction == null
-          ? item.start
-          : Math.min(video.duration * item.startFraction, Math.max(video.duration * 0.5, video.duration - item.hold / 1000 - 0.2));
-        segmentStart = Math.max(0, Math.min(start + (item.startOffset || 0), Math.max(0, video.duration - 0.1)));
-        video.currentTime = segmentStart;
+        bounds = reelWindow(item, video.duration);
+        video.currentTime = bounds.start;
+        if (video.requestVideoFrameCallback) {
+          const trackFrame = () => {
+            video.ontimeupdate();
+            frameHandles.set(video, video.requestVideoFrameCallback(trackFrame));
+          };
+          frameHandles.set(video, video.requestVideoFrameCallback(trackFrame));
+        }
       }
     };
     video.ontimeupdate = () => {
-      if (item.playToEnd && item.endMargin && video === videos[front] &&
-          visible && !busy && video.currentTime >= video.duration - item.endMargin) {
+      if (video === videos[front] && visible && !busy && video.currentTime >= bounds.wipeAt) {
         nextShot();
-      } else if (!item.playToEnd && item.startFraction != null && video.currentTime >= video.duration - 0.15) {
-        video.currentTime = segmentStart;
       }
+      // Never run into the trimmed black tail while waiting for the next source.
+      // Replay this excerpt rather than pausing on its last frame.
+      if (video.currentTime >= bounds.end) video.currentTime = bounds.start;
     };
     video.onended = () => {
-      if (item.playToEnd && video === videos[front]) nextShot();
+      video.currentTime = bounds.start;
+      if (visible && (video === videos[front] || video.classList.contains('is-incoming'))) play(video);
     };
     video.addEventListener('loadedmetadata', seek, { once: true });
     video.load();
@@ -830,12 +849,20 @@ const REEL_SHOTS = [
 
   function readyFrame(video) {
     return new Promise((resolve, reject) => {
-      const cleanup = () => ['canplay', 'seeked', 'error'].forEach(event => video.removeEventListener(event, check));
+      const events = ['canplay', 'canplaythrough', 'progress', 'seeked', 'error'];
+      const cleanup = () => events.forEach(event => video.removeEventListener(event, check));
       const check = () => {
         if (video.error) { cleanup(); reject(video.error); }
-        else if (video.readyState >= 2 && !video.seeking) { cleanup(); resolve(); }
+        else if (video.readyState >= 3 && !video.seeking) {
+          const target = Math.min(video.duration, video.currentTime + 2);
+          for (let i = 0; i < video.buffered.length; i++) {
+            if (video.buffered.start(i) <= video.currentTime && video.buffered.end(i) >= target - 0.05) {
+              cleanup(); resolve(); return;
+            }
+          }
+        }
       };
-      ['canplay', 'seeked', 'error'].forEach(event => video.addEventListener(event, check));
+      events.forEach(event => video.addEventListener(event, check));
       check();
     });
   }
@@ -853,7 +880,6 @@ const REEL_SHOTS = [
       await incoming.play();
     } catch (error) {
       busy = false;
-      videos[front].currentTime = 0;
       if (visible) play(videos[front]);
       return;
     }
