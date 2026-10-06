@@ -455,6 +455,8 @@ body.edit-mode .cell-remove { display: flex; }
 .about-photo > img {
   width: 117.65%; height: 112.36%; max-width: none;
   left: -8.24%; top: -2.92%; object-fit: fill;
+  transform: scale(1.1); transform-origin: center;
+  cursor: default;
 }
 .about-photo-bg {
   position: absolute; bottom: -18px; right: -6px;
@@ -1256,7 +1258,7 @@ function closeLightbox(e) {
 // (like a real animatic player) are left alone so clicking play works normally.
 document.addEventListener('click', (e) => {
   const t = e.target;
-  if (t.closest('#splash') || t.closest('#reel') || t.closest('nav') || t.closest('#edit-banner') || t.closest('#fx-lightbox')) return;
+  if (t.closest('#splash') || t.closest('#reel') || t.closest('nav') || t.closest('#edit-banner') || t.closest('#fx-lightbox') || t.closest('.about-photo')) return;
   if (t.tagName === 'IMG') {
     openLightbox(t.currentSrc || t.src || t.dataset.src, t.alt || '');
   } else if (t.tagName === 'VIDEO' && !t.hasAttribute('controls') && !t.hasAttribute('data-inline-scrub')) {
