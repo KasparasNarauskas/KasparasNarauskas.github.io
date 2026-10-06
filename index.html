@@ -498,6 +498,13 @@ body.edit-mode .cell-remove { display: flex; }
 }
 .about-link.contact-email:hover { background: #fff; color: var(--bg); }
 .about-link.contact-social { color: var(--paper); }
+.about-software { margin-top: 56px; padding-top: 28px; border-top: 1px solid var(--rule); }
+.software-title { font-family: var(--display); font-size: 24px; letter-spacing: var(--ls-tight); color: var(--paper); margin-bottom: 20px; }
+.software-list { list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px 24px; }
+.software-list li { font-family: var(--body); font-size: 13px; font-weight: 300; color: var(--light); }
+.animatic-scrub { display: flex; align-items: center; gap: 14px; padding: 12px 14px; cursor: default; border-top: 1px solid var(--rule); }
+.animatic-scrub input { flex: 1; min-width: 0; accent-color: var(--paper); cursor: pointer; }
+.animatic-time { font-family: var(--body); font-size: 11px; color: var(--light); font-variant-numeric: tabular-nums; white-space: nowrap; }
 
 /* ── FOOTER ── */
 footer {
@@ -550,6 +557,7 @@ footer {
   .reel { aspect-ratio: 16 / 9; }
   .moodboard-grid { columns: 1; }
   .fx-grid { grid-template-columns: 1fr; }
+  .software-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 </style>
 </head>
@@ -612,7 +620,11 @@ footer {
     <div class="visdev-stack">
       <div class="visdev-slot slot-editable" data-slot="vk-logo"><img loading="lazy" decoding="async" data-src="https://res.cloudinary.com/twplcz62/image/upload/v1784566080/Varokarn_logo_logline_wwcjek.jpg" alt="The Varokarn, logo and logline"></div>
       <div class="visdev-slot slot-editable" data-slot="vk-video" id="vid-varokarn">
-        <video data-src="https://res.cloudinary.com/twplcz62/video/upload/v1791290609/Varokarn_feedback_storyboard_u7dsly.mp4" data-poster="https://res.cloudinary.com/twplcz62/video/upload/so_0/v1791290609/Varokarn_feedback_storyboard_u7dsly.jpg" aria-label="The Varokarn, animatic in progress" loop muted playsinline preload="none" data-fxauto></video>
+        <video data-src="https://res.cloudinary.com/twplcz62/video/upload/v1791290609/Varokarn_feedback_storyboard_u7dsly.mp4" data-poster="https://res.cloudinary.com/twplcz62/video/upload/so_0/v1791290609/Varokarn_feedback_storyboard_u7dsly.jpg" aria-label="The Varokarn, animatic in progress" loop muted playsinline preload="none" data-fxauto data-inline-scrub></video>
+        <div class="animatic-scrub">
+          <input id="varokarn-scrub" type="range" min="0" max="1" step="0.1" value="0" disabled aria-label="Seek through the Varokarn animatic">
+          <span class="animatic-time" id="varokarn-time">0:00 / 0:00</span>
+        </div>
       </div>
       <div class="visdev-slot slot-editable" data-slot="vk-concept-1"><img loading="lazy" decoding="async" data-src="https://res.cloudinary.com/twplcz62/image/upload/v1784404070/varokarn-concept-07_jpg_xwzmzu.jpg" alt="The Varokarn, concept"></div>
       <div class="visdev-slot slot-editable" data-slot="vk-concept-2"><img loading="lazy" decoding="async" data-src="https://res.cloudinary.com/twplcz62/image/upload/v1784404068/varokarn-concept-01_vvbrym.jpg" alt="The Varokarn, concept"></div>
@@ -716,6 +728,17 @@ footer {
         <!-- Add when live: <a href="https://linkedin.com/in/USERNAME" class="about-link">LinkedIn</a> -->
       </div>
     </div>
+  </div>
+  <div class="about-software" aria-labelledby="software-title">
+    <h3 class="software-title" id="software-title">FAMILIAR SOFTWARE</h3>
+    <ul class="software-list">
+      <li>Adobe Photoshop</li>
+      <li>Clip Studio Paint</li>
+      <li>Toon Boom Storyboard Pro</li>
+      <li>Blender</li>
+      <li>TVPaint</li>
+      <li>Toon Boom Harmony</li>
+    </ul>
   </div>
 </section>
 
@@ -1192,6 +1215,29 @@ if (fxAutoVideos.length) {
   });
 }
 
+// Keep inline seeking independent of scroll-triggered playback.
+const varokarnVideo = document.querySelector('#vid-varokarn video');
+const varokarnScrub = document.getElementById('varokarn-scrub');
+const varokarnTime = document.getElementById('varokarn-time');
+const formatVideoTime = seconds => {
+  const whole = Math.max(0, Math.floor(seconds || 0));
+  return Math.floor(whole / 60) + ':' + String(whole % 60).padStart(2, '0');
+};
+function updateVarokarnScrub() {
+  const duration = varokarnVideo.duration;
+  if (!Number.isFinite(duration) || duration <= 0) return;
+  varokarnScrub.disabled = false;
+  varokarnScrub.max = duration;
+  varokarnScrub.value = varokarnVideo.currentTime;
+  varokarnTime.textContent = formatVideoTime(varokarnVideo.currentTime) + ' / ' + formatVideoTime(duration);
+}
+['loadedmetadata', 'durationchange', 'timeupdate', 'seeked'].forEach(event =>
+  varokarnVideo.addEventListener(event, updateVarokarnScrub));
+varokarnScrub.addEventListener('input', () => {
+  varokarnVideo.currentTime = Number(varokarnScrub.value);
+  updateVarokarnScrub();
+});
+
 // ── Lightbox (shared by FX and Personal) ──
 function openLightbox(url, caption) {
   const lb = document.getElementById('fx-lightbox');
@@ -1219,7 +1265,7 @@ document.addEventListener('click', (e) => {
   if (t.closest('#splash') || t.closest('#reel') || t.closest('nav') || t.closest('#edit-banner') || t.closest('#fx-lightbox')) return;
   if (t.tagName === 'IMG') {
     openLightbox(t.currentSrc || t.src || t.dataset.src, t.alt || '');
-  } else if (t.tagName === 'VIDEO' && !t.hasAttribute('controls')) {
+  } else if (t.tagName === 'VIDEO' && !t.hasAttribute('controls') && !t.hasAttribute('data-inline-scrub')) {
     const src = t.currentSrc || t.src || t.dataset.src || (t.querySelector('source') && t.querySelector('source').src);
     if (src) openLightbox(src, '');
   }
