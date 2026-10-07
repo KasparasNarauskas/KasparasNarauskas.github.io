@@ -112,13 +112,21 @@ main { padding-top: 60px; }
 
 /* ── OPENING REEL ── */
 .reel {
-  position: sticky; top: 60px; z-index: 0; width: 100%; aspect-ratio: 2.3 / 1;
+  position: -webkit-sticky; position: sticky; top: 60px; z-index: 0; width: 100%; aspect-ratio: 2.3 / 1;
   background: var(--bg2); overflow: hidden;
 }
 .work-content {
   position: relative; z-index: 3; background: var(--bg);
+  isolation: isolate; transform: translateZ(0);
   box-shadow: 0 -18px 40px rgba(0,0,0,0.18);
 }
+.reel-play {
+  position: absolute; z-index: 4; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  padding: 12px 20px; border: 1px solid var(--paper); background: var(--bg);
+  color: var(--paper); font: 600 12px var(--body); letter-spacing: var(--ls-label);
+  text-transform: uppercase; cursor: pointer;
+}
+.reel-play[hidden] { display: none; }
 #vid-varokarn {
   --animatic-width: min(1200px, calc(var(--viewport-width, 100vw) - 64px));
   width: var(--animatic-width); max-width: none;
@@ -549,7 +557,6 @@ footer {
     transition-duration: 0.01ms !important;
   }
   html { scroll-behavior: auto; }
-  .reel { position: relative; top: auto !important; }
   .reel-video.is-incoming.is-wiping { clip-path: none; }
   .reel-divider { display: none; }
 }
@@ -619,6 +626,7 @@ footer {
   <video class="reel-video" muted playsinline loop preload="auto" aria-hidden="true"></video>
   <video class="reel-video" muted playsinline loop preload="auto" aria-hidden="true"></video>
   <div class="reel-divider" aria-hidden="true"></div>
+  <button class="reel-play" type="button" hidden>Play reel</button>
 </section>
 
 <div class="work-content" id="work-content">
@@ -773,6 +781,15 @@ function updateViewportWidth() {
 updateViewportWidth();
 window.addEventListener('resize', updateViewportWidth, { passive: true });
 
+// Smaller video renditions on phones; desktop reel sources retain their detail.
+function playbackSource(source, portfolio = false) {
+  if (!source.includes('res.cloudinary.com/') || !source.includes('/video/upload/')) return source;
+  const mobile = window.matchMedia('(max-width: 600px)').matches;
+  if (!mobile && !portfolio) return source;
+  return source.replace(/\/video\/upload\/(?:[^/]+\/)?(?=v\d+\/)/,
+    '/video/upload/q_auto,w_' + (mobile ? 960 : 1600) + '/');
+}
+
 // ── SPLASH ──
 // Shows once per browser session; click anywhere to skip; honors reduced-motion.
 (function() {
@@ -785,11 +802,13 @@ window.addEventListener('resize', updateViewportWidth, { passive: true });
     }, 950);
   };
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (sessionStorage.getItem('splashSeen') || reducedMotion) {
+  let splashSeen = false;
+  try { splashSeen = !!sessionStorage.getItem('splashSeen'); } catch (_) {}
+  if (splashSeen || reducedMotion) {
     s.style.display = 'none';
     return;
   }
-  sessionStorage.setItem('splashSeen', '1');
+  try { sessionStorage.setItem('splashSeen', '1'); } catch (_) {}
   s.addEventListener('click', dismiss, { once: true });
   setTimeout(dismiss, 2000);
 })();
@@ -829,7 +848,10 @@ function reelWindow(item, duration) {
   const reel = document.getElementById('reel');
   const videos = [...reel.querySelectorAll('.reel-video')];
   const divider = reel.querySelector('.reel-divider');
+  const playButton = reel.querySelector('.reel-play');
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let userStarted = false;
+  const pendingPlay = new WeakSet();
   let front = 0, shot = 0, timer, visible = false, busy = false;
   const frameHandles = new WeakMap();
   const splashHidden = () => document.getElementById('splash').style.display === 'none';
@@ -839,7 +861,11 @@ function reelWindow(item, duration) {
     if (video.cancelVideoFrameCallback && frameHandles.has(video)) {
       video.cancelVideoFrameCallback(frameHandles.get(video));
     }
-    video.src = item.src;
+    video.defaultMuted = true;
+    video.setAttribute('muted', '');
+    video.setAttribute('playsinline', '');
+    video.setAttribute('webkit-playsinline', '');
+    video.src = playbackSource(item.src);
     video.poster = item.poster;
     video.muted = true;
     video.loop = false;
@@ -847,7 +873,7 @@ function reelWindow(item, duration) {
     const seek = () => {
       if (video.readyState >= 1 && Number.isFinite(video.duration)) {
         bounds = reelWindow(item, video.duration);
-        video.currentTime = bounds.start;
+        if (Math.abs(video.currentTime - bounds.start) > 0.05) video.currentTime = bounds.start;
         if (video.requestVideoFrameCallback) {
           const trackFrame = () => {
             video.ontimeupdate();
@@ -874,11 +900,16 @@ function reelWindow(item, duration) {
   }
 
   function play(video) {
+    if (!visible || (reducedMotion && !userStarted) || pendingPlay.has(video)) return;
     video.muted = true;
+    pendingPlay.add(video);
     video.play().then(() => {
+      playButton.hidden = true;
       window.dispatchEvent(new Event('reelready'));
       if (video === videos[front]) schedule();
-    }).catch(() => {});
+    }).catch(error => {
+      if (visible && error.name === 'NotAllowedError') playButton.hidden = false;
+    }).finally(() => pendingPlay.delete(video));
   }
 
   function schedule() {
@@ -953,7 +984,7 @@ function reelWindow(item, duration) {
 
   setShot(videos[0], REEL_SHOTS[0]);
   videos[0].classList.add('is-front');
-  if (reducedMotion) return; // Still frame for visitors who limit motion.
+  if (reducedMotion) playButton.hidden = false;
   // Give the opening video bandwidth before requesting the next reel clip.
   videos[0].addEventListener('playing', () => {
     if (!videos[1].getAttribute('src')) setShot(videos[1], REEL_SHOTS[1]);
@@ -979,6 +1010,15 @@ function reelWindow(item, duration) {
   window.addEventListener('resize', updateReelVisibility, { passive: true });
   document.addEventListener('visibilitychange', updateReelVisibility);
   window.addEventListener('splashdismissed', updateReelVisibility);
+  videos.forEach(video => video.addEventListener('canplay', () => {
+    updateReelVisibility();
+    if (visible && video === videos[front] && video.paused) play(video);
+  }));
+  playButton.addEventListener('click', () => {
+    userStarted = true;
+    updateReelVisibility();
+    play(videos[front]);
+  });
   // A tap can retry autoplay on phones after the first blocked play attempt.
   reel.addEventListener('pointerdown', () => { if (visible) play(videos[front]); });
 })();
@@ -1166,7 +1206,7 @@ function loadPortfolioMedia(media) {
     media.addEventListener('load', () => delete media.dataset.src, { once: true });
     media.src = media.dataset.src;
   } else {
-    media.src = media.dataset.src;
+    media.src = playbackSource(media.dataset.src, true);
     delete media.dataset.src;
     media.preload = media.hasAttribute('controls') ? 'none' : 'auto';
     media.load();
@@ -1202,6 +1242,16 @@ if (window.scrollY > 0 || window.matchMedia('(prefers-reduced-motion: reduce)').
 // they are ever asked to play, so the loop point has no gap to fill.
 const fxAutoVideos = document.querySelectorAll('video[data-fxauto]');
 if (fxAutoVideos.length) {
+  const inView = new Set();
+  const pending = new WeakSet();
+  function playVisible(v) {
+    if (!inView.has(v) || document.hidden || pending.has(v)) return;
+    v.muted = true;
+    pending.add(v);
+    v.play().then(() => {
+      if (!inView.has(v) || document.hidden) v.pause();
+    }).catch(() => {}).finally(() => pending.delete(v));
+  }
   const fxPrepObserver = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (!entry.isIntersecting) return;
@@ -1213,24 +1263,41 @@ if (fxAutoVideos.length) {
       }
       fxPrepObserver.unobserve(v);
     });
-  }, { rootMargin: '50% 0px 50% 0px', threshold: 0 });
+  }, { rootMargin: Math.max(900, window.innerHeight * 1.5) + 'px 0px', threshold: 0 });
 
   const fxPlayObserver = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       const v = entry.target;
       if (entry.isIntersecting) {
+        inView.add(v);
         loadPortfolioMedia(v);
-        v.play().catch(() => {});
+        playVisible(v);
       } else {
+        inView.delete(v);
         v.pause();
       }
     });
   }, { rootMargin: '-25% 0px -25% 0px', threshold: 0 });
 
   fxAutoVideos.forEach(v => {
-    fxPrepObserver.observe(v);
+    v.defaultMuted = true;
+    v.setAttribute('webkit-playsinline', '');
+    v.addEventListener('canplay', () => playVisible(v));
     fxPlayObserver.observe(v);
   });
+  let prepStarted = false;
+  function startVideoPrep() {
+    if (prepStarted) return;
+    prepStarted = true;
+    fxAutoVideos.forEach(v => fxPrepObserver.observe(v));
+  }
+  window.addEventListener('reelready', startVideoPrep, { once: true });
+  window.addEventListener('scroll', startVideoPrep, { once: true, passive: true });
+  if (window.scrollY > 0) startVideoPrep();
+  document.addEventListener('visibilitychange', () => {
+    inView.forEach(v => document.hidden ? v.pause() : playVisible(v));
+  });
+  document.addEventListener('touchend', () => inView.forEach(playVisible), { passive: true });
 }
 
 // Keep inline seeking independent of scroll-triggered playback.
