@@ -10,7 +10,7 @@
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://res.cloudinary.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Jost:ital,wght@0,200;0,300;0,400;1,200;1,300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Jost:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -25,8 +25,8 @@
   --paper: #f0ebe0;
   --cream: #b0a99e;
   --ls-tight: 0.08em;
-  --ls-label: 0.28em;
-  --ls-wide:  0.4em;
+  --ls-label: 0.14em;
+  --ls-wide:  0.24em;
   --ease: cubic-bezier(0.4, 0, 0.2, 1);
   --display: 'Bebas Neue', sans-serif;
   --body:    'Jost', sans-serif;
@@ -55,7 +55,7 @@ body {
 }
 #splash.gone { opacity: 0; pointer-events: none; }
 .splash-top {
-  font-family: var(--body); font-weight: 200; font-size: 11px;
+  font-family: var(--body); font-weight: 400; font-size: 11px;
   letter-spacing: var(--ls-wide); text-transform: uppercase; color: var(--mid);
   opacity: 0; animation: fadeup 0.6s ease 0.1s forwards; margin-bottom: 14px;
 }
@@ -70,7 +70,7 @@ body {
   margin: 22px auto 0; opacity: 0; animation: fadein 0.5s ease 0.85s forwards;
 }
 .splash-disc {
-  font-family: var(--body); font-weight: 200; font-size: 10px;
+  font-family: var(--body); font-weight: 400; font-size: 10px;
   letter-spacing: var(--ls-wide); text-transform: uppercase; color: var(--mid);
   margin-top: 18px; opacity: 0; animation: fadein 0.5s ease 1s forwards; text-align: center;
 }
@@ -92,8 +92,8 @@ nav {
 }
 .nav-links { display: flex; list-style: none; align-items: center; }
 .nav-link {
-  font-family: var(--body); font-size: 10px; font-weight: 300;
-  letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--mid);
+  font-family: var(--body); font-size: 11px; font-weight: 600;
+  letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--light);
   background: none; border: none; border-bottom: 1px solid transparent;
   padding: 6px 18px; cursor: pointer; transition: color 0.2s var(--ease), border-color 0.2s var(--ease);
 }
@@ -187,7 +187,7 @@ main { padding-top: 60px; }
 .play-ring svg { width: 14px; height: 14px; fill: var(--mid); margin-left: 3px; transition: fill 0.2s var(--ease); }
 .video-slot:hover .play-ring svg { fill: var(--paper); }
 .video-slot-label {
-  font-family: var(--body); font-weight: 200; font-size: 10px;
+  font-family: var(--body); font-weight: 400; font-size: 10px;
   letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--dim);
 }
 
@@ -219,7 +219,7 @@ main { padding-top: 60px; }
   gap: 24px; margin-top: 16px;
 }
 .panel-btn {
-  font-family: var(--body); font-weight: 200; font-size: 10px;
+  font-family: var(--body); font-weight: 400; font-size: 10px;
   letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--mid);
   background: none; border: none; cursor: pointer;
   padding: 8px 20px; border: 1px solid var(--rule);
@@ -227,7 +227,7 @@ main { padding-top: 60px; }
 }
 .panel-btn:hover { color: var(--paper); border-color: var(--light); }
 .panel-counter {
-  font-family: var(--body); font-weight: 200; font-size: 11px;
+  font-family: var(--body); font-weight: 400; font-size: 11px;
   letter-spacing: var(--ls-label); color: var(--dim);
   min-width: 60px; text-align: center;
 }
@@ -266,7 +266,7 @@ main { padding-top: 60px; }
 .visdev-slot:has(> iframe) { aspect-ratio: 16/9; display: flex; padding: 12px 14px; }
 
 .visdev-tag {
-  font-family: var(--body); font-weight: 200; font-size: 10px;
+  font-family: var(--body); font-weight: 400; font-size: 10px;
   letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--dim);
   position: relative; z-index: 1; transition: color 0.2s var(--ease);
 }
@@ -320,7 +320,7 @@ main { padding-top: 60px; }
 }
 .fx-cell:hover .fx-ph-glyph { color: var(--dim); }
 .fx-ph-label {
-  font-family: var(--body); font-weight: 200; font-size: 10px;
+  font-family: var(--body); font-weight: 400; font-size: 10px;
   letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--dim);
   transition: color 0.2s var(--ease);
 }
@@ -367,13 +367,13 @@ body.edit-mode { padding-bottom: 72px; }
   white-space: nowrap;
 }
 .eb-steps {
-  font-family: var(--body); font-weight: 300; font-size: 11px;
+  font-family: var(--body); font-weight: 400; font-size: 11px;
   color: var(--mid); letter-spacing: 0.02em; line-height: 1.5;
 }
 .eb-actions { display: flex; gap: 8px; }
 .eb-actions button {
   background: var(--bg3); border: 1px solid var(--rule); color: var(--mid);
-  font-family: var(--body); font-weight: 300; font-size: 10px;
+  font-family: var(--body); font-weight: 400; font-size: 10px;
   letter-spacing: var(--ls-label); text-transform: uppercase;
   padding: 9px 14px; cursor: pointer;
   transition: color 0.2s var(--ease), border-color 0.2s var(--ease);
@@ -387,7 +387,7 @@ body.edit-mode .slot-editable { outline: 1px dashed var(--dim); outline-offset: 
   display: none;
   position: absolute; top: 8px; left: 8px; z-index: 3;
   background: rgba(15,15,15,0.85); border: 1px solid var(--dim); color: var(--light);
-  font-family: var(--body); font-weight: 300; font-size: 9px;
+  font-family: var(--body); font-weight: 400; font-size: 9px;
   letter-spacing: var(--ls-label); text-transform: uppercase;
   padding: 6px 10px; cursor: pointer;
   transition: color 0.2s var(--ease), border-color 0.2s var(--ease);
@@ -400,7 +400,7 @@ body.edit-mode .slot-chip { display: block; }
   display: none;
   border: 1px dashed var(--dim);
   align-items: center; justify-content: center;
-  font-family: var(--body); font-weight: 200; font-size: 10px;
+  font-family: var(--body); font-weight: 400; font-size: 10px;
   letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--mid);
   cursor: pointer;
   transition: color 0.2s var(--ease), border-color 0.2s var(--ease);
@@ -464,7 +464,7 @@ body.edit-mode .cell-remove { display: flex; }
   color: var(--rule); line-height: 1; user-select: none;
 }
 .about-photo-label {
-  font-family: var(--body); font-weight: 200; font-size: 10px;
+  font-family: var(--body); font-weight: 400; font-size: 10px;
   letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--dim);
   position: relative; z-index: 1;
 }
@@ -473,8 +473,8 @@ body.edit-mode .cell-remove { display: flex; }
   letter-spacing: var(--ls-tight); color: var(--paper); line-height: 1.05; margin-bottom: 32px;
 }
 .about-body {
-  font-family: var(--body); font-weight: 300; font-size: 14px;
-  color: var(--mid); line-height: 1.95; margin-bottom: 40px;
+  font-family: var(--body); font-weight: 400; font-size: 15px;
+  color: var(--light); line-height: 1.85; margin-bottom: 40px;
 }
 .about-body p + p { margin-top: 16px; }
 .about-facts {
@@ -483,23 +483,23 @@ body.edit-mode .cell-remove { display: flex; }
 }
 .fact { display: grid; grid-template-columns: 84px 1fr; gap: 16px; align-items: baseline; }
 .fact-key {
-  font-family: var(--body); font-weight: 200; font-size: 10px;
-  letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--dim);
+  font-family: var(--body); font-weight: 500; font-size: 11px;
+  letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--light);
 }
 .fact-val {
-  font-family: var(--body); font-weight: 300; font-size: 13px;
-  letter-spacing: var(--ls-tight); color: var(--mid);
+  font-family: var(--body); font-weight: 400; font-size: 14px;
+  letter-spacing: 0.02em; color: var(--light);
 }
 .about-links { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; padding-top: 24px; border-top: 1px solid var(--rule); }
 .about-link {
-  font-family: var(--body); font-weight: 300; font-size: 10px;
+  font-family: var(--body); font-weight: 600; font-size: 11px;
   letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--mid);
   text-decoration: none; transition: color 0.2s var(--ease);
 }
 .about-link:hover { color: var(--paper); }
 .about-link.contact-email {
   display: inline-block; padding: 12px 16px; background: var(--paper);
-  color: var(--bg); font-weight: 400; overflow-wrap: anywhere;
+  color: var(--bg); font-weight: 600; overflow-wrap: anywhere;
   transition: background 0.2s var(--ease);
 }
 .about-link.contact-email:hover { background: #fff; color: var(--bg); }
@@ -507,7 +507,7 @@ body.edit-mode .cell-remove { display: flex; }
 .about-software { margin-top: 56px; padding-top: 28px; border-top: 1px solid var(--rule); }
 .software-title { font-family: var(--display); font-size: 24px; letter-spacing: var(--ls-tight); color: var(--paper); margin-bottom: 20px; }
 .software-list { list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px 24px; }
-.software-list li { font-family: var(--body); font-size: 13px; font-weight: 300; color: var(--light); }
+.software-list li { font-family: var(--body); font-size: 14px; font-weight: 400; color: var(--light); }
 .animatic-scrub { display: flex; align-items: center; gap: 14px; padding: 12px 14px; cursor: default; border-top: 1px solid var(--rule); }
 .animatic-scrub input { flex: 1; min-width: 0; accent-color: var(--paper); cursor: pointer; }
 .animatic-time { font-family: var(--body); font-size: 11px; color: var(--light); font-variant-numeric: tabular-nums; white-space: nowrap; }
@@ -520,11 +520,11 @@ footer {
 .footer-sig { font-family: var(--display); font-size: 15px; letter-spacing: var(--ls-tight); color: var(--dim); }
 .footer-links { display: flex; gap: 22px; }
 .footer-link {
-  font-family: var(--body); font-weight: 200; font-size: 10px;
-  letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--dim);
+  font-family: var(--body); font-weight: 500; font-size: 11px;
+  letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--light);
   text-decoration: none; transition: color 0.2s var(--ease);
 }
-.footer-link:hover { color: var(--light); }
+.footer-link:hover { color: var(--paper); }
 
 
 /* ── ACCESSIBILITY ── */
