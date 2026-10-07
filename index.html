@@ -120,13 +120,6 @@ main { padding-top: 60px; }
   isolation: isolate; transform: translateZ(0);
   box-shadow: 0 -18px 40px rgba(0,0,0,0.18);
 }
-.reel-play {
-  position: absolute; z-index: 4; left: 50%; top: 50%; transform: translate(-50%, -50%);
-  padding: 12px 20px; border: 1px solid var(--paper); background: var(--bg);
-  color: var(--paper); font: 600 12px var(--body); letter-spacing: var(--ls-label);
-  text-transform: uppercase; cursor: pointer;
-}
-.reel-play[hidden] { display: none; }
 #vid-varokarn {
   --animatic-width: min(1200px, calc(var(--viewport-width, 100vw) - 64px));
   width: var(--animatic-width); max-width: none;
@@ -626,7 +619,6 @@ footer {
   <video class="reel-video" muted playsinline loop preload="auto" aria-hidden="true"></video>
   <video class="reel-video" muted playsinline loop preload="auto" aria-hidden="true"></video>
   <div class="reel-divider" aria-hidden="true"></div>
-  <button class="reel-play" type="button" hidden>Play reel</button>
 </section>
 
 <div class="work-content" id="work-content">
@@ -848,9 +840,6 @@ function reelWindow(item, duration) {
   const reel = document.getElementById('reel');
   const videos = [...reel.querySelectorAll('.reel-video')];
   const divider = reel.querySelector('.reel-divider');
-  const playButton = reel.querySelector('.reel-play');
-  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let userStarted = false;
   const pendingPlay = new WeakSet();
   let front = 0, shot = 0, timer, visible = false, busy = false;
   const frameHandles = new WeakMap();
@@ -865,6 +854,7 @@ function reelWindow(item, duration) {
     video.setAttribute('muted', '');
     video.setAttribute('playsinline', '');
     video.setAttribute('webkit-playsinline', '');
+    video.autoplay = video === videos[front];
     video.src = playbackSource(item.src);
     video.poster = item.poster;
     video.muted = true;
@@ -900,22 +890,19 @@ function reelWindow(item, duration) {
   }
 
   function play(video) {
-    if (!visible || (reducedMotion && !userStarted) || pendingPlay.has(video)) return;
+    if (!visible || pendingPlay.has(video)) return;
     video.muted = true;
     pendingPlay.add(video);
     video.play().then(() => {
-      playButton.hidden = true;
       window.dispatchEvent(new Event('reelready'));
       if (video === videos[front]) schedule();
-    }).catch(error => {
-      if (visible && error.name === 'NotAllowedError') playButton.hidden = false;
-    }).finally(() => pendingPlay.delete(video));
+    }).catch(() => {}).finally(() => pendingPlay.delete(video));
   }
 
   function schedule() {
     clearTimeout(timer);
     const video = videos[front];
-    if (!visible || reducedMotion || busy || video.paused || video.readyState < 2) return;
+    if (!visible || busy || video.paused || video.readyState < 2) return;
     const item = REEL_SHOTS[shot];
     // Full clips advance with playback events, so buffering never cuts them short.
     if (item.playToEnd) return;
@@ -984,7 +971,6 @@ function reelWindow(item, duration) {
 
   setShot(videos[0], REEL_SHOTS[0]);
   videos[0].classList.add('is-front');
-  if (reducedMotion) playButton.hidden = false;
   // Give the opening video bandwidth before requesting the next reel clip.
   videos[0].addEventListener('playing', () => {
     if (!videos[1].getAttribute('src')) setShot(videos[1], REEL_SHOTS[1]);
@@ -1010,15 +996,17 @@ function reelWindow(item, duration) {
   window.addEventListener('resize', updateReelVisibility, { passive: true });
   document.addEventListener('visibilitychange', updateReelVisibility);
   window.addEventListener('splashdismissed', updateReelVisibility);
-  videos.forEach(video => video.addEventListener('canplay', () => {
-    updateReelVisibility();
-    if (visible && video === videos[front] && video.paused) play(video);
-  }));
-  playButton.addEventListener('click', () => {
-    userStarted = true;
-    updateReelVisibility();
-    play(videos[front]);
+  videos.forEach(video => {
+    ['loadeddata', 'canplay', 'seeked'].forEach(event => video.addEventListener(event, () => {
+      updateReelVisibility();
+      if (visible && video === videos[front] && video.paused) play(video);
+    }));
+    video.addEventListener('playing', () => window.dispatchEvent(new Event('reelready')));
   });
+  document.addEventListener('touchend', () => {
+    updateReelVisibility();
+    if (visible && videos[front].paused) play(videos[front]);
+  }, { passive: true });
   // A tap can retry autoplay on phones after the first blocked play attempt.
   reel.addEventListener('pointerdown', () => { if (visible) play(videos[front]); });
 })();
@@ -1270,10 +1258,12 @@ if (fxAutoVideos.length) {
       const v = entry.target;
       if (entry.isIntersecting) {
         inView.add(v);
+        v.autoplay = true;
         loadPortfolioMedia(v);
         playVisible(v);
       } else {
         inView.delete(v);
+        v.autoplay = false;
         v.pause();
       }
     });
@@ -1282,7 +1272,14 @@ if (fxAutoVideos.length) {
   fxAutoVideos.forEach(v => {
     v.defaultMuted = true;
     v.setAttribute('webkit-playsinline', '');
-    v.addEventListener('canplay', () => playVisible(v));
+    v.addEventListener('loadedmetadata', () => {
+      // A tiny initial seek asks mobile decoders to present their first frame.
+      // It does not skip a visible animation frame.
+      if (v.currentTime === 0 && Number.isFinite(v.duration) && v.duration > 0.001) v.currentTime = 0.001;
+      playVisible(v);
+    });
+    ['loadeddata', 'canplay', 'seeked'].forEach(event => v.addEventListener(event, () => playVisible(v)));
+    v.addEventListener('playing', () => { if (!inView.has(v) || document.hidden) v.pause(); });
     fxPlayObserver.observe(v);
   });
   let prepStarted = false;
