@@ -939,6 +939,7 @@ function reelWindow(item, duration) {
       if (video.currentTime >= bounds.end) video.currentTime = bounds.start;
     };
     video.onended = () => {
+      if (video === videos[front] && visible && !busy) nextShot();
       video.currentTime = bounds.start;
       if (visible && (video === videos[front] || video.classList.contains('is-incoming'))) play(video);
     };
@@ -968,21 +969,32 @@ function reelWindow(item, duration) {
 
   function readyFrame(video) {
     return new Promise((resolve, reject) => {
-      const events = ['canplay', 'canplaythrough', 'progress', 'seeked', 'error'];
-      const cleanup = () => events.forEach(event => video.removeEventListener(event, check));
-      const check = () => {
-        if (video.error) { cleanup(); reject(video.error); }
-        else if (video.readyState >= 3 && !video.seeking) {
-          const target = Math.min(video.duration, video.currentTime + 2);
-          for (let i = 0; i < video.buffered.length; i++) {
-            if (video.buffered.start(i) <= video.currentTime && video.buffered.end(i) >= target - 0.05) {
-              cleanup(); resolve(); return;
-            }
-          }
-        }
+      const events = ['loadeddata', 'canplay', 'playing', 'timeupdate', 'seeked', 'error'];
+      let settled = false;
+      const cleanup = () => {
+        clearTimeout(deadline);
+        events.forEach(event => video.removeEventListener(event, check));
       };
+      const finish = error => {
+        if (settled) return;
+        settled = true;
+        cleanup();
+        if (error) { video.pause(); reject(error); }
+        else resolve();
+      };
+      const check = () => {
+        if (video.error) finish(video.error);
+        else if (video.readyState >= 2 && !video.seeking && !video.paused) finish();
+      };
+      const deadline = setTimeout(() => finish(new Error('Reel playback timed out')), 12000);
       events.forEach(event => video.addEventListener(event, check));
-      check();
+      // Start playback before waiting: mobile browsers may defer buffering
+      // a paused video. Only reveal the wipe once a playable frame is ready.
+      video.muted = true;
+      video.play().then(() => {
+        if (settled) { if (!visible) video.pause(); return; }
+        check();
+      }).catch(finish);
     });
   }
 
@@ -995,19 +1007,21 @@ function reelWindow(item, duration) {
     const wipeDuration = REEL_SHOTS[shot].wipeDuration || 900;
     reel.style.setProperty('--reel-wipe-duration', wipeDuration + 'ms');
     if (!incoming.getAttribute('src')) setShot(incoming, REEL_SHOTS[nextIndex]);
+    incoming.classList.add('is-incoming');
     try {
       await readyFrame(incoming);
-      if (!visible) { busy = false; return; }
-      await incoming.play();
+      if (!visible) { incoming.pause(); incoming.classList.remove('is-incoming'); busy = false; return; }
     } catch (error) {
+      incoming.pause();
+      incoming.classList.remove('is-incoming', 'is-wiping');
+      setShot(incoming, REEL_SHOTS[nextIndex]);
       busy = false;
       if (visible) play(videos[front]);
       return;
     }
-    incoming.classList.add('is-incoming');
     // Wait for a frame so the clip and diagonal edge start from the left.
     requestAnimationFrame(() => requestAnimationFrame(() => {
-      if (!visible) { incoming.classList.remove('is-incoming'); busy = false; return; }
+      if (!visible) { incoming.pause(); incoming.classList.remove('is-incoming'); busy = false; return; }
       incoming.classList.add('is-wiping');
       divider.classList.add('is-wiping');
       setTimeout(() => {
