@@ -676,8 +676,8 @@ footer {
     <output id="sequence-editor-status" aria-live="polite"></output>
   </details>
 
-      <div class="visdev-slot slot-editable" data-slot="vk-concept-1"><img loading="lazy" decoding="async" data-src="https://res.cloudinary.com/twplcz62/image/upload/v1784404070/varokarn-concept-07_jpg_xwzmzu.jpg" alt="The Varokarn, concept"></div>
       <div class="visdev-slot slot-editable" data-slot="vk-concept-4"><img loading="lazy" decoding="async" data-src="https://res.cloudinary.com/twplcz62/image/upload/v1784404067/varokarn-concept-03_ykj24c.jpg" alt="The Varokarn, concept"></div>
+      <div class="visdev-slot slot-editable" data-slot="vk-concept-1"><img loading="lazy" decoding="async" data-src="https://res.cloudinary.com/twplcz62/image/upload/v1784404070/varokarn-concept-07_jpg_xwzmzu.jpg" alt="The Varokarn, concept"></div>
       <div class="visdev-slot slot-editable" data-slot="vk-concept-3"><img loading="lazy" decoding="async" data-src="https://res.cloudinary.com/twplcz62/image/upload/v1784404067/varokarn-concept-02_hjhwzc.jpg" alt="The Varokarn, concept"></div>
       <div class="visdev-slot slot-editable" data-slot="vk-concept-5"><img loading="lazy" decoding="async" data-src="https://res.cloudinary.com/twplcz62/image/upload/v1784404071/varokarn-concept-06_fyqbyv.jpg" alt="The Varokarn, concept"></div>
       <div class="visdev-slot slot-editable" data-slot="vk-concept-6"><img loading="lazy" decoding="async" data-src="https://res.cloudinary.com/twplcz62/image/upload/v1784404071/varokarn-concept-04_pe9c8u.jpg" alt="The Varokarn, concept"></div>
@@ -778,7 +778,7 @@ footer {
 <script type="application/json" id="VAROKARN_SEQUENCE">
 {
   "title": "THE VAROKARN / ANIMATIC",
-  "description": "Work in progress \u00b7 Storyboard & animatic",
+  "description": "",
   "video": "https://res.cloudinary.com/twplcz62/video/upload/v1791290609/Varokarn_feedback_storyboard_u7dsly.mp4",
   "poster": "https://res.cloudinary.com/twplcz62/video/upload/so_0/v1791290609/Varokarn_feedback_storyboard_u7dsly.jpg",
   "panels": [
@@ -803,8 +803,8 @@ footer {
 </script>
 <script type="application/json" id="STORY_SEQUENCE">
 {
-  "title": "THE VAROKARN / CLERICS",
-  "description": "Story sequence · Storyboard & animatic",
+  "title": "THE VAROKARN / FALSE GODS",
+  "description": "",
   "video": "",
   "poster": "",
   "panels": [
@@ -1598,6 +1598,7 @@ function initSequenceViewer(prefix, mountId, configId, autoPlay = false) {
     root = mount.querySelector('.sequence');
     root.querySelector('h3').textContent = config.title;
     root.querySelector('header p').textContent = config.description;
+    root.querySelector('header p').hidden = !config.description.trim();
     stage = root.querySelector('.sequence-stage'); video = stage.querySelector('video'); image = stage.querySelector('img'); empty = stage.querySelector('.sequence-empty');
     caption = root.querySelector('.sequence-caption'); count = root.querySelector('.sequence-count'); navigation = root.querySelector('.sequence-navigation');
     animaticTab = root.querySelector('[data-animatic]'); boardsTab = root.querySelector('[data-boards]'); expand = root.querySelector('.sequence-expand');
