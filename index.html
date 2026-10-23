@@ -501,6 +501,50 @@ footer {
   .about-details { grid-column: auto; grid-template-columns: 1fr; gap: 24px; }
   .software-list { gap: 4px 0; }
 }
+
+/* Featured story sequence. Its media is configured in STORY_SEQUENCE below. */
+.sequence { max-width: 1000px; margin: 0 auto 72px; }
+.sequence-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 20px; margin-bottom: 18px; }
+.sequence-heading h3 { font: 28px var(--display); letter-spacing: var(--ls-tight); }
+.sequence-heading p, .sequence-caption { color: var(--light); font-size: 14px; }
+.sequence-stage { background: #151719; aspect-ratio: 2 / 1; position: relative; overflow: hidden; border: 1px solid var(--rule); touch-action: pan-y; }
+.sequence-stage video, .sequence-stage img { display: block; width: 100%; height: 100%; object-fit: contain; cursor: default; }
+.sequence-empty { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 24px; text-align: center; background: radial-gradient(ellipse at 50% 60%, #252a2c, #151719 75%); }
+.sequence-empty strong { font: clamp(28px, 4vw, 52px) var(--display); letter-spacing: .08em; }
+.sequence-empty span { font-size: 11px; text-transform: uppercase; letter-spacing: .16em; color: var(--light); }
+.sequence-empty .sequence-play-glyph { font-size: 26px; color: var(--paper); width: 56px; height: 56px; border: 1px solid var(--dim); border-radius: 50%; display: grid; place-items: center; padding-left: 4px; }
+.sequence-tools { display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--rule); padding: 12px 0; flex-wrap: wrap; }
+.sequence button, .sequence-editor button { font: 600 11px var(--body); letter-spacing: .06em; color: var(--light); background: transparent; border: 1px solid var(--rule); padding: 10px 14px; cursor: pointer; }
+.sequence button:hover, .sequence button[aria-pressed="true"] { color: var(--paper); border-color: var(--light); }
+.sequence button:disabled { opacity: .3; cursor: default; }
+.sequence-tabs { display: flex; gap: 8px; }
+.sequence-tools .sequence-expand { margin-left: auto; }
+.sequence-navigation { display: flex; align-items: center; justify-content: center; gap: 20px; padding-top: 14px; }
+.sequence-count { font-variant-numeric: tabular-nums; color: var(--light); min-width: 62px; text-align: center; }
+.sequence-caption { min-height: 1.6em; margin: 14px auto 0; text-align: center; max-width: 760px; }
+.sequence [hidden] { display: none !important; }
+.sequence-dialog { position: fixed; inset: 0; width: 100%; max-width: none; height: 100%; max-height: none; border: 0; background: #0f0f0f; color: var(--paper); padding: 28px; }
+.sequence-dialog::backdrop { background: #0f0f0f; }
+.sequence-dialog .sequence { max-width: 1400px; margin: auto; }
+.sequence-dialog .sequence-stage { height: min(70dvh, 700px); aspect-ratio: auto; }
+.sequence-editor { margin: 0 auto 28px; max-width: 1000px; padding: 20px; border: 1px dashed var(--dim); }
+.sequence-editor summary { cursor: pointer; color: var(--paper); }
+.sequence-editor p { color: var(--light); margin: 12px 0; }
+.sequence-editor textarea { width: 100%; height: 300px; background: var(--bg2); color: var(--paper); border: 1px solid var(--dim); padding: 12px; font: 12px/1.6 monospace; }
+.sequence-editor output { display: block; margin-top: 10px; }
+@media (max-width:600px) {
+ .sequence { margin-bottom: 44px; }
+ .sequence-heading { display: block; }
+ .sequence-heading h3 { font-size: 24px; }
+ .sequence-heading p { font-size: 12px; margin-top: 4px; }
+ .sequence-empty { gap: 6px; padding: 12px; }
+ .sequence-empty .sequence-play-glyph { width: 36px; height: 36px; font-size: 18px; }
+ .sequence-empty span { font-size: 9px; }
+ .sequence button { padding: 10px; }
+ .sequence-dialog { padding: 16px; }
+ .sequence-dialog .sequence-stage { height: 55dvh; }
+}
+
 </style>
 </head>
 <body>
@@ -599,6 +643,19 @@ footer {
     <div class="s-rule"></div>
   </div>
 
+  <!-- Featured storyboard viewer: edit the STORY_SEQUENCE JSON near the bottom,
+       or open this file with ?edit and use the sequence editor. -->
+  <div id="sequence-mount"></div>
+  <details class="sequence-editor" id="sequence-editor" hidden>
+    <summary>Edit sequence media</summary>
+    <p>Paste a Cloudinary video URL in video. Add panel image URLs to panels in reading order. Each panel has a src and an optional caption. Empty URLs show preview placeholders. Apply, then download the updated site.</p>
+    <label for="sequence-config-input">Sequence settings</label>
+    <textarea id="sequence-config-input" spellcheck="false"></textarea>
+    <button type="button" id="sequence-apply">Apply changes</button>
+    <button type="button" onclick="exportSiteCode(true)">Download updated site</button>
+    <output id="sequence-editor-status" aria-live="polite"></output>
+  </details>
+
   <!-- PROJECT 1: THE VAROKARN -->
   <div class="project-block">
     <div class="project-label">THE VAROKARN</div>
@@ -694,6 +751,8 @@ footer {
 </div>
 </main>
 
+<dialog class="sequence-dialog" id="sequence-dialog" aria-label="Expanded story sequence"></dialog>
+
 <!-- FX LIGHTBOX -->
 <div id="fx-lightbox" onclick="closeLightbox(event)">
   <div id="lb-media"></div>
@@ -707,6 +766,24 @@ footer {
     <!-- Add when live: <a href="https://linkedin.com/in/USERNAME" class="footer-link">LinkedIn</a> -->
   </div>
 </footer>
+
+
+<!-- STORY_SEQUENCE: replace empty strings with your Cloudinary links.
+     Add/remove panel objects freely. The first mode is always Animatic. -->
+<script type="application/json" id="STORY_SEQUENCE">
+{
+  "title": "THE VAROKARN / CLERICS",
+  "description": "Story sequence · Storyboard & animatic",
+  "video": "",
+  "poster": "",
+  "panels": [
+    { "src": "", "caption": "Panel 01 · Preview placeholder" },
+    { "src": "", "caption": "Panel 02 · Preview placeholder" },
+    { "src": "", "caption": "Panel 03 · Preview placeholder" },
+    { "src": "", "caption": "Panel 04 · Preview placeholder" }
+  ]
+}
+</script>
 
 <script>
 // Use the visible page width so the featured animatic clears both gutters
@@ -1279,7 +1356,7 @@ function closeLightbox(e) {
 // (like a real animatic player) are left alone so clicking play works normally.
 document.addEventListener('click', (e) => {
   const t = e.target;
-  if (t.closest('#splash') || t.closest('#reel') || t.closest('nav') || t.closest('#edit-banner') || t.closest('#fx-lightbox') || t.closest('.about-photo')) return;
+  if (t.closest('.sequence') || t.closest('#splash') || t.closest('#reel') || t.closest('nav') || t.closest('#edit-banner') || t.closest('#fx-lightbox') || t.closest('.about-photo')) return;
   if (t.tagName === 'IMG') {
     openLightbox(t.currentSrc || t.src || t.dataset.src, t.alt || '');
   } else if (t.tagName === 'VIDEO' && !t.hasAttribute('controls') && !t.hasAttribute('data-inline-scrub')) {
@@ -1293,7 +1370,7 @@ document.addEventListener('keydown', e => {
 });
 
 // ── Export: copy the entire updated site as one HTML file ──
-function exportSiteCode() {
+function exportSiteCode(download = false) {
   const clone = document.documentElement.cloneNode(true);
   // Preserve deferred loading in every exported revision, even after scrolling.
   clone.querySelectorAll('main img').forEach(img => {
@@ -1328,7 +1405,20 @@ function exportSiteCode() {
   if (lb) { lb.classList.remove('open'); }
   const lbm = clone.querySelector('#lb-media');
   if (lbm) { lbm.innerHTML = '<span>FX</span>'; }
+  // The sequence rebuilds from its persisted configuration on page load.
+  clone.querySelector('#sequence-mount').replaceChildren();
+  const sequenceDialog = clone.querySelector('#sequence-dialog');
+  sequenceDialog.replaceChildren(); sequenceDialog.removeAttribute('open');
+  clone.querySelector('#sequence-editor').hidden = true;
+  clone.querySelector('#sequence-config-input').value = '';
+  clone.querySelector('#sequence-editor-status').textContent = '';
+  clone.querySelector('body').style.overflow = '';
   const html = '<!DOCTYPE html>\n' + clone.outerHTML;
+  if (download) {
+    const url = URL.createObjectURL(new Blob([html], { type: 'text/html' }));
+    const link = document.createElement('a'); link.href = url; link.download = 'index.html'; link.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000); return;
+  }
   navigator.clipboard.writeText(html).then(() =>
     alert('Full site code copied.\n\nOn GitHub: open index.html, click the pencil icon, select all (Ctrl+A), paste, then Commit changes.')
   ).catch(() => alert('Could not access the clipboard. Try a different browser.'));
@@ -1339,6 +1429,151 @@ function resetLocalEdits() {
   localStorage.removeItem(STORE_KEY);
   location.reload();
 }
+
+// Video-first sequence viewer, with an optional board-by-board reading mode.
+(() => {
+  const mount = document.getElementById('sequence-mount');
+  const dialog = document.getElementById('sequence-dialog');
+  const configNode = document.getElementById('STORY_SEQUENCE');
+  const editor = document.getElementById('sequence-editor');
+  const input = document.getElementById('sequence-config-input');
+  const status = document.getElementById('sequence-editor-status');
+  let config = JSON.parse(configNode.textContent);
+  let root, stage, video, image, empty, caption, count, navigation, animaticTab, boardsTab, expand;
+  let mode = 'animatic', panel = 0;
+  const validURL = value => value === '' || /^https?:\/\//i.test(value);
+  function validate(value) {
+    if (!value || typeof value.title !== 'string' || typeof value.description !== 'string' ||
+        typeof value.video !== 'string' || !validURL(value.video) ||
+        typeof value.poster !== 'string' || !validURL(value.poster) || !Array.isArray(value.panels) ||
+        !value.panels.every(p => p && typeof p.src === 'string' && validURL(p.src) && typeof p.caption === 'string')) {
+      throw new Error('Use the shown structure with http(s) links or empty strings, and a caption for each panel.');
+    }
+  }
+  function placeholder(title, subtitle, play = false) {
+    empty.replaceChildren();
+    if (play) {
+      const glyph = document.createElement('span'); glyph.className = 'sequence-play-glyph'; glyph.textContent = '▶'; glyph.setAttribute('aria-hidden', 'true'); empty.append(glyph);
+    }
+    const heading = document.createElement('strong'); heading.textContent = title;
+    const detail = document.createElement('span'); detail.textContent = subtitle;
+    empty.append(heading, detail); empty.hidden = false;
+  }
+  function show() {
+    const boards = mode === 'boards';
+    animaticTab.setAttribute('aria-pressed', String(!boards));
+    boardsTab.setAttribute('aria-pressed', String(boards));
+    video.hidden = boards || !config.video;
+    image.hidden = !boards;
+    navigation.hidden = !boards;
+    empty.hidden = true;
+    if (boards) {
+      video.pause();
+      const item = config.panels[panel];
+      image.hidden = !item.src;
+      image.alt = item.caption || 'Storyboard panel ' + (panel + 1);
+      if (item.src) image.src = item.src;
+      else { image.removeAttribute('src'); placeholder('PANEL ' + String(panel + 1).padStart(2, '0'), 'Storyboard preview · artwork to be added'); }
+      caption.textContent = item.caption;
+      count.textContent = (panel + 1) + ' / ' + config.panels.length;
+      root.querySelector('[data-prev]').disabled = panel === 0;
+      root.querySelector('[data-next]').disabled = panel === config.panels.length - 1;
+      // Only request the next board ahead, rather than the entire sequence.
+      if (config.panels[panel + 1]?.src) { const next = new Image(); next.src = config.panels[panel + 1].src; }
+    } else {
+      caption.textContent = config.video ? '' : 'Animatic preview. Your video will appear here.';
+      if (config.video) {
+        if (!video.getAttribute('src')) { video.src = config.video; if (config.poster) video.poster = config.poster; }
+      } else placeholder('WATCH THE SEQUENCE', 'Animatic · video to be added', true);
+    }
+  }
+  function step(delta) {
+    if (mode !== 'boards') return;
+    panel = Math.max(0, Math.min(config.panels.length - 1, panel + delta)); show();
+  }
+  function closeExpanded() {
+    if (!dialog.open) return;
+    dialog.close();
+  }
+  dialog.addEventListener('close', () => {
+    if (!root) return;
+    mount.append(root); expand.textContent = 'Expand'; expand.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+    expand.focus();
+  });
+  function build() {
+    if (video) video.pause();
+    if (dialog.open) closeExpanded();
+    mode = 'animatic'; panel = 0;
+    mount.innerHTML = `<section class="sequence" aria-label="Storyboard and animatic viewer" tabindex="0">
+      <header class="sequence-heading"><h3></h3><p></p></header>
+      <div class="sequence-stage">
+        <video controls playsinline preload="none" aria-label="Clerics animatic"></video>
+        <img hidden decoding="async" alt="Storyboard panel">
+        <div class="sequence-empty"></div>
+      </div>
+      <div class="sequence-tools">
+        <div class="sequence-tabs" role="group" aria-label="Viewing mode">
+          <button type="button" data-animatic aria-pressed="true">Animatic</button>
+          <button type="button" data-boards aria-pressed="false">View boards</button>
+        </div>
+        <button type="button" class="sequence-expand" aria-expanded="false">Expand</button>
+      </div>
+      <div class="sequence-navigation" hidden>
+        <button type="button" data-prev aria-label="Previous panel">← Previous</button>
+        <span class="sequence-count" aria-live="polite"></span>
+        <button type="button" data-next aria-label="Next panel">Next →</button>
+      </div>
+      <p class="sequence-caption" aria-live="polite"></p>
+    </section>`;
+    root = mount.querySelector('.sequence');
+    root.querySelector('h3').textContent = config.title;
+    root.querySelector('header p').textContent = config.description;
+    stage = root.querySelector('.sequence-stage'); video = stage.querySelector('video'); image = stage.querySelector('img'); empty = stage.querySelector('.sequence-empty');
+    caption = root.querySelector('.sequence-caption'); count = root.querySelector('.sequence-count'); navigation = root.querySelector('.sequence-navigation');
+    animaticTab = root.querySelector('[data-animatic]'); boardsTab = root.querySelector('[data-boards]'); expand = root.querySelector('.sequence-expand');
+    boardsTab.disabled = !config.panels.length;
+    animaticTab.addEventListener('click', () => { mode = 'animatic'; show(); });
+    boardsTab.addEventListener('click', () => { mode = 'boards'; show(); });
+    root.querySelector('[data-prev]').addEventListener('click', () => step(-1));
+    root.querySelector('[data-next]').addEventListener('click', () => step(1));
+    root.addEventListener('keydown', event => {
+      if (mode !== 'boards' || !['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+      event.preventDefault();
+      if (event.key === 'Home') panel = 0;
+      else if (event.key === 'End') panel = config.panels.length - 1;
+      else { step(event.key === 'ArrowLeft' ? -1 : 1); return; }
+      show();
+    });
+    let touchStart = null;
+    stage.addEventListener('touchstart', e => { if (e.touches.length === 1) touchStart = [e.touches[0].clientX, e.touches[0].clientY]; }, { passive: true });
+    stage.addEventListener('touchend', e => {
+      if (!touchStart) return;
+      const dx = e.changedTouches[0].clientX - touchStart[0], dy = e.changedTouches[0].clientY - touchStart[1]; touchStart = null;
+      if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.5) step(dx < 0 ? 1 : -1);
+    }, { passive: true });
+    expand.addEventListener('click', () => {
+      if (dialog.open) { closeExpanded(); return; }
+      dialog.append(root); dialog.showModal(); document.body.style.overflow = 'hidden';
+      expand.textContent = 'Close'; expand.setAttribute('aria-expanded', 'true'); expand.focus();
+    });
+    image.addEventListener('error', () => { image.hidden = true; placeholder('IMAGE UNAVAILABLE', 'Try the next panel or check this image link'); });
+    video.addEventListener('error', () => { caption.textContent = 'The video could not load. Please try again later.'; });
+    show();
+  }
+  if (editMode) {
+    editor.hidden = false; input.value = JSON.stringify(config, null, 2);
+    document.getElementById('sequence-apply').addEventListener('click', () => {
+      try {
+        const value = JSON.parse(input.value); validate(value);
+        config = value;
+        configNode.textContent = JSON.stringify(config, null, 2).replace(/</g, '\u003c');
+        build(); status.textContent = 'Applied. Download the updated site to keep these changes.';
+      } catch (error) { status.textContent = error.message; }
+    });
+  }
+  build();
+})();
 
 </script>
 </body>
