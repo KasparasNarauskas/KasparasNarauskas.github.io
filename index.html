@@ -545,6 +545,8 @@ footer {
  .sequence-dialog .sequence-stage { height: 55dvh; }
 }
 
+#vid-varokarn .sequence { max-width: none; margin: 0; }
+#vid-varokarn .sequence-stage { aspect-ratio: 16 / 9; }
 </style>
 </head>
 <body>
@@ -663,13 +665,16 @@ footer {
     <!-- Logo/logline, work-in-progress animatic, then concept art -->
     <div class="visdev-stack">
       <div class="visdev-slot slot-editable" data-slot="vk-logo"><img loading="lazy" decoding="async" data-src="https://res.cloudinary.com/twplcz62/image/upload/v1784566080/Varokarn_logo_logline_wwcjek.jpg" alt="The Varokarn, logo and logline"></div>
-      <div class="visdev-slot slot-editable" data-slot="vk-video" id="vid-varokarn">
-        <video data-src="https://res.cloudinary.com/twplcz62/video/upload/v1791290609/Varokarn_feedback_storyboard_u7dsly.mp4" data-poster="https://res.cloudinary.com/twplcz62/video/upload/so_0/v1791290609/Varokarn_feedback_storyboard_u7dsly.jpg" aria-label="The Varokarn, animatic in progress" loop muted playsinline preload="none" data-fxauto data-inline-scrub></video>
-        <div class="animatic-scrub">
-          <input id="varokarn-scrub" type="range" min="0" max="1" step="0.1" value="0" disabled aria-label="Seek through the Varokarn animatic">
-          <span class="animatic-time" id="varokarn-time">0:00 / 0:00</span>
-        </div>
-      </div>
+      <div id="vid-varokarn"></div>
+  <details class="sequence-editor" id="varokarn-editor" hidden>
+    <summary>Edit Varokarn sequence media</summary>
+    <p>Paste a Cloudinary video URL in video. Add panel image URLs to panels in reading order. Each panel has a src and an optional caption. Empty URLs show preview placeholders. Apply, then download the updated site.</p>
+    <label for="varokarn-config-input">Sequence settings</label>
+    <textarea id="varokarn-config-input" spellcheck="false"></textarea>
+    <button type="button" id="varokarn-apply">Apply changes</button>
+    <button type="button" onclick="exportSiteCode(true)">Download updated site</button>
+    <output id="varokarn-editor-status" aria-live="polite"></output>
+  </details>
       <div class="visdev-slot slot-editable" data-slot="vk-concept-2"><img loading="lazy" decoding="async" data-src="https://res.cloudinary.com/twplcz62/image/upload/v1792691352/Gann_Plusweek_character_sheet_armorless_yntjuz.jpg" alt="The Varokarn, concept"></div>
       <div class="visdev-slot slot-editable" data-slot="vk-clerics"><img loading="lazy" decoding="async" data-src="https://res.cloudinary.com/twplcz62/image/upload/v1792586572/Caladan_Clerics_varokarn_urhbdp.jpg" alt="The Varokarn, Calad Empire cleric character designs"></div>
       <div class="visdev-slot slot-editable" data-slot="vk-concept-1"><img loading="lazy" decoding="async" data-src="https://res.cloudinary.com/twplcz62/image/upload/v1784404070/varokarn-concept-07_jpg_xwzmzu.jpg" alt="The Varokarn, concept"></div>
@@ -751,6 +756,7 @@ footer {
 </div>
 </main>
 
+<dialog class="sequence-dialog" id="varokarn-dialog" aria-label="Expanded Varokarn sequence"></dialog>
 <dialog class="sequence-dialog" id="sequence-dialog" aria-label="Expanded story sequence"></dialog>
 
 <!-- FX LIGHTBOX -->
@@ -770,6 +776,32 @@ footer {
 
 <!-- STORY_SEQUENCE: replace empty strings with your Cloudinary links.
      Add/remove panel objects freely. The first mode is always Animatic. -->
+<script type="application/json" id="VAROKARN_SEQUENCE">
+{
+  "title": "THE VAROKARN / ANIMATIC",
+  "description": "Work in progress \u00b7 Storyboard & animatic",
+  "video": "https://res.cloudinary.com/twplcz62/video/upload/v1791290609/Varokarn_feedback_storyboard_u7dsly.mp4",
+  "poster": "https://res.cloudinary.com/twplcz62/video/upload/so_0/v1791290609/Varokarn_feedback_storyboard_u7dsly.jpg",
+  "panels": [
+    {
+      "src": "",
+      "caption": "Board artwork to be added."
+    },
+    {
+      "src": "",
+      "caption": "Board artwork to be added."
+    },
+    {
+      "src": "",
+      "caption": "Board artwork to be added."
+    },
+    {
+      "src": "",
+      "caption": "Board artwork to be added."
+    }
+  ]
+}
+</script>
 <script type="application/json" id="STORY_SEQUENCE">
 {
   "title": "THE VAROKARN / CLERICS",
@@ -1406,6 +1438,12 @@ function exportSiteCode(download = false) {
   const lbm = clone.querySelector('#lb-media');
   if (lbm) { lbm.innerHTML = '<span>FX</span>'; }
   // The sequence rebuilds from its persisted configuration on page load.
+  clone.querySelector('#vid-varokarn').replaceChildren();
+  const vkDialog = clone.querySelector('#varokarn-dialog');
+  vkDialog.replaceChildren(); vkDialog.removeAttribute('open');
+  clone.querySelector('#varokarn-editor').hidden = true;
+  clone.querySelector('#varokarn-config-input').value = '';
+  clone.querySelector('#varokarn-editor-status').textContent = '';
   clone.querySelector('#sequence-mount').replaceChildren();
   const sequenceDialog = clone.querySelector('#sequence-dialog');
   sequenceDialog.replaceChildren(); sequenceDialog.removeAttribute('open');
@@ -1431,16 +1469,32 @@ function resetLocalEdits() {
 }
 
 // Video-first sequence viewer, with an optional board-by-board reading mode.
-(() => {
-  const mount = document.getElementById('sequence-mount');
-  const dialog = document.getElementById('sequence-dialog');
-  const configNode = document.getElementById('STORY_SEQUENCE');
-  const editor = document.getElementById('sequence-editor');
-  const input = document.getElementById('sequence-config-input');
-  const status = document.getElementById('sequence-editor-status');
+function initSequenceViewer(prefix, mountId, configId, autoPlay = false) {
+  const mount = document.getElementById(mountId);
+  const dialog = document.getElementById(prefix + '-dialog');
+  const configNode = document.getElementById(configId);
+  const editor = document.getElementById(prefix + '-editor');
+  const input = document.getElementById(prefix + '-config-input');
+  const status = document.getElementById(prefix + '-editor-status');
   let config = JSON.parse(configNode.textContent);
   let root, stage, video, image, empty, caption, count, navigation, animaticTab, boardsTab, expand;
   let mode = 'animatic', panel = 0;
+  let prepObserver, playObserver, inView = false;
+  function prepareVideo() {
+    if (!config.video || video.getAttribute('src')) return;
+    video.src = autoPlay && typeof playbackSource === 'function' ? playbackSource(config.video, true) : config.video;
+    if (config.poster) video.poster = config.poster;
+    if (autoPlay) { video.preload = 'auto'; video.load(); }
+  }
+  function resumeVideo() {
+    if (!autoPlay || !inView || mode !== 'animatic' || document.hidden) return;
+    prepareVideo(); video.play().catch(() => {});
+  }
+  document.addEventListener('visibilitychange', () => {
+    if (!video || !autoPlay) return;
+    if (document.hidden) video.pause(); else resumeVideo();
+  });
+  document.addEventListener('touchend', resumeVideo, { passive: true });
   const validURL = value => value === '' || /^https?:\/\//i.test(value);
   function validate(value) {
     if (!value || typeof value.title !== 'string' || typeof value.description !== 'string' ||
@@ -1483,7 +1537,8 @@ function resetLocalEdits() {
     } else {
       caption.textContent = config.video ? '' : 'Animatic preview. Your video will appear here.';
       if (config.video) {
-        if (!video.getAttribute('src')) { video.src = config.video; if (config.poster) video.poster = config.poster; }
+        if (!autoPlay) prepareVideo();
+        resumeVideo();
       } else placeholder('WATCH THE SEQUENCE', 'Animatic · video to be added', true);
     }
   }
@@ -1502,13 +1557,14 @@ function resetLocalEdits() {
     expand.focus();
   });
   function build() {
+    prepObserver?.disconnect(); playObserver?.disconnect(); inView = false;
     if (video) video.pause();
     if (dialog.open) closeExpanded();
     mode = 'animatic'; panel = 0;
     mount.innerHTML = `<section class="sequence" aria-label="Storyboard and animatic viewer" tabindex="0">
       <header class="sequence-heading"><h3></h3><p></p></header>
       <div class="sequence-stage">
-        <video controls playsinline preload="none" aria-label="Clerics animatic"></video>
+        <video controls playsinline preload="none" aria-label="Animatic"></video>
         <img hidden decoding="async" alt="Storyboard panel">
         <div class="sequence-empty"></div>
       </div>
@@ -1559,11 +1615,28 @@ function resetLocalEdits() {
     });
     image.addEventListener('error', () => { image.hidden = true; placeholder('IMAGE UNAVAILABLE', 'Try the next panel or check this image link'); });
     video.addEventListener('error', () => { caption.textContent = 'The video could not load. Please try again later.'; });
+    video.setAttribute('aria-label', config.title + ', animatic');
+    if (autoPlay) {
+      video.muted = true; video.defaultMuted = true; video.loop = true;
+      video.setAttribute('muted', ''); video.setAttribute('webkit-playsinline', '');
+      if ('IntersectionObserver' in window) {
+        prepObserver = new IntersectionObserver(entries => {
+          if (entries.some(e => e.isIntersecting)) { prepareVideo(); prepObserver.disconnect(); }
+        }, { rootMargin: '700px 0px' });
+        prepObserver.observe(root);
+        playObserver = new IntersectionObserver(entries => {
+          inView = entries.some(e => e.isIntersecting);
+          if (inView) resumeVideo(); else video.pause();
+        }, { threshold: 0, rootMargin: '-15% 0px -15% 0px' });
+        playObserver.observe(root);
+      } else { inView = true; prepareVideo(); }
+      ['loadeddata', 'canplay'].forEach(event => video.addEventListener(event, resumeVideo));
+    }
     show();
   }
   if (editMode) {
     editor.hidden = false; input.value = JSON.stringify(config, null, 2);
-    document.getElementById('sequence-apply').addEventListener('click', () => {
+    document.getElementById(prefix + '-apply').addEventListener('click', () => {
       try {
         const value = JSON.parse(input.value); validate(value);
         config = value;
@@ -1573,7 +1646,9 @@ function resetLocalEdits() {
     });
   }
   build();
-})();
+}
+initSequenceViewer('sequence', 'sequence-mount', 'STORY_SEQUENCE');
+initSequenceViewer('varokarn', 'vid-varokarn', 'VAROKARN_SEQUENCE', true);
 
 </script>
 </body>
