@@ -118,8 +118,8 @@ main { padding-top: 60px; }
   isolation: isolate; transform: translateZ(0);
   box-shadow: 0 -18px 40px rgba(0,0,0,0.18);
 }
-#vid-varokarn {
-  --animatic-width: min(1200px, calc(var(--viewport-width, 100vw) - 64px));
+#vid-varokarn, #sequence-mount {
+  --animatic-width: min(1000px, calc(var(--viewport-width, 100vw) - 64px));
   width: var(--animatic-width); max-width: none;
   margin: 36px calc((100% - var(--animatic-width)) / 2);
 }
@@ -492,7 +492,7 @@ footer {
   .port-section { padding: 44px 18px 56px; scroll-margin-top: 100px; }
   main { padding-top: 84px; }
   .reel { aspect-ratio: 16 / 9; top: 84px; }
-  #vid-varokarn { --animatic-width: calc(var(--viewport-width, 100vw) - 36px); margin-top: 24px; margin-bottom: 24px; }
+  #vid-varokarn, #sequence-mount { --animatic-width: calc(var(--viewport-width, 100vw) - 36px); margin-top: 24px; margin-bottom: 24px; }
   .fx-grid { grid-template-columns: 1fr; }
   #about { padding-top: 28px; padding-bottom: 32px; }
   .about-layout { grid-template-columns: 1fr; gap: 24px; }
@@ -545,8 +545,7 @@ footer {
  .sequence-dialog .sequence-stage { height: 55dvh; }
 }
 
-#vid-varokarn .sequence { max-width: none; margin: 0; }
-#vid-varokarn .sequence-stage { aspect-ratio: 16 / 9; }
+#vid-varokarn .sequence, #sequence-mount .sequence { max-width: none; margin: 0; }
 </style>
 </head>
 <body>
@@ -645,19 +644,6 @@ footer {
     <div class="s-rule"></div>
   </div>
 
-  <!-- Featured storyboard viewer: edit the STORY_SEQUENCE JSON near the bottom,
-       or open this file with ?edit and use the sequence editor. -->
-  <div id="sequence-mount"></div>
-  <details class="sequence-editor" id="sequence-editor" hidden>
-    <summary>Edit sequence media</summary>
-    <p>Paste a Cloudinary video URL in video. Add panel image URLs to panels in reading order. Each panel has a src and an optional caption. Empty URLs show preview placeholders. Apply, then download the updated site.</p>
-    <label for="sequence-config-input">Sequence settings</label>
-    <textarea id="sequence-config-input" spellcheck="false"></textarea>
-    <button type="button" id="sequence-apply">Apply changes</button>
-    <button type="button" onclick="exportSiteCode(true)">Download updated site</button>
-    <output id="sequence-editor-status" aria-live="polite"></output>
-  </details>
-
   <!-- PROJECT 1: THE VAROKARN -->
   <div class="project-block">
     <div class="project-label">THE VAROKARN</div>
@@ -677,6 +663,19 @@ footer {
   </details>
       <div class="visdev-slot slot-editable" data-slot="vk-concept-2"><img loading="lazy" decoding="async" data-src="https://res.cloudinary.com/twplcz62/image/upload/v1792691352/Gann_Plusweek_character_sheet_armorless_yntjuz.jpg" alt="The Varokarn, concept"></div>
       <div class="visdev-slot slot-editable" data-slot="vk-clerics"><img loading="lazy" decoding="async" data-src="https://res.cloudinary.com/twplcz62/image/upload/v1792586572/Caladan_Clerics_varokarn_urhbdp.jpg" alt="The Varokarn, Calad Empire cleric character designs"></div>
+  <!-- Featured storyboard viewer: edit the STORY_SEQUENCE JSON near the bottom,
+       or open this file with ?edit and use the sequence editor. -->
+  <div id="sequence-mount"></div>
+  <details class="sequence-editor" id="sequence-editor" hidden>
+    <summary>Edit sequence media</summary>
+    <p>Paste a Cloudinary video URL in video. Add panel image URLs to panels in reading order. Each panel has a src and an optional caption. Empty URLs show preview placeholders. Apply, then download the updated site.</p>
+    <label for="sequence-config-input">Sequence settings</label>
+    <textarea id="sequence-config-input" spellcheck="false"></textarea>
+    <button type="button" id="sequence-apply">Apply changes</button>
+    <button type="button" onclick="exportSiteCode(true)">Download updated site</button>
+    <output id="sequence-editor-status" aria-live="polite"></output>
+  </details>
+
       <div class="visdev-slot slot-editable" data-slot="vk-concept-1"><img loading="lazy" decoding="async" data-src="https://res.cloudinary.com/twplcz62/image/upload/v1784404070/varokarn-concept-07_jpg_xwzmzu.jpg" alt="The Varokarn, concept"></div>
       <div class="visdev-slot slot-editable" data-slot="vk-concept-4"><img loading="lazy" decoding="async" data-src="https://res.cloudinary.com/twplcz62/image/upload/v1784404067/varokarn-concept-03_ykj24c.jpg" alt="The Varokarn, concept"></div>
       <div class="visdev-slot slot-editable" data-slot="vk-concept-3"><img loading="lazy" decoding="async" data-src="https://res.cloudinary.com/twplcz62/image/upload/v1784404067/varokarn-concept-02_hjhwzc.jpg" alt="The Varokarn, concept"></div>
