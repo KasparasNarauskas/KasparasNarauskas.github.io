@@ -129,9 +129,9 @@ main { padding-top: 60px; }
   object-fit: cover; display: block; pointer-events: none; visibility: hidden;
 }
 .reel-video.is-front, .reel-video.is-incoming { visibility: visible; }
-.reel-video.is-incoming { z-index: 1; clip-path: polygon(0 0, -40% 0, -16% 100%, 0 100%); }
+.reel-video.is-incoming { z-index: 1; opacity: 0; }
 .reel-video.is-incoming.is-wiping {
-  animation: reel-wipe var(--reel-wipe-duration, 900ms) var(--ease) forwards;
+  animation: reel-fade var(--reel-wipe-duration, 900ms) linear forwards;
 }
 .reel-divider {
   position: absolute; z-index: 2; top: 50%; left: -28%;
@@ -139,7 +139,8 @@ main { padding-top: 60px; }
   transform: translateY(-50%) rotate(-29deg); pointer-events: none;
   opacity: 0;
 }
-.reel-divider.is-wiping { opacity: 1; animation: reel-divider var(--reel-wipe-duration, 900ms) var(--ease) forwards; }
+.reel-divider.is-wiping { display: none; }
+@keyframes reel-fade { to { opacity: 1; } }
 @keyframes reel-wipe {
   to { clip-path: polygon(0 0, 116% 0, 140% 100%, 0 100%); }
 }
@@ -1048,6 +1049,13 @@ function reelWindow(item, duration) {
 (function() {
   const reel = document.getElementById('reel');
   const videos = [...reel.querySelectorAll('.reel-video')];
+  // One persistent decoder per clip: never replace a healthy source on loop.
+  while (videos.length < REEL_SHOTS.length) {
+    const video = document.createElement('video');
+    video.className = 'reel-video'; video.preload = 'metadata';
+    video.setAttribute('aria-hidden', 'true');
+    reel.append(video); videos.push(video);
+  }
   const divider = reel.querySelector('.reel-divider');
   const pendingPlay = new WeakSet();
   let front = 0, shot = 0, timer, visible = false, busy = false;
@@ -1163,12 +1171,15 @@ function reelWindow(item, duration) {
   async function nextShot() {
     if (!visible || busy) return;
     busy = true;
-    const incomingIndex = 1 - front;
+    const incomingIndex = (shot + 1) % REEL_SHOTS.length;
     const incoming = videos[incomingIndex];
     const nextIndex = (shot + 1) % REEL_SHOTS.length;
     const wipeDuration = REEL_SHOTS[shot].wipeDuration || 900;
     reel.style.setProperty('--reel-wipe-duration', wipeDuration + 'ms');
     if (!incoming.getAttribute('src')) setShot(incoming, REEL_SHOTS[nextIndex]);
+    else if (Number.isFinite(incoming.duration)) {
+      incoming.currentTime = reelWindow(REEL_SHOTS[nextIndex], incoming.duration).start;
+    }
     incoming.classList.add('is-incoming');
     try {
       await readyFrame(incoming);
@@ -1195,7 +1206,8 @@ function reelWindow(item, duration) {
         front = incomingIndex;
         shot = nextIndex;
         busy = false;
-        setShot(videos[1 - front], REEL_SHOTS[(shot + 1) % REEL_SHOTS.length]);
+        const preloadIndex = (shot + 1) % REEL_SHOTS.length;
+        if (!videos[preloadIndex].getAttribute('src')) setShot(videos[preloadIndex], REEL_SHOTS[preloadIndex]);
         if (!visible) incoming.pause();
         schedule();
       }, wipeDuration);
