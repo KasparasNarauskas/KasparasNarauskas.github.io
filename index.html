@@ -602,13 +602,14 @@ footer {
     <div class="about-text">
       <div class="about-name">KASPARAS<br>NARAUSKAS</div>
       <div class="about-body">
-        <p>I want my work to feel like moments from a bigger story, to make you curious about what exists just outside the frame.</p>
+        <p>I want my work to feel like moments from a bigger story.</p>
         <p>I focus on visual storytelling through concept art, storyboarding, animation and hand-drawn FX, with an emphasis on cinematic composition, atmosphere and worldbuilding.</p>
+        <p>My long-term goal is to direct ambitious, captivating work that stays with people.</p>
       </div>
       <div class="about-links">
         <a href="mailto:knarauskas.art@gmail.com" class="about-link contact-email">knarauskas.art@gmail.com</a>
         <a href="https://www.instagram.com/k.narauskas.art/" class="about-link contact-social" target="_blank" rel="noopener noreferrer">Instagram</a>
-        <!-- Add when live: <a href="https://linkedin.com/in/USERNAME" class="about-link">LinkedIn</a> -->
+        <a href="https://www.linkedin.com/in/kasparas-narauskas-a51a49445" class="about-link contact-social" target="_blank" rel="noopener noreferrer">LinkedIn</a>
       </div>
     </div>
     <div class="about-details">
@@ -647,20 +648,9 @@ footer {
   <div class="project-block">
     <div class="project-label">THE VAROKARN</div>
 
-    <!-- Logo/logline, work-in-progress animatic, then concept art -->
+    <!-- Cleric concept, False Gods sequence, logline, Gann sheet, Varokarn animatic, then remaining concept art -->
     <div class="visdev-stack">
-      <div class="visdev-slot slot-editable" data-slot="vk-logo"><img loading="lazy" decoding="async" data-src="https://res.cloudinary.com/twplcz62/image/upload/v1784566080/Varokarn_logo_logline_wwcjek.jpg" alt="The Varokarn, logo and logline"></div>
-      <div id="vid-varokarn"></div>
-  <details class="sequence-editor" id="varokarn-editor" hidden>
-    <summary>Edit Varokarn sequence media</summary>
-    <p>Paste a Cloudinary video URL in video. Add panel image URLs to panels in reading order. Each panel has a src and an optional caption. Empty URLs show preview placeholders. Apply, then download the updated site.</p>
-    <label for="varokarn-config-input">Sequence settings</label>
-    <textarea id="varokarn-config-input" spellcheck="false"></textarea>
-    <button type="button" id="varokarn-apply">Apply changes</button>
-    <button type="button" onclick="exportSiteCode(true)">Download updated site</button>
-    <output id="varokarn-editor-status" aria-live="polite"></output>
-  </details>
-      <div class="visdev-slot slot-editable" data-slot="vk-concept-2"><img loading="lazy" decoding="async" data-src="https://res.cloudinary.com/twplcz62/image/upload/v1792691352/Gann_Plusweek_character_sheet_armorless_yntjuz.jpg" alt="The Varokarn, concept"></div>
+      <div class="visdev-slot slot-editable" data-slot="vk-clerics"><img loading="lazy" decoding="async" data-src="https://res.cloudinary.com/twplcz62/image/upload/v1792586572/Caladan_Clerics_varokarn_urhbdp.jpg" alt="The Varokarn, Calad Empire cleric character designs"></div>
   <!-- Featured storyboard viewer: edit the STORY_SEQUENCE JSON near the bottom,
        or open this file with ?edit and use the sequence editor. -->
   <div id="sequence-mount"></div>
@@ -674,7 +664,19 @@ footer {
     <output id="sequence-editor-status" aria-live="polite"></output>
   </details>
 
-      <div class="visdev-slot slot-editable" data-slot="vk-clerics"><img loading="lazy" decoding="async" data-src="https://res.cloudinary.com/twplcz62/image/upload/v1792586572/Caladan_Clerics_varokarn_urhbdp.jpg" alt="The Varokarn, Calad Empire cleric character designs"></div>
+      <div class="visdev-slot slot-editable" data-slot="vk-logo"><img loading="lazy" decoding="async" data-src="https://res.cloudinary.com/twplcz62/image/upload/v1784566080/Varokarn_logo_logline_wwcjek.jpg" alt="The Varokarn, logo and logline"></div>
+      <div class="visdev-slot slot-editable" data-slot="vk-concept-2"><img loading="lazy" decoding="async" data-src="https://res.cloudinary.com/twplcz62/image/upload/v1792691352/Gann_Plusweek_character_sheet_armorless_yntjuz.jpg" alt="The Varokarn, concept"></div>
+      <div id="vid-varokarn"></div>
+  <details class="sequence-editor" id="varokarn-editor" hidden>
+    <summary>Edit Varokarn sequence media</summary>
+    <p>Paste a Cloudinary video URL in video. Add panel image URLs to panels in reading order. Each panel has a src and an optional caption. Empty URLs show preview placeholders. Apply, then download the updated site.</p>
+    <label for="varokarn-config-input">Sequence settings</label>
+    <textarea id="varokarn-config-input" spellcheck="false"></textarea>
+    <button type="button" id="varokarn-apply">Apply changes</button>
+    <button type="button" onclick="exportSiteCode(true)">Download updated site</button>
+    <output id="varokarn-editor-status" aria-live="polite"></output>
+  </details>
+
       <div class="visdev-slot slot-editable" data-slot="vk-concept-4"><img loading="lazy" decoding="async" data-src="https://res.cloudinary.com/twplcz62/image/upload/v1793116043/Varokarn_Soldier_Layout_Sheet.jpg" alt="The Varokarn, soldier layout sheet"></div>
       <div class="visdev-slot slot-editable" data-slot="vk-concept-1"><img loading="lazy" decoding="async" data-src="https://res.cloudinary.com/twplcz62/image/upload/v1784404070/varokarn-concept-07_jpg_xwzmzu.jpg" alt="The Varokarn, concept"></div>
       <div class="visdev-slot slot-editable" data-slot="vk-concept-3"><img loading="lazy" decoding="async" data-src="https://res.cloudinary.com/twplcz62/image/upload/v1784404067/varokarn-concept-02_hjhwzc.jpg" alt="The Varokarn, concept"></div>
@@ -976,9 +978,12 @@ window.addEventListener('resize', updateViewportWidth, { passive: true });
 function playbackSource(source, portfolio = false) {
   if (!source.includes('res.cloudinary.com/') || !source.includes('/video/upload/')) return source;
   const mobile = window.matchMedia('(max-width: 600px)').matches;
-  if (!mobile && !portfolio) return source;
-  return source.replace(/\/video\/upload\/(?:[^/]+\/)?(?=v\d+\/)/,
-    '/video/upload/q_auto,w_' + (mobile ? 960 : 1600) + '/');
+  // Explicit H.264 MP4 delivery, including original MOV uploads.
+  // Keep the uploaded masters untouched and use one consistent browser rendition.
+  const width = mobile ? 960 : (portfolio ? 1600 : 1920);
+  return source.replace(/\/video\/upload\/(?:[^/]+\/)*?(?=v\d+\/)/,
+    '/video/upload/f_mp4,vc_h264,ac_aac,q_auto,c_limit,w_' + width + '/')
+    .replace(/\.(mov|mp4|webm)(?=\?|$)/i, '.mp4');
 }
 
 // ── SPLASH ──
@@ -1402,6 +1407,8 @@ function enablePortfolioMedia() {
   observePortfolioMedia();
 }
 window.addEventListener('reelready', enablePortfolioMedia, { once: true });
+// A failed or blocked reel must not prevent the rest of the portfolio loading.
+setTimeout(enablePortfolioMedia, 3500);
 window.addEventListener('scroll', enablePortfolioMedia, { once: true, passive: true });
 if (editMode) new MutationObserver(observePortfolioMedia).observe(document.querySelector('main'), { childList: true, subtree: true });
 if (window.scrollY > 0 || window.matchMedia('(prefers-reduced-motion: reduce)').matches) enablePortfolioMedia();
@@ -1642,7 +1649,7 @@ function initSequenceViewer(prefix, mountId, configId, autoPlay = false) {
   let prepObserver, playObserver, inView = false;
   function prepareVideo() {
     if (!config.video || video.getAttribute('src')) return;
-    video.src = autoPlay && typeof playbackSource === 'function' ? playbackSource(config.video, true) : config.video;
+    video.src = playbackSource(config.video, true);
     if (config.poster) video.poster = config.poster;
     if (autoPlay) { video.preload = 'auto'; video.load(); }
   }
