@@ -118,7 +118,7 @@ main { padding-top: 60px; }
   isolation: isolate; transform: translateZ(0);
   box-shadow: 0 -18px 40px rgba(0,0,0,0.18);
 }
-#vid-varokarn, #sequence-mount {
+#vid-varokarn, #sequence-mount, .video-slot.animatic-wide {
   --animatic-width: min(1000px, calc(var(--viewport-width, 100vw) - 64px));
   width: var(--animatic-width); max-width: none;
   margin: 36px calc((100% - var(--animatic-width)) / 2);
@@ -491,7 +491,7 @@ footer {
   .port-section { padding: 44px 18px 56px; scroll-margin-top: 100px; }
   main { padding-top: 84px; }
   .reel { aspect-ratio: 16 / 9; top: 84px; }
-  #vid-varokarn, #sequence-mount { --animatic-width: calc(var(--viewport-width, 100vw) - 36px); margin-top: 24px; margin-bottom: 24px; }
+  #vid-varokarn, #sequence-mount, .video-slot.animatic-wide { --animatic-width: calc(var(--viewport-width, 100vw) - 36px); margin-top: 24px; margin-bottom: 24px; }
   .fx-grid { grid-template-columns: 1fr; }
   #about { padding-top: 28px; padding-bottom: 32px; }
   .about-layout { grid-template-columns: 1fr; gap: 24px; }
@@ -693,7 +693,7 @@ footer {
   <div class="project-block">
     <div class="project-label">LIAN, BLENDER ANIMATIC</div>
 
-    <div class="video-slot slot-editable" data-slot="p2-video" style="cursor: default;">
+    <div class="video-slot slot-editable animatic-wide" data-slot="p2-video" style="cursor: default;">
       <video data-src="https://res.cloudinary.com/twplcz62/video/upload/v1784584194/Lian_Animatic_Fin_i0klbs.mp4" data-poster="https://res.cloudinary.com/twplcz62/video/upload/so_1.5/v1784584194/Lian_Animatic_Fin_i0klbs.jpg" data-manual-player data-inline-scrub playsinline preload="none"></video>
       <div class="animatic-scrub">
         <button class="animatic-button" type="button" data-play aria-label="Play Lian animatic">Play</button>
@@ -711,7 +711,7 @@ footer {
   <div class="project-block">
     <div class="project-label">ANIMATIC FOR &quot;RETURN&quot;</div>
 
-    <div class="video-slot" style="cursor: default;">
+    <div class="video-slot animatic-wide" style="cursor: default;">
       <video data-src="https://res.cloudinary.com/twplcz62/video/upload/v1784665770/smell_animatic_comparison_ndyzt7.mp4" data-poster="https://res.cloudinary.com/twplcz62/video/upload/so_1.5/v1784665770/smell_animatic_comparison_ndyzt7.jpg" data-manual-player data-inline-scrub playsinline preload="none"></video>
       <div class="animatic-scrub">
         <button class="animatic-button" type="button" data-play aria-label="Play Return animatic">Play</button>
@@ -1088,9 +1088,11 @@ function reelWindow(item, duration) {
       }
       // Never run into the trimmed black tail while waiting for the next source.
       // Replay this excerpt rather than pausing on its last frame.
-      if (video.currentTime >= bounds.end) video.currentTime = bounds.start;
+      // Do not seek the outgoing decoder while its frame is still in the wipe.
+      if (!busy && video.currentTime >= bounds.end) video.currentTime = bounds.start;
     };
     video.onended = () => {
+      if (busy) return;
       if (video === videos[front] && visible && !busy) nextShot();
       video.currentTime = bounds.start;
       if (visible && (video === videos[front] || video.classList.contains('is-incoming'))) play(video);
@@ -1104,6 +1106,7 @@ function reelWindow(item, duration) {
     video.muted = true;
     pendingPlay.add(video);
     video.play().then(() => {
+        if (!visible) { video.pause(); return; }
       window.dispatchEvent(new Event('reelready'));
       if (video === videos[front]) schedule();
     }).catch(() => {}).finally(() => pendingPlay.delete(video));
@@ -1122,9 +1125,10 @@ function reelWindow(item, duration) {
   function readyFrame(video) {
     return new Promise((resolve, reject) => {
       const events = ['loadeddata', 'canplay', 'playing', 'timeupdate', 'seeked', 'error'];
-      let settled = false;
+      let settled = false, presentedFrame = null;
       const cleanup = () => {
         clearTimeout(deadline);
+        if (presentedFrame !== null && video.cancelVideoFrameCallback) video.cancelVideoFrameCallback(presentedFrame);
         events.forEach(event => video.removeEventListener(event, check));
       };
       const finish = error => {
@@ -1136,7 +1140,13 @@ function reelWindow(item, duration) {
       };
       const check = () => {
         if (video.error) finish(video.error);
-        else if (video.readyState >= 2 && !video.seeking && !video.paused) finish();
+        else if (video.readyState >= 2 && !video.seeking && !video.paused) {
+          if (!video.requestVideoFrameCallback) finish();
+          else if (presentedFrame === null) presentedFrame = video.requestVideoFrameCallback(() => {
+            presentedFrame = null;
+            if (!video.seeking && !video.paused) finish();
+          });
+        }
       };
       const deadline = setTimeout(() => finish(new Error('Reel playback timed out')), 12000);
       events.forEach(event => video.addEventListener(event, check));
@@ -1206,8 +1216,16 @@ function reelWindow(item, duration) {
       bounds.top < window.innerHeight && workTop > Math.max(navBottom, bounds.top);
     if (nextVisible === visible) return;
     visible = nextVisible;
-    if (visible) { play(videos[front]); schedule(); }
-    else { clearTimeout(timer); videos.forEach(video => video.pause()); }
+    if (visible) {
+      play(videos[front]);
+      videos.forEach(video => { if (video.classList.contains('is-incoming')) play(video); });
+      schedule();
+    } else {
+      clearTimeout(timer);
+      // Let an active wipe settle before pausing its incoming frame.
+      // The transition completion already pauses the new front when hidden.
+      if (!busy) videos.forEach(video => video.pause());
+    }
   }
   const observer = new IntersectionObserver(updateReelVisibility, { threshold: 0.1 });
   observer.observe(reel);
