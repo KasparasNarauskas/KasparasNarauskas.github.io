@@ -625,6 +625,24 @@ footer {
 }
 
 #vid-varokarn .sequence, #sequence-mount .sequence { max-width: none; margin: 0; }
+
+@media(min-width:1500px){
+ .concept-annotation.annotation-left,.concept-annotation.annotation-right{transform:translateX(0);transition:transform .5s ease;min-height:720px;}
+ .annotation-left.annotation-active{transform:translateX(-110px);}
+ .annotation-right.annotation-active{transform:translateX(110px);}
+ .concept-annotation>.support-visuals{top:240px;display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+ .support-visuals .support-placeholder:first-child{grid-column:1/-1;}
+ .support-visuals .support-placeholder{width:100%;margin:0;}
+ .concept-annotation.annotation-intro{min-height:0;}
+}
+@media(hover:hover) and (pointer:fine){
+ .support-placeholder:hover{transform:scale(1.12);}
+ .annotation-left.annotation-active:has(.support-placeholder:hover){transform:translateX(-132px);}
+ .annotation-right.annotation-active:has(.support-placeholder:hover){transform:translateX(132px);}
+ .concept-annotation:has(.support-placeholder:hover)>.visdev-slot{transform:scale(.965);}
+}
+.lian-process .board-thumb{min-height:110px;}
+@media(prefers-reduced-motion:reduce){.concept-annotation{transform:none!important;transition:none!important;}}
 </style>
 </head>
 <body>
@@ -726,13 +744,11 @@ footer {
 
   <!-- PROJECT 1: THE VAROKARN -->
   <div class="project-block">
-    <div class="project-label"><h3>THE VAROKARN</h3><p class="project-medium">Storyboards, animatics &amp; concept development</p></div>
+    <div class="project-label"><h3>THE VAROKARN</h3><p class="project-medium">Storyboards, animatics &amp; concept development of the world</p></div>
 
     <!-- Cleric concept, False Gods sequence, logline, Gann sheet, Varokarn animatic, then remaining concept art -->
     <div class="visdev-stack">
-      <div class="visdev-slot slot-editable" data-slot="vk-clerics"><img loading="lazy" decoding="async" data-src="https://res.cloudinary.com/twplcz62/image/upload/v1792586572/Caladan_Clerics_varokarn_urhbdp.jpg" alt="The Varokarn, Calad Empire cleric character designs"></div>
-  <!-- Featured storyboard viewer: edit the STORY_SEQUENCE JSON near the bottom,
-       or open this file with ?edit and use the sequence editor. -->
+      <div class="visdev-slot slot-editable" data-slot="vk-logo"><img loading="lazy" decoding="async" data-src="https://res.cloudinary.com/twplcz62/image/upload/v1784566080/Varokarn_logo_logline_wwcjek.jpg" alt="The Varokarn, logo and logline"></div>
   <div id="sequence-mount"></div>
   <details class="sequence-editor" id="sequence-editor" hidden>
     <summary>Edit sequence media</summary>
@@ -743,9 +759,7 @@ footer {
     <button type="button" onclick="exportSiteCode(true)">Download updated site</button>
     <output id="sequence-editor-status" aria-live="polite"></output>
   </details>
-
-      <div class="visdev-slot slot-editable" data-slot="vk-logo"><img loading="lazy" decoding="async" data-src="https://res.cloudinary.com/twplcz62/image/upload/v1784566080/Varokarn_logo_logline_wwcjek.jpg" alt="The Varokarn, logo and logline"></div>
-      <div class="visdev-slot slot-editable" data-slot="vk-concept-2"><img loading="lazy" decoding="async" data-src="https://res.cloudinary.com/twplcz62/image/upload/v1792691352/Gann_Plusweek_character_sheet_armorless_yntjuz.jpg" alt="The Varokarn, concept"></div>
+      <div class="visdev-slot slot-editable" data-slot="vk-clerics"><img loading="lazy" decoding="async" data-src="https://res.cloudinary.com/twplcz62/image/upload/v1792586572/Caladan_Clerics_varokarn_urhbdp.jpg" alt="The Varokarn, Calad Empire cleric character designs"></div>
       <div id="vid-varokarn"></div>
   <details class="sequence-editor" id="varokarn-editor" hidden>
     <summary>Edit Varokarn sequence media</summary>
@@ -756,6 +770,7 @@ footer {
     <button type="button" onclick="exportSiteCode(true)">Download updated site</button>
     <output id="varokarn-editor-status" aria-live="polite"></output>
   </details>
+      <div class="visdev-slot slot-editable" data-slot="vk-concept-2"><img loading="lazy" decoding="async" data-src="https://res.cloudinary.com/twplcz62/image/upload/v1792691352/Gann_Plusweek_character_sheet_armorless_yntjuz.jpg" alt="The Varokarn, concept"></div>
 
       <div class="visdev-slot slot-editable" data-slot="vk-concept-4"><img loading="lazy" decoding="async" data-src="https://res.cloudinary.com/twplcz62/image/upload/v1793116043/Varokarn_Soldier_Layout_Sheet.jpg" alt="The Varokarn, soldier layout sheet"></div>
       <div class="visdev-slot slot-editable" data-slot="vk-concept-1"><img loading="lazy" decoding="async" data-src="https://res.cloudinary.com/twplcz62/image/upload/v1784404070/varokarn-concept-07_jpg_xwzmzu.jpg" alt="The Varokarn, concept"></div>
@@ -1994,14 +2009,14 @@ function installDesignNotes() {
     ['vk-logo', 'The Varokarn', 'A series of stories and concept developments for a proposed two-season series, exploring its world through characters, scenes and visual development.'],
     ['vk-concept-1', 'The Kharai', 'Placeholder: a short connection between this culture, its visual language and its place in the story.'],
     ['vk-concept-3', 'Character development', 'Placeholder: connect the armour, silhouette and design studies to the character’s history.'],
-    ['vk-concept-5', 'The Keeps', 'Placeholder: introduce what the Keeps are and why they matter to the people living around them.'],
-    ['vk-concept-6', 'The Kharai vessel', 'Placeholder: explain the vessel’s place in the world through a detail or development study.']
+    ['vk-concept-6', 'The Keeps', 'Placeholder: introduce what the Keeps are and why they matter to the people living around them.'],
+    ['vk-concept-5', 'The Kharai vessel', 'Placeholder: explain the vessel’s place in the world through a detail or development study.']
   );
   Object.assign(supportingLabels, {
     'vk-logo': [], 'vk-concept-1': ['Kharai visual development'],
     'vk-concept-3': ['Armour studies', 'Silhouette exploration', 'Character sketches'],
-    'vk-concept-5': ['Keep detail', 'World & scale'],
-    'vk-concept-6': ['Vessel development']
+    'vk-concept-6': ['Keep detail', 'World & scale'],
+    'vk-concept-5': ['Vessel development']
   });
   notes.forEach(([slot,title,copy], index) => {
     const art = document.querySelector('[data-slot="' + slot + '"]'); if (!art || art.closest('.concept-annotation')) return;
@@ -2021,21 +2036,43 @@ function installDesignNotes() {
       figure.append(caption,hint); visuals.append(figure);
     });
     group.append(visuals);
+    visuals.querySelectorAll('.support-placeholder').forEach(figure => {
+      figure.tabIndex = 0; figure.setAttribute('role', 'button');
+      figure.setAttribute('aria-label', 'Enlarge ' + figure.querySelector('span').textContent);
+      const open = () => {
+        const modal = document.createElement('dialog'); modal.className = 'board-modal'; modal.setAttribute('aria-label', figure.querySelector('span').textContent);
+        const close = document.createElement('button'); close.className = 'board-close'; close.textContent = '×'; close.setAttribute('aria-label', 'Close supporting image');
+        const preview = figure.cloneNode(true); preview.removeAttribute('role'); preview.removeAttribute('tabindex'); preview.style.cssText = 'width:100%;max-width:850px;min-height:40vh;margin:auto;transform:none;';
+        modal.append(close,preview); document.body.append(modal);
+        const old = document.body.style.overflow; close.onclick = () => modal.close();
+        modal.addEventListener('close', () => { document.body.style.overflow = old; modal.remove(); figure.focus({preventScroll:true}); });
+        modal.showModal(); document.body.style.overflow = 'hidden'; close.focus();
+      };
+      figure.onclick = open;
+      figure.onkeydown = e => { if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } };
+    });
   });
   const lian = document.querySelector('[data-slot="p2-video"]');
   if (lian && !document.querySelector('.lian-process')) {
     const process = document.createElement('div'); process.className = 'lian-process';
-    process.innerHTML = '<aside class="design-note support-visuals" aria-label="Lian early development"><figure class="support-placeholder"><span>First paper boards</span><small>Sketch image placeholder</small></figure><figure class="support-placeholder"><span>Early shot exploration</span><small>Sketch image placeholder</small></figure></aside>';
+    process.classList.add('sequence');
+    process.innerHTML = '<div class="board-strip"><button type="button" class="board-arrow" aria-label="Previous paper boards">←</button><div class="board-track" aria-label="Lian paper board placeholders"></div><button type="button" class="board-arrow" aria-label="Next paper boards">→</button></div>';
+    const track=process.querySelector('.board-track');
+    for(let i=1;i<=16;i++){const f=document.createElement('figure');f.className='board-thumb support-placeholder';f.innerHTML='<span>Paper board '+i+'</span><small>Image placeholder</small>';track.append(f);}
+    process.querySelectorAll('.board-arrow').forEach((b,i)=>b.onclick=()=>track.scrollBy({left:(i?1:-1)*track.clientWidth,behavior:'smooth'}));
     lian.after(process);
   }
   if (!('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const observer = new IntersectionObserver(entries => entries.forEach(e => {
-    if (e.isIntersecting) e.target.querySelectorAll('.design-note').forEach(note => note.classList.remove('note-pending'));
-  }), {threshold:0, rootMargin:'-18% 0px -18% 0px'});
-  const resetObserver = new IntersectionObserver(entries => entries.forEach(e => {
-    if (!e.isIntersecting) e.target.querySelectorAll('.design-note').forEach(note => note.classList.add('note-pending'));
-  }), {threshold:0, rootMargin:'220px 0px'});
-  document.querySelectorAll('.concept-annotation, .lian-process').forEach(group => { group.querySelectorAll('.design-note').forEach(note => note.classList.add('note-pending')); observer.observe(group); resetObserver.observe(group); });
+  const groups=[...document.querySelectorAll('.concept-annotation')];
+  groups.forEach(g=>g.querySelectorAll('.design-note').forEach(n=>n.classList.add('note-pending')));
+  let dwell,frame;
+  function update(){
+    clearTimeout(dwell);
+    groups.forEach(g=>{const r=g.getBoundingClientRect();if(r.bottom<0||r.top>innerHeight){g.classList.remove('annotation-active');g.querySelectorAll('.design-note').forEach(n=>n.classList.add('note-pending'));}});
+    dwell=setTimeout(()=>groups.forEach(g=>{const r=g.getBoundingClientRect();const active=r.top<innerHeight*.65&&r.bottom>innerHeight*.35;g.classList.toggle('annotation-active',active);g.querySelectorAll('.design-note').forEach(n=>n.classList.toggle('note-pending',!active));}),150);
+  }
+  window.addEventListener('scroll',()=>{if(!frame)frame=requestAnimationFrame(()=>{frame=0;update();});},{passive:true});
+  window.addEventListener('resize',update,{passive:true});update();
 }
 installDesignNotes();
 initSequenceViewer('sequence', 'sequence-mount', 'STORY_SEQUENCE');
