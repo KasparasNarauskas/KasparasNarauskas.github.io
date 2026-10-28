@@ -91,6 +91,8 @@ nav {
   color: var(--paper); cursor: pointer; text-decoration: none; user-select: none;
 }
 .nav-links { display: flex; list-style: none; align-items: center; }
+.nav-links li:not(:last-child) .nav-link { font-size: clamp(13px, 1.3vw, 17px); font-weight: 600; }
+.nav-links li:not(:last-child) .nav-link.active { background: var(--paper); color: var(--bg); }
 .nav-link {
   font-family: var(--body); font-size: 11px; font-weight: 600;
   letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--light);
@@ -244,6 +246,12 @@ main { padding-top: 60px; }
 .visdev-slot:hover .visdev-tag { color: var(--light); }
 
 /* ── FX SECTION ── */
+#fx { max-width: none; background: #f0ebe0; --paper: #191917; --light: #4f4b45; --mid: #625d55; --rule: #c7c0b4; color: #191917; padding-top: 88px; }
+#fx > * { max-width: 1136px; margin-left: auto; margin-right: auto; }
+#fx .s-head { margin-bottom: 52px; }
+#fx .s-title { font-size: clamp(38px, 5vw, 70px); letter-spacing: .035em; }
+#fx .visdev-slot, #fx .fx-cell { background: #161616; }
+@media (max-width: 600px) { .nav-links li:not(:last-child) .nav-link { font-size: 11px; padding: 8px 5px; } }
 .fx-grid {
   display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px;
 }
@@ -563,7 +571,7 @@ footer {
   <a class="nav-name" id="nav-home">KASPARAS NARAUSKAS</a>
   <ul class="nav-links">
     <li><button class="nav-link active" data-target="story">Story / Concept</button></li>
-    <li><button class="nav-link" data-target="fx">FX/ ANIMATION</button></li>
+    <li><button class="nav-link" data-target="fx">FX &amp; Animation</button></li>
     <li><button class="nav-link nav-contact" data-target="about">About &amp; Contact</button></li>
   </ul>
 </nav>
@@ -730,7 +738,7 @@ footer {
 ══════════════════════════════════════════ -->
 <section class="port-section" id="fx">
   <div class="s-head">
-    <h2 class="s-title">FX/ ANIMATION</h2>
+    <h2 class="s-title">FX &amp; Animation</h2>
     <div class="s-rule"></div>
   </div>
 
@@ -1174,13 +1182,15 @@ function reelWindow(item, duration) {
     const incomingIndex = (shot + 1) % REEL_SHOTS.length;
     const incoming = videos[incomingIndex];
     const nextIndex = (shot + 1) % REEL_SHOTS.length;
-    const wipeDuration = REEL_SHOTS[shot].wipeDuration || 900;
+    const wipeDuration = 0;
     reel.style.setProperty('--reel-wipe-duration', wipeDuration + 'ms');
     if (!incoming.getAttribute('src')) setShot(incoming, REEL_SHOTS[nextIndex]);
     else if (Number.isFinite(incoming.duration)) {
       incoming.currentTime = reelWindow(REEL_SHOTS[nextIndex], incoming.duration).start;
     }
     incoming.classList.add('is-incoming');
+    // Hold the outgoing frame while the next decoder prepares, without overlapping playback.
+    videos[front].pause();
     try {
       await readyFrame(incoming);
       if (!visible) { incoming.pause(); incoming.classList.remove('is-incoming'); busy = false; return; }
