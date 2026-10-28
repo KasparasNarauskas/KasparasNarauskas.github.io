@@ -539,6 +539,75 @@ footer {
 .sequence-dialog .sequence-stage { height: min(70dvh, 700px); aspect-ratio: auto; }
 .sequence-editor { margin: 0 auto 28px; max-width: 1000px; padding: 20px; border: 1px dashed var(--dim); }
 .sequence-editor summary { cursor: pointer; color: var(--paper); }
+.board-strip { display: grid; grid-template-columns: 42px minmax(0,1fr) 42px; gap: 12px; align-items: center; margin: 16px 0 24px; }
+.board-track { display: flex; gap: 8px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; overscroll-behavior-x: contain; }
+.sequence .board-thumb { flex: 0 0 calc((100% - 24px)/4); padding: 0; border: 1px solid #55514a; scroll-snap-align: start; overflow: hidden; background: #111; }
+.board-thumb img { display: block; width: 100%; aspect-ratio: 2/1; object-fit: contain; }
+.board-thumb[aria-current="true"] { outline: 2px solid var(--paper); outline-offset: -2px; }
+.sequence .board-arrow { padding: 10px 0; font-size: 24px; color: var(--paper); min-height: 44px; }
+.board-arrow:disabled { opacity: .25; cursor: default; }
+.board-modal { margin: auto; width: min(1200px,96vw); max-width: 96vw; max-height: 94dvh; padding: 52px 20px 20px; background: #161616; color: var(--paper); border: 1px solid #555; }
+.board-modal::backdrop { background: rgba(0,0,0,.88); }
+.board-modal img { width: 100%; height: min(68dvh,650px); object-fit: contain; display: block; }
+.board-modal button { background: transparent; color: var(--paper); border: 1px solid #666; min-width: 44px; min-height: 44px; font: 24px var(--body); cursor: pointer; }
+.board-close { position: absolute; top: 6px; right: 12px; }
+.board-modal-nav { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-top: 12px; }
+.board-modal-status { font: 13px var(--body); color: var(--light); text-align: center; }
+.concept-annotation { position: relative; width: 100%; margin: 20px auto 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+.concept-annotation > .visdev-slot { grid-column: 1 / -1; }
+.support-visuals { display: grid; gap: 14px; }
+.support-placeholder { aspect-ratio: 4/3; display: flex; flex-direction: column; justify-content: flex-end; padding: 14px; border: 1px solid #514d45; background: linear-gradient(145deg,#292b29,#171817); }
+.support-placeholder span { font-size: 13px; color: var(--paper); }
+.support-placeholder small { margin: 5px 0 0; font-size: 9px; }
+.design-note { padding: 16px 0 0 18px; border-left: 1px solid #666158; max-width: 420px; color: var(--light); font: 14px/1.6 var(--body); }
+.design-note strong { display: block; color: var(--paper); font-weight: 500; margin-bottom: 6px; }
+.design-note small { display: block; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 8px; }
+.design-note.note-pending { opacity: 0; transform: translateX(-18px); }
+.support-visuals.note-pending { transform: translateX(18px) translateY(8px); }
+.design-note { transition: opacity .45s ease, transform .45s ease; }
+@media(min-width:1100px) {
+  .concept-annotation { width: min(1320px,calc(100vw - 64px)); margin-left: calc((100% - min(1320px,calc(100vw - 64px))) / 2); grid-template-columns: 180px minmax(0,1fr) 180px; gap: 24px; align-items: center; }
+  .concept-annotation > .visdev-slot { grid-column: 2; grid-row: 1; }
+  .concept-annotation > .design-note { grid-column: 1; grid-row: 1; padding-top: 0; font-size: 13px; }
+  .concept-annotation > .support-visuals { grid-column: 3; border-left: 0; padding: 0; transition-delay: .12s; }
+}
+@media(max-width:600px) { .concept-annotation { grid-template-columns: 1fr; gap: 18px; } .support-visuals { grid-template-columns: 1fr 1fr; border-left: 0; padding: 0; } }
+@media(max-width:600px) { .board-strip { grid-template-columns: 36px minmax(0,1fr) 36px; gap: 8px; } .sequence .board-thumb { flex-basis: calc((100% - 8px)/2); } }
+@media(prefers-reduced-motion:reduce) { .design-note { transition: none; } }
+.design-note { transition: opacity .5s ease, transform .55s cubic-bezier(.16,1,.3,1); }
+.design-note.note-pending { transform: translateX(-28px) translateY(12px); transition-duration: .18s; pointer-events: none; }
+.support-visuals.note-pending { transform: translateX(28px) translateY(18px); }
+.support-visuals { transition-delay: .08s; }
+.concept-annotation > .visdev-slot { transition: transform .4s cubic-bezier(.2,.7,.2,1); }
+.support-placeholder { transition: transform .35s cubic-bezier(.2,.7,.2,1), border-color .25s; transform-origin: center; position: relative; }
+.lian-process { max-width: 1000px; margin: 22px auto 40px; }
+.lian-process .support-visuals { max-width: 590px; display: grid; grid-template-columns: 1fr 1fr; border-left: 0; padding: 0; margin-left: auto; }
+.lian-process .support-placeholder { aspect-ratio: 16/10; }
+@media(hover:hover) and (pointer:fine) {
+  .support-placeholder:hover { transform: scale(1.07); z-index: 2; border-color: var(--paper); }
+  .concept-annotation:has(.support-placeholder:hover) > .visdev-slot { transform: scale(.98); }
+}
+@media(prefers-reduced-motion:reduce) {
+  .design-note, .support-placeholder, .concept-annotation > .visdev-slot { transition: none !important; }
+  .support-placeholder:hover, .concept-annotation:has(.support-placeholder:hover) > .visdev-slot { transform: none; }
+}
+.support-placeholder:nth-child(2) { width: 84%; margin-left: auto; aspect-ratio: 1/1; }
+.support-placeholder:nth-child(3) { width: 92%; aspect-ratio: 16/9; }
+.annotation-intro .support-visuals { display: none; }
+.annotation-intro .design-note { border-left: 0; font-size: 15px; }
+.annotation-intro .design-note small { display: none; }
+@media(min-width:1500px) {
+  .concept-annotation { width: 900px; margin-left: 0; display: block; min-height: 430px; margin-top: 48px; margin-bottom: 64px; }
+  .concept-annotation > .visdev-slot { width: 900px; }
+  .concept-annotation > .design-note { position: absolute; width: 210px; top: 5%; }
+  .concept-annotation > .support-visuals { top: 42%; width: 210px; }
+  .annotation-left { transform: translateX(-110px); }
+  .annotation-left > .design-note { left: 930px; }
+  .annotation-right { transform: translateX(110px); }
+  .annotation-right > .design-note { right: 930px; left: auto; }
+  .annotation-intro { min-height: 0; }
+  .annotation-intro > .design-note { top: 20%; }
+}
 .sequence-editor p { color: var(--light); margin: 12px 0; }
 .sequence-editor textarea { width: 100%; height: 300px; background: var(--bg2); color: var(--paper); border: 1px solid var(--dim); padding: 12px; font: 12px/1.6 monospace; }
 .sequence-editor output { display: block; margin-top: 10px; }
@@ -1597,6 +1666,7 @@ function closeLightbox(e) {
 // (like a real animatic player) are left alone so clicking play works normally.
 document.addEventListener('click', (e) => {
   const t = e.target;
+  if (t.closest('.board-modal')) return;
   if (t.closest('.sequence') || t.closest('#splash') || t.closest('#reel') || t.closest('nav') || t.closest('#edit-banner') || t.closest('#fx-lightbox') || t.closest('.about-photo')) return;
   if (t.tagName === 'IMG') {
     openLightbox(t.currentSrc || t.src || t.dataset.src, t.alt || '');
@@ -1630,6 +1700,8 @@ function exportSiteCode(download = false) {
   const banner = clone.querySelector('#edit-banner');
   if (banner) banner.remove();
   clone.querySelectorAll('.slot-chip, .cell-remove, .add-tile').forEach(el => el.remove());
+  clone.querySelectorAll('.board-modal').forEach(el => el.remove());
+  clone.querySelectorAll('.note-pending').forEach(el => el.classList.remove('note-pending'));
   const body = clone.querySelector('body');
   body.classList.remove('edit-mode');
   const splash = clone.querySelector('#splash');
@@ -1696,7 +1768,7 @@ function initSequenceViewer(prefix, mountId, configId, autoPlay = false) {
     if (autoPlay) { video.preload = 'auto'; video.load(); }
   }
   function resumeVideo() {
-    if (!autoPlay || !inView || mode !== 'animatic' || document.hidden) return;
+    if (!autoPlay || !inView || mode !== 'animatic' || document.hidden || root?.dataset.boardsOpen === 'true') return;
     prepareVideo(); video.play().catch(() => {});
   }
   document.addEventListener('visibilitychange', () => {
@@ -1849,6 +1921,7 @@ function initSequenceViewer(prefix, mountId, configId, autoPlay = false) {
       ['loadeddata', 'canplay'].forEach(event => video.addEventListener(event, resumeVideo));
     }
     show();
+    installBoardStrip(root, video, config, prefix);
   }
   if (editMode) {
     editor.hidden = false; input.value = JSON.stringify(config, null, 2);
@@ -1863,6 +1936,108 @@ function initSequenceViewer(prefix, mountId, configId, autoPlay = false) {
   }
   build();
 }
+function installBoardStrip(root, video, config, prefix) {
+  root.querySelector('.sequence-tools').hidden = true;
+  document.getElementById(prefix + '-board-modal')?.remove();
+  const panels = config.panels.filter(p => p.src);
+  if (!panels.length) return;
+  const strip = document.createElement('div'); strip.className = 'board-strip';
+  strip.innerHTML = '<button class="board-arrow" type="button" aria-label="Previous storyboard thumbnails">←</button><div class="board-track" role="group" aria-label="Storyboard panels"></div><button class="board-arrow" type="button" aria-label="Next storyboard thumbnails">→</button>';
+  root.querySelector('.sequence-stage').after(strip);
+  const track = strip.querySelector('.board-track'), arrows = strip.querySelectorAll('.board-arrow');
+  const modal = document.createElement('dialog'); modal.className = 'board-modal'; modal.id = prefix + '-board-modal';
+  modal.setAttribute('aria-label', config.title + ' storyboard');
+  modal.innerHTML = '<button type="button" class="board-close" aria-label="Close storyboard">×</button><img alt=""><div class="board-modal-nav"><button type="button" data-back aria-label="Previous panel">←</button><span class="board-modal-status" aria-live="polite"></span><button type="button" data-forward aria-label="Next panel">→</button></div>';
+  document.body.append(modal);
+  const big = modal.querySelector('img'), status = modal.querySelector('.board-modal-status');
+  const back = modal.querySelector('[data-back]'), forward = modal.querySelector('[data-forward]');
+  let selected = 0, opener, oldOverflow = '';
+  function paint() {
+    big.hidden = false; big.src = panels[selected].src; big.alt = panels[selected].caption || 'Storyboard panel ' + (selected + 1);
+    status.textContent = (selected + 1) + ' / ' + panels.length;
+    back.disabled = selected === 0; forward.disabled = selected === panels.length - 1;
+    [...track.children].forEach((button,i) => button.setAttribute('aria-current', String(i === selected)));
+  }
+  big.addEventListener('error', () => { big.hidden = true; status.textContent = 'Panel could not load. Use the arrows to continue.'; });
+  panels.forEach((p,i) => {
+    const button = document.createElement('button'); button.type = 'button'; button.className = 'board-thumb'; button.setAttribute('aria-label', 'Open storyboard panel ' + (i + 1));
+    const img = document.createElement('img'); img.src = p.src; img.alt = p.caption || ''; img.loading = 'lazy'; img.decoding = 'async'; button.append(img);
+    button.addEventListener('click', () => { selected = i; opener = button; video.pause(); root.dataset.boardsOpen = 'true'; oldOverflow = document.body.style.overflow; paint(); modal.showModal(); document.body.style.overflow = 'hidden'; modal.querySelector('.board-close').focus(); });
+    track.append(button);
+  });
+  function advance(delta) { selected = Math.max(0, Math.min(panels.length - 1, selected + delta)); paint(); }
+  back.onclick = () => advance(-1); forward.onclick = () => advance(1);
+  modal.querySelector('.board-close').onclick = () => modal.close();
+  modal.addEventListener('click', e => { if (e.target === modal) { const r = modal.getBoundingClientRect(); if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) modal.close(); } });
+  modal.addEventListener('keydown', e => { if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') { e.preventDefault(); advance(e.key === 'ArrowLeft' ? -1 : 1); } });
+  modal.addEventListener('close', () => { root.dataset.boardsOpen = 'false'; document.body.style.overflow = oldOverflow; opener?.focus({preventScroll:true}); });
+  let touchX;
+  big.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; }, {passive:true});
+  big.addEventListener('touchend', e => { const dx = e.changedTouches[0].clientX - touchX; if (Math.abs(dx) > 50) advance(dx < 0 ? 1 : -1); }, {passive:true});
+  function updateArrows() { arrows[0].disabled = track.scrollLeft < 2; arrows[1].disabled = track.scrollLeft + track.clientWidth >= track.scrollWidth - 2; }
+  arrows.forEach((button,i) => button.onclick = () => track.scrollBy({left:(i ? 1 : -1) * (track.clientWidth + 8), behavior:matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'}));
+  track.addEventListener('scroll', updateArrows, {passive:true}); window.addEventListener('resize', updateArrows, {passive:true}); requestAnimationFrame(updateArrows);
+}
+
+function installDesignNotes() {
+  const notes = [
+    ['vk-clerics', 'Designing authority', 'Placeholder: connect one choice in the clerics’ silhouettes, materials or costume to the power dynamic explored in False Gods below.'],
+    ['vk-concept-2', 'Character into performance', 'Placeholder: describe how Gann’s proportions and posture inform the way he occupies the frame and reacts in the following scene.'],
+    ['vk-concept-4', 'A world made visible', 'Placeholder: explain how the soldiers’ equipment expresses the society behind it, and what that tells us about the world beyond this image.']
+  ];
+  const supportingLabels = {
+    'vk-clerics': ['Caladan capital', 'Caladan emblem'],
+    'vk-concept-2': ['Pose & performance', 'Scene composition'],
+    'vk-concept-4': ['Fighting stance', 'Light projections']
+  };
+  notes.push(
+    ['vk-logo', 'The Varokarn', 'A series of stories and concept developments for a proposed two-season series, exploring its world through characters, scenes and visual development.'],
+    ['vk-concept-1', 'The Kharai', 'Placeholder: a short connection between this culture, its visual language and its place in the story.'],
+    ['vk-concept-3', 'Character development', 'Placeholder: connect the armour, silhouette and design studies to the character’s history.'],
+    ['vk-concept-5', 'The Keeps', 'Placeholder: introduce what the Keeps are and why they matter to the people living around them.'],
+    ['vk-concept-6', 'The Kharai vessel', 'Placeholder: explain the vessel’s place in the world through a detail or development study.']
+  );
+  Object.assign(supportingLabels, {
+    'vk-logo': [], 'vk-concept-1': ['Kharai visual development'],
+    'vk-concept-3': ['Armour studies', 'Silhouette exploration', 'Character sketches'],
+    'vk-concept-5': ['Keep detail', 'World & scale'],
+    'vk-concept-6': ['Vessel development']
+  });
+  notes.forEach(([slot,title,copy], index) => {
+    const art = document.querySelector('[data-slot="' + slot + '"]'); if (!art || art.closest('.concept-annotation')) return;
+    const group = document.createElement('div'); group.className = 'concept-annotation'; art.before(group); group.append(art);
+    group.classList.add(index % 2 ? 'annotation-left' : 'annotation-right');
+    if (slot === 'vk-logo') group.classList.add('annotation-intro');
+    const note = document.createElement('aside'); note.className = 'design-note';
+    const label = document.createElement('small'); label.textContent = 'Draft design note';
+    const heading = document.createElement('strong'); heading.textContent = title;
+    const text = document.createElement('p'); text.textContent = copy;
+    note.append(label,heading,text); group.append(note);
+    const visuals = document.createElement('aside'); visuals.className = 'design-note support-visuals';
+    supportingLabels[slot].forEach(name => {
+      const figure = document.createElement('figure'); figure.className = 'support-placeholder';
+      const caption = document.createElement('span'); caption.textContent = name;
+      const hint = document.createElement('small'); hint.textContent = 'Image placeholder';
+      figure.append(caption,hint); visuals.append(figure);
+    });
+    group.append(visuals);
+  });
+  const lian = document.querySelector('[data-slot="p2-video"]');
+  if (lian && !document.querySelector('.lian-process')) {
+    const process = document.createElement('div'); process.className = 'lian-process';
+    process.innerHTML = '<aside class="design-note support-visuals" aria-label="Lian early development"><figure class="support-placeholder"><span>First paper boards</span><small>Sketch image placeholder</small></figure><figure class="support-placeholder"><span>Early shot exploration</span><small>Sketch image placeholder</small></figure></aside>';
+    lian.after(process);
+  }
+  if (!('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const observer = new IntersectionObserver(entries => entries.forEach(e => {
+    if (e.isIntersecting) e.target.querySelectorAll('.design-note').forEach(note => note.classList.remove('note-pending'));
+  }), {threshold:0, rootMargin:'-18% 0px -18% 0px'});
+  const resetObserver = new IntersectionObserver(entries => entries.forEach(e => {
+    if (!e.isIntersecting) e.target.querySelectorAll('.design-note').forEach(note => note.classList.add('note-pending'));
+  }), {threshold:0, rootMargin:'220px 0px'});
+  document.querySelectorAll('.concept-annotation, .lian-process').forEach(group => { group.querySelectorAll('.design-note').forEach(note => note.classList.add('note-pending')); observer.observe(group); resetObserver.observe(group); });
+}
+installDesignNotes();
 initSequenceViewer('sequence', 'sequence-mount', 'STORY_SEQUENCE');
 initSequenceViewer('varokarn', 'vid-varokarn', 'VAROKARN_SEQUENCE', true);
 
