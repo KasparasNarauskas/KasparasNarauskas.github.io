@@ -91,8 +91,8 @@ nav {
   color: var(--paper); cursor: pointer; text-decoration: none; user-select: none;
 }
 .nav-links { display: flex; list-style: none; align-items: center; }
-.nav-links li:not(:last-child) .nav-link { font-size: clamp(13px, 1.3vw, 17px); font-weight: 600; }
-.nav-links li:not(:last-child) .nav-link.active { background: var(--paper); color: var(--bg); }
+.nav-links li:not(:last-child) .nav-link { font-size: clamp(12px, 1vw, 14px); font-weight: 500; letter-spacing: .1em; padding: 10px 16px; }
+.nav-links li:not(:last-child) .nav-link.active { background: transparent; color: var(--paper); border-bottom-color: var(--paper); }
 .nav-link {
   font-family: var(--body); font-size: 11px; font-weight: 600;
   letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--light);
@@ -246,10 +246,11 @@ main { padding-top: 60px; }
 .visdev-slot:hover .visdev-tag { color: var(--light); }
 
 /* ── FX SECTION ── */
-#fx { max-width: none; background: #f0ebe0; --paper: #191917; --light: #4f4b45; --mid: #625d55; --rule: #c7c0b4; color: #191917; padding-top: 88px; }
+#fx { max-width: none; background: #20211f; color: var(--paper); border-top: 1px solid #55554e; padding-top: 96px; }
 #fx > * { max-width: 1136px; margin-left: auto; margin-right: auto; }
 #fx .s-head { margin-bottom: 52px; }
-#fx .s-title { font-size: clamp(38px, 5vw, 70px); letter-spacing: .035em; }
+#fx .s-title { font-family: var(--display); font-size: clamp(38px, 5vw, 64px); font-weight: 400; letter-spacing: .055em; }
+#fx .s-rule { background: #55554e; }
 #fx .visdev-slot, #fx .fx-cell { background: #161616; }
 @media (max-width: 600px) { .nav-links li:not(:last-child) .nav-link { font-size: 11px; padding: 8px 5px; } }
 .fx-grid {
