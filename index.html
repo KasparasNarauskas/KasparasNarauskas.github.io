@@ -574,7 +574,7 @@ footer {
 @media(max-width:600px) { .concept-annotation { grid-template-columns: 1fr; gap: 18px; } .support-visuals { grid-template-columns: 1fr 1fr; border-left: 0; padding: 0; } }
 @media(max-width:600px) { .board-strip { grid-template-columns: 36px minmax(0,1fr) 36px; gap: 8px; } .sequence .board-thumb { flex-basis: calc((100% - 8px)/2); } }
 @media(prefers-reduced-motion:reduce) { .design-note { transition: none; } }
-.design-note { transition: opacity .22s ease, transform .28s cubic-bezier(.16,1,.3,1); }
+.design-note { transition: opacity .5s ease, transform .55s cubic-bezier(.16,1,.3,1); }
 .design-note.note-pending { transform: translateX(-28px) translateY(12px); transition-duration: .18s; pointer-events: none; }
 .support-visuals.note-pending { transform: translateX(28px) translateY(18px); }
 .support-visuals { transition-delay: .08s; }
@@ -627,7 +627,7 @@ footer {
 #vid-varokarn .sequence, #sequence-mount .sequence { max-width: none; margin: 0; }
 
 @media(min-width:1500px){
- .concept-annotation.annotation-left,.concept-annotation.annotation-right{transform:translateX(0);transition:transform .28s ease;min-height:720px;}
+ .concept-annotation.annotation-left,.concept-annotation.annotation-right{transform:translateX(0);transition:transform .5s ease;min-height:720px;}
  .annotation-left.annotation-active{transform:translateX(-110px);}
  .annotation-right.annotation-active{transform:translateX(110px);}
  .concept-annotation>.support-visuals{top:240px;display:grid;grid-template-columns:1fr 1fr;gap:12px;}
@@ -643,6 +643,111 @@ footer {
 }
 .lian-process .board-thumb{min-height:110px;}
 @media(prefers-reduced-motion:reduce){.concept-annotation{transform:none!important;transition:none!important;}}
+
+#lb-close { position:absolute; top:max(16px,env(safe-area-inset-top)); right:18px; z-index:2; display:none; border:1px solid #777; background:#171717; color:#fff; font-size:26px; width:44px; height:44px; cursor:pointer; }
+#fx-lightbox.open #lb-close {display:block;}
+/* ── WEBSITE: gallery reveal & responsive refinement ── */
+/* The class is applied to both notes and studies; hide them together. */
+.concept-annotation > .design-note {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity .32s ease, transform .44s cubic-bezier(.2,.7,.2,1), visibility .32s;
+}
+.concept-annotation > .design-note.note-pending {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.concept-annotation > .support-visuals.note-pending { transform: translate3d(14px,10px,0); }
+.concept-annotation > .design-note:not(.support-visuals).note-pending { transform: translate3d(-14px,6px,0); }
+.concept-annotation > .design-note:not(.note-pending) { transform: translate3d(0,0,0); }
+/* Animate main image only on large displays with side space. */
+@media (min-width:1500px) {
+ .concept-annotation.annotation-left,.concept-annotation.annotation-right { min-height: min(680px, 65vw); }
+ .concept-annotation.annotation-intro { min-height:0; }
+}
+@media (max-width:1099px) {
+ .concept-annotation { width:100%; max-width:900px; margin-left:auto; margin-right:auto; }
+ .concept-annotation > .visdev-slot { grid-column:1/-1; }
+ .concept-annotation > .design-note { min-width:0; }
+ .concept-annotation > .support-visuals { border-left:0; padding:0; }
+}
+@media (max-width:700px) {
+ .port-section { padding: 36px 14px 48px; }
+ .s-head { margin-bottom: 26px; gap:12px; }
+ .s-title { font-size:clamp(32px,8vw,48px); }
+ .project-block { margin-bottom:44px; }
+ .project-label { margin-bottom:18px; }
+ .project-label h3 { font-size:clamp(27px,7vw,37px); }
+ .project-medium { font-size:12px; margin-top:6px; }
+ .project-divider { margin-bottom:32px; }
+ .visdev-stack { gap:10px; }
+ .concept-annotation {
+   display:grid; grid-template-columns:minmax(0,1fr); gap:0;
+   margin:14px auto 30px; min-height:0;
+ }
+ .concept-annotation > .visdev-slot { grid-column:1; grid-row:auto; width:100%; max-width:none; }
+ .concept-annotation > .design-note:not(.support-visuals) {
+   grid-column:1; grid-row:auto; padding:10px 0 0 11px;
+   margin:11px 0 0; border-left:1px solid #625e55;
+   max-width:none; font-size:12px; line-height:1.48;
+ }
+ .concept-annotation .design-note strong { margin-bottom:3px; font-size:13px; }
+ .concept-annotation .design-note small { font-size:9px; margin-bottom:4px; }
+ .concept-annotation > .support-visuals {
+   grid-column:1; grid-row:auto; width:100%; margin-top:11px;
+   display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px;
+ }
+ .concept-annotation .support-placeholder,
+ .concept-annotation .support-placeholder:nth-child(2),
+ .concept-annotation .support-placeholder:nth-child(3) {
+   width:100%; margin:0; min-width:0; aspect-ratio: 1.65/1;
+   padding:9px;
+ }
+ .concept-annotation .support-placeholder:first-child { grid-column:auto; }
+ .support-placeholder span { font-size:11px; line-height:1.25; }
+ .support-placeholder small { font-size:8px; margin-top:3px; }
+ .annotation-intro .design-note { margin-top:8px; }
+ #about { padding:20px 14px 22px; }
+ #about .s-head { margin-bottom:13px; }
+ .about-layout { display:grid; grid-template-columns:94px minmax(0,1fr); gap:10px 14px; align-items:start; }
+ .about-photo { width:94px; max-width:none; aspect-ratio:3/4; padding:0; grid-column:1; grid-row:1; }
+ .about-layout > :not(.about-photo):not(.about-details) { grid-column:2; }
+ .about-name { font-size:clamp(24px,6vw,34px); margin-bottom:7px; }
+ .about-body { font-size:12px; line-height:1.48; margin-bottom:7px; }
+ .about-body p + p { margin-top:7px; }
+ .about-details {
+   grid-column:1/-1; grid-row:auto; display:grid;
+   grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+   gap:12px; padding:11px 0 0; margin:0;
+   border-top:1px solid var(--rule);
+ }
+ .about-facts { gap:5px; }
+ .fact { grid-template-columns:50px minmax(0,1fr); gap:5px; }
+ .fact-key { font-size:9px; letter-spacing:.06em; }
+ .fact-val, .software-list li { font-size:11px; line-height:1.45; }
+ .software-title { font-size:10px; margin-bottom:4px; }
+ .about-links { gap:7px 10px; }
+ .about-link { font-size:10px; letter-spacing:.06em; }
+ .about-link.contact-email { padding:7px 9px; }
+ .fx-grid { gap:9px; }
+ .video-slot { margin-bottom:20px; }
+ .lian-process { margin-bottom:25px; }
+ .board-modal { padding:50px 12px 14px; }
+}
+@media (max-width:390px) {
+ .about-layout { grid-template-columns:78px minmax(0,1fr); gap:9px 11px; }
+ .about-photo { width:78px; }
+ .about-name { font-size:25px; }
+ .about-body { font-size:11px; }
+ .about-details { grid-template-columns:1fr; gap:10px; }
+ .concept-annotation > .support-visuals { gap:6px; }
+}
+@media (prefers-reduced-motion:reduce) {
+ .concept-annotation > .design-note, .concept-annotation > .support-visuals { opacity:1!important; visibility:visible!important; transform:none!important; transition:none!important; pointer-events:auto!important; }
+ .concept-annotation.annotation-left,.concept-annotation.annotation-right { transform:none!important; }
+}
+
 </style>
 </head>
 <body>
@@ -856,6 +961,7 @@ footer {
 
 <!-- FX LIGHTBOX -->
 <div id="fx-lightbox" onclick="closeLightbox(event)">
+  <button type="button" id="lb-close" aria-label="Close enlarged media" onclick="closeLightbox()">×</button>
   <div id="lb-media"></div>
 </div>
 
@@ -2062,17 +2168,49 @@ function installDesignNotes() {
     process.querySelectorAll('.board-arrow').forEach((b,i)=>b.onclick=()=>track.scrollBy({left:(i?1:-1)*track.clientWidth,behavior:'smooth'}));
     lian.after(process);
   }
-  if (!('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const groups=[...document.querySelectorAll('.concept-annotation')];
-  groups.forEach(g=>g.querySelectorAll('.design-note').forEach(n=>n.classList.add('note-pending')));
-  let dwell,frame;
-  function update(){
-    clearTimeout(dwell);
-    groups.forEach(g=>{const r=g.getBoundingClientRect();if(r.bottom<0||r.top>innerHeight){g.classList.remove('annotation-active');g.querySelectorAll('.design-note').forEach(n=>n.classList.add('note-pending'));}});
-    groups.forEach(g=>{const r=g.getBoundingClientRect();const active=r.top<innerHeight*.85&&r.bottom>innerHeight*.15;g.classList.toggle('annotation-active',active);g.querySelectorAll('.design-note').forEach(n=>n.classList.toggle('note-pending',!active));});
+  // One lightweight scroll coordinator for all concept notes. No debounce:
+  // movement is tied to the artwork's position, including touch scrolling.
+  const groups = [...document.querySelectorAll('.concept-annotation')];
+  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+  const state = new WeakMap();
+  let frame = 0;
+  function setActive(group, active) {
+    if (state.get(group) === active) return;
+    state.set(group, active);
+    group.classList.toggle('annotation-active', active);
+    group.querySelectorAll('.design-note').forEach(note => {
+      note.classList.toggle('note-pending', !active);
+      note.setAttribute('aria-hidden', String(!active));
+    });
   }
-  window.addEventListener('scroll',()=>{if(!frame)frame=requestAnimationFrame(()=>{frame=0;update();});},{passive:true});
-  window.addEventListener('resize',update,{passive:true});update();
+  function update() {
+    frame = 0;
+    if (reducedMotion.matches) {
+      groups.forEach(group => setActive(group, true));
+      return;
+    }
+    const h = window.innerHeight || document.documentElement.clientHeight;
+    const mobile = window.matchMedia('(max-width: 700px)').matches;
+    groups.forEach(group => {
+      const art = group.querySelector(':scope > .visdev-slot');
+      const r = (art || group).getBoundingClientRect();
+      const wasActive = state.get(group) === true;
+      // Reveal only after the principal artwork has clearly entered the viewport.
+      // Hysteresis prevents flicker while reversing scroll direction.
+      const entry = mobile ? .69 : .66;
+      const exit = mobile ? .80 : .78;
+      const upper = mobile ? .13 : .15;
+      const active = wasActive
+        ? r.top < h * exit && r.bottom > h * (upper - .07)
+        : r.top < h * entry && r.bottom > h * upper;
+      setActive(group, active);
+    });
+  }
+  function schedule() { if (!frame) frame = requestAnimationFrame(update); }
+  window.addEventListener('scroll', schedule, { passive: true });
+  window.addEventListener('resize', schedule, { passive: true });
+  reducedMotion.addEventListener?.('change', schedule);
+  schedule();
 }
 installDesignNotes();
 initSequenceViewer('sequence', 'sequence-mount', 'STORY_SEQUENCE');
