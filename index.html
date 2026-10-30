@@ -761,21 +761,8 @@ footer {
   #story .concept-annotation { margin:5px auto 9px; gap:0; min-height:0; }
   #story .concept-annotation.annotation-left,
   #story .concept-annotation.annotation-right { min-height:0; transform:none; }
-  /* Truly collapse the supporting content until its own artwork activates.
-     Hidden content must not leave a black hole in the gallery. */
-  #story .concept-annotation:not(.annotation-active) > .design-note { display:none !important; }
-  #story .concept-annotation.annotation-active > .design-note:not(.support-visuals) {
-    display:block; margin:9px 0 3px; padding:8px 10px;
-    background:#191919; border-left:2px solid #777166;
-    font-size:11.5px; line-height:1.48;
-    animation: support-enter .32s cubic-bezier(.2,.7,.2,1) both;
-  }
-  #story .concept-annotation.annotation-active > .support-visuals:not(:empty) {
-    display:grid; grid-template-columns:repeat(2,minmax(0,1fr));
-    gap:6px; margin:5px 0 3px; padding:0; border:0;
-    animation: support-enter .35s cubic-bezier(.2,.7,.2,1) both;
-  }
-  #story .concept-annotation > .support-visuals:empty { display:none !important; }
+  /* Mobile reveal behavior is defined once in the V5 block below.
+     Never switch display values while the user scrolls. */
   #story .support-placeholder, #story .support-placeholder:nth-child(2),
   #story .support-placeholder:nth-child(3) {
     width:100%; min-height:68px; aspect-ratio:1.8; padding:8px;
@@ -844,51 +831,127 @@ footer {
   #story .concept-annotation.annotation-right { min-height:clamp(440px,37vw,555px); }
   #story .concept-annotation.annotation-intro { min-height:0; }
 }
-/* ── WEBSITE v4: one authoritative mobile reveal rule for ALL motion settings ──
-   Never use prefers-reduced-motion to force all cards open. */
+/* ── WEBSITE V5: stable-size mobile gallery + genuine motion ──
+   The two supporting areas ALWAYS take up the same compact grid row, even
+   while visually hidden. Toggling active therefore never changes document
+   height or pushes the scroll position (the V4 rubber-band root cause).
+   Only opacity and transform animate; no display or height animations. */
 @media (max-width:700px) {
-  #story .concept-annotation:not(.annotation-active) > .design-note {
-    display:none !important;
-    visibility:hidden !important;
-    pointer-events:none !important;
+  #story .concept-annotation {
+    display:grid;
+    grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);
+    column-gap:9px; row-gap:0;
+    align-items:start;
+    isolation:isolate;
   }
-  #story .concept-annotation.annotation-active > .design-note:not(.support-visuals) {
+  #story .concept-annotation > .visdev-slot {
+    grid-column:1/-1; grid-row:1; min-width:0;
+  }
+  #story .concept-annotation > .design-note:not(.support-visuals) {
+    grid-column:1; grid-row:2;
     display:block !important;
-    visibility:visible !important;
-    opacity:1 !important;
-    pointer-events:auto !important;
-    animation: website-note-enter .48s cubic-bezier(.16,1,.3,1) both;
+    position:relative;
+    min-width:0; max-width:none;
+    margin:9px 0 0; padding:9px 9px 10px;
+    background:#1b1b1b; border-left:2px solid #777166;
+    font-size:11.5px; line-height:1.43;
+    opacity:0 !important;
+    visibility:hidden !important;
+    transform:translate3d(-13px,16px,0) !important;
+    pointer-events:none !important;
+    transition:opacity .42s ease,
+               transform .52s cubic-bezier(.16,1,.3,1),
+               visibility 0s linear .52s !important;
+    animation:none !important;
   }
-  #story .concept-annotation.annotation-active > .support-visuals:not(:empty) {
+  #story .concept-annotation > .support-visuals:not(:empty) {
+    grid-column:2; grid-row:2;
     display:grid !important;
-    visibility:visible !important;
-    opacity:1 !important;
-    pointer-events:auto !important;
-    animation: website-studies-enter .54s cubic-bezier(.16,1,.3,1) both;
+    grid-template-columns:minmax(0,1fr);
+    gap:5px; min-width:0;
+    margin:9px 0 0; padding:0; border:0;
+    opacity:0 !important;
+    visibility:hidden !important;
+    transform:translate3d(13px,20px,0) scale(.975) !important;
+    pointer-events:none !important;
+    transition:opacity .42s ease,
+               transform .56s cubic-bezier(.16,1,.3,1),
+               visibility 0s linear .56s !important;
+    animation:none !important;
   }
   #story .concept-annotation > .support-visuals:empty { display:none !important; }
+  #story .concept-annotation:has(> .support-visuals:empty) > .design-note:not(.support-visuals) {
+    grid-column:1/-1;
+  }
+  #story .concept-annotation .support-visuals .support-placeholder,
+  #story .concept-annotation .support-visuals .support-placeholder:nth-child(2),
+  #story .concept-annotation .support-visuals .support-placeholder:nth-child(3) {
+    box-sizing:border-box;
+    width:100%; margin:0; min-height:62px;
+    aspect-ratio:1.9/1;
+    padding:7px; overflow:hidden;
+  }
+  #story .concept-annotation .support-visuals .support-placeholder span {
+    font-size:10px; line-height:1.25;
+  }
+  #story .concept-annotation .support-visuals .support-placeholder small {
+    font-size:7.5px; margin-top:2px;
+  }
+  /* For three studies, arrange them in two compact rows instead of a tall stack. */
+  #story .concept-annotation:has(> .support-visuals > :nth-child(3)) > .support-visuals {
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  #story .concept-annotation:has(> .support-visuals > :nth-child(3)) > .support-visuals > :nth-child(3) {
+    grid-column:1/-1; aspect-ratio:3.6/1;
+  }
+  /* Active state: a visible, staggered entrance. No layout-affecting properties. */
+  #story .concept-annotation.annotation-active > .design-note:not(.support-visuals) {
+    opacity:1 !important; visibility:visible !important;
+    transform:translate3d(0,0,0) !important;
+    pointer-events:auto !important;
+    transition:opacity .48s ease-out,
+               transform .58s cubic-bezier(.16,1,.3,1),
+               visibility 0s linear 0s !important;
+  }
+  #story .concept-annotation.annotation-active > .support-visuals:not(:empty) {
+    opacity:1 !important; visibility:visible !important;
+    transform:translate3d(0,0,0) scale(1) !important;
+    pointer-events:auto !important;
+    transition:opacity .52s ease-out .10s,
+               transform .64s cubic-bezier(.16,1,.3,1) .10s,
+               visibility 0s linear 0s !important;
+  }
 }
-@keyframes website-note-enter {
-  from { opacity:0; transform:translate3d(0,17px,0); }
-  to   { opacity:1; transform:translate3d(0,0,0); }
-}
-@keyframes website-studies-enter {
-  from { opacity:0; transform:translate3d(0,23px,0) scale(.98); }
-  to   { opacity:1; transform:translate3d(0,0,0) scale(1); }
-}
+/* Respect the OS setting without abruptly revealing everything. A restrained
+   fade is still available. The on-page Enable Motion button opts back into
+   the full slide-and-fade on devices that request reduced motion. */
 @media (max-width:700px) and (prefers-reduced-motion:reduce) {
-  /* Notes still enter/exit at the correct positions. They simply don't move
-     unless the visitor expressly enables motion using the small toggle. */
+  html:not(.gallery-motion-override) #story .concept-annotation > .design-note {
+    transform:none !important;
+    transition:opacity .22s ease, visibility 0s linear .22s !important;
+  }
   html:not(.gallery-motion-override) #story .concept-annotation.annotation-active > .design-note {
-    animation:none !important; transition:none !important; transform:none !important;
+    transition:opacity .26s ease, visibility 0s linear 0s !important;
+  }
+  html.gallery-motion-override #story .concept-annotation > .design-note:not(.support-visuals) {
+    transition:opacity .42s ease,
+               transform .52s cubic-bezier(.16,1,.3,1),
+               visibility 0s linear .52s !important;
+  }
+  html.gallery-motion-override #story .concept-annotation > .support-visuals:not(:empty) {
+    transition:opacity .42s ease,
+               transform .56s cubic-bezier(.16,1,.3,1),
+               visibility 0s linear .56s !important;
   }
   html.gallery-motion-override #story .concept-annotation.annotation-active > .design-note:not(.support-visuals) {
-    animation:website-note-enter .48s cubic-bezier(.16,1,.3,1) both !important;
-    animation-duration:.48s !important;
+    transition:opacity .48s ease-out,
+               transform .58s cubic-bezier(.16,1,.3,1),
+               visibility 0s linear 0s !important;
   }
   html.gallery-motion-override #story .concept-annotation.annotation-active > .support-visuals:not(:empty) {
-    animation:website-studies-enter .54s cubic-bezier(.16,1,.3,1) both !important;
-    animation-duration:.54s !important;
+    transition:opacity .52s ease-out .10s,
+               transform .64s cubic-bezier(.16,1,.3,1) .10s,
+               visibility 0s linear 0s !important;
   }
 }
 /* Only visible on devices reporting reduced motion; user can opt back into
@@ -2347,7 +2410,7 @@ function installDesignNotes() {
   const groups = [...document.querySelectorAll('.concept-annotation')];
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
   const state = new WeakMap();
-  document.documentElement.dataset.galleryVersion = 'v4';
+  document.documentElement.dataset.galleryVersion = 'v5';
   const motionToggle = document.getElementById('gallery-motion-toggle');
   motionToggle?.addEventListener('click', () => {
     const enabled = document.documentElement.classList.toggle('gallery-motion-override');
@@ -2364,7 +2427,7 @@ function installDesignNotes() {
   }
   function refreshDebug() {
     if (!debugPanel) return;
-    debugPanel.textContent = 'Gallery v4 | mobile: ' + matchMedia('(max-width:700px)').matches +
+    debugPanel.textContent = 'Gallery v5 | mobile: ' + matchMedia('(max-width:700px)').matches +
       '\nOS reduce motion: ' + reducedMotion.matches +
       '\nMotion override: ' + document.documentElement.classList.contains('gallery-motion-override') +
       '\nActive artworks: ' + groups.filter(g => g.classList.contains('annotation-active')).length +
