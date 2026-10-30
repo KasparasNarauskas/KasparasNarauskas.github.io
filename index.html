@@ -748,6 +748,93 @@ footer {
  .concept-annotation.annotation-left,.concept-annotation.annotation-right { transform:none!important; }
 }
 
+
+/* ── WEBSITE / mobile gallery v2: art first, detail second ── */
+@media (max-width: 700px) {
+  #story { padding-top:28px; padding-bottom:38px; }
+  #story .s-head { margin-bottom:20px; }
+  #story .project-block { margin-bottom:22px; }
+  #story .project-label { margin-bottom:10px; }
+  #story .project-divider { margin-bottom:16px; }
+  #story .visdev-stack { gap:5px; }
+  #story .concept-annotation { margin:5px auto 9px; gap:0; min-height:0; }
+  #story .concept-annotation.annotation-left,
+  #story .concept-annotation.annotation-right { min-height:0; transform:none; }
+  /* Truly collapse the supporting content until its own artwork activates.
+     Hidden content must not leave a black hole in the gallery. */
+  #story .concept-annotation:not(.annotation-active) > .design-note { display:none !important; }
+  #story .concept-annotation.annotation-active > .design-note:not(.support-visuals) {
+    display:block; margin:9px 0 3px; padding:8px 10px;
+    background:#191919; border-left:2px solid #777166;
+    font-size:11.5px; line-height:1.48;
+    animation: support-enter .32s cubic-bezier(.2,.7,.2,1) both;
+  }
+  #story .concept-annotation.annotation-active > .support-visuals:not(:empty) {
+    display:grid; grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:6px; margin:5px 0 3px; padding:0; border:0;
+    animation: support-enter .35s cubic-bezier(.2,.7,.2,1) both;
+  }
+  #story .concept-annotation > .support-visuals:empty { display:none !important; }
+  #story .support-placeholder, #story .support-placeholder:nth-child(2),
+  #story .support-placeholder:nth-child(3) {
+    width:100%; min-height:68px; aspect-ratio:1.8; padding:8px;
+  }
+  #story .lian-process { margin-top:8px; margin-bottom:16px; }
+  #story .sequence { margin-bottom:28px; }
+  #story .video-slot { margin-bottom:12px; }
+  /* Treat About as a compact editorial grid, not three unrelated columns. */
+  #about { padding:19px 15px 24px; }
+  #about .s-head { margin-bottom:14px; }
+  #about .about-layout {
+    display:grid; grid-template-columns: minmax(112px, 34%) minmax(0,1fr);
+    gap:9px 15px; align-items:start;
+  }
+  #about .about-photo {
+    grid-column:1; grid-row:1 / span 2; width:100%; max-width:none;
+    aspect-ratio:3/4; align-self:start;
+  }
+  #about .about-text { display:contents; }
+  #about .about-name { grid-column:2; grid-row:1; font-size:clamp(29px,7.2vw,40px); line-height:1.01; margin:0; }
+  #about .about-body { display:contents; }
+  #about .about-body p { font-size:12px; line-height:1.48; color:var(--light); margin:0; }
+  #about .about-body p:first-child { grid-column:2; grid-row:2; align-self:start; }
+  #about .about-body p:nth-child(2) { grid-column:1/-1; grid-row:3; margin-top:3px; }
+  #about .about-body p:nth-child(3) { grid-column:1/-1; grid-row:4; }
+  #about .about-links {
+    grid-column:1/-1; grid-row:5; gap:8px 14px; align-items:center;
+    padding:5px 0 0; flex-wrap:wrap;
+  }
+  #about .about-link.contact-email { padding:8px 10px; font-size:10px; }
+  #about .about-details {
+    grid-column:1/-1; grid-row:6; display:grid;
+    grid-template-columns:1fr; gap:12px; margin-top:3px;
+    padding-top:13px; border-top:1px solid var(--rule);
+  }
+  #about .about-facts { display:grid; grid-template-columns:1fr; gap:6px; }
+  #about .fact { grid-template-columns:64px minmax(0,1fr); gap:8px; }
+  #about .fact-key { font-size:10px; }
+  #about .fact-val { font-size:12px; }
+  #about .software-title { margin-bottom:6px; font-size:10px; }
+  #about .software-list li { font-size:11.5px; line-height:1.55; }
+}
+@media (max-width:390px) {
+  #about .about-layout { grid-template-columns:minmax(108px,34%) minmax(0,1fr); gap:8px 12px; }
+  #about .about-photo { width:100%; }
+  #about .about-name { font-size:clamp(27px,7.1vw,32px); }
+  #about .about-body p { font-size:11.5px; }
+  #about .about-details { grid-template-columns:1fr; }
+}
+@keyframes support-enter {
+  from { opacity:0; transform:translateY(9px); }
+  to { opacity:1; transform:translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  #story .concept-annotation > .design-note { display:block !important; opacity:1 !important; visibility:visible !important; }
+  #story .concept-annotation > .support-visuals { display:grid !important; }
+  #story .concept-annotation > .support-visuals:empty { display:none !important; }
+  #story .concept-annotation > .design-note { animation:none !important; }
+}
+
 </style>
 </head>
 <body>
@@ -2173,6 +2260,14 @@ function installDesignNotes() {
   const groups = [...document.querySelectorAll('.concept-annotation')];
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
   const state = new WeakMap();
+  // Hide immediately, before the first animation frame, so mobile never
+  // flashes all studies and notes at their full size on initial load.
+  if (!reducedMotion.matches) groups.forEach(group => {
+    group.classList.remove('annotation-active');
+    group.querySelectorAll('.design-note').forEach(note => {
+      note.classList.add('note-pending'); note.setAttribute('aria-hidden', 'true');
+    });
+  });
   let frame = 0;
   function setActive(group, active) {
     if (state.get(group) === active) return;
@@ -2197,9 +2292,9 @@ function installDesignNotes() {
       const wasActive = state.get(group) === true;
       // Reveal only after the principal artwork has clearly entered the viewport.
       // Hysteresis prevents flicker while reversing scroll direction.
-      const entry = mobile ? .69 : .66;
-      const exit = mobile ? .80 : .78;
-      const upper = mobile ? .13 : .15;
+      const entry = mobile ? .61 : .66;
+      const exit = mobile ? .79 : .78;
+      const upper = mobile ? .19 : .15;
       const active = wasActive
         ? r.top < h * exit && r.bottom > h * (upper - .07)
         : r.top < h * entry && r.bottom > h * upper;
