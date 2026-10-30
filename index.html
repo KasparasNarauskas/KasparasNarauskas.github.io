@@ -835,6 +835,44 @@ footer {
   #story .concept-annotation > .design-note { animation:none !important; }
 }
 
+
+/* WEBSITE v3: keep desktop artwork close; mobile shows ONE contextual reveal at a time. */
+@media (min-width:1100px) {
+  #story .concept-annotation { margin-top:14px; margin-bottom:22px; }
+  #story .project-block { margin-bottom:clamp(38px,4.2vw,66px); }
+  #story .project-divider { margin-bottom:clamp(26px,3.5vw,52px); }
+}
+@media (min-width:1500px) {
+  #story .concept-annotation.annotation-left,
+  #story .concept-annotation.annotation-right { min-height:clamp(440px,37vw,555px); }
+  #story .concept-annotation.annotation-intro { min-height:0; }
+}
+@media (max-width:700px) and (prefers-reduced-motion:no-preference) {
+  /* These override earlier phone and reduced-motion declarations: inactive support
+     must be genuinely hidden, not just visually opaque or taking up space. */
+  #story .concept-annotation:not(.annotation-active) > .design-note,
+  #story .concept-annotation:not(.annotation-active) > .support-visuals { display:none !important; }
+  #story .concept-annotation.annotation-active > .design-note:not(.support-visuals) {
+    display:block !important; visibility:visible !important; opacity:1 !important;
+    transform:none !important; pointer-events:auto !important;
+    animation:website-note-enter .46s cubic-bezier(.16,1,.3,1) both !important;
+  }
+  #story .concept-annotation.annotation-active > .support-visuals:not(:empty) {
+    display:grid !important; visibility:visible !important; opacity:1 !important;
+    transform:none !important; pointer-events:auto !important;
+    animation:website-studies-enter .55s cubic-bezier(.16,1,.3,1) both !important;
+  }
+  #story .concept-annotation.annotation-active > .support-visuals:empty { display:none !important; }
+}
+@keyframes website-note-enter {
+  from { opacity:0; transform:translate3d(0,18px,0); }
+  to { opacity:1; transform:translate3d(0,0,0); }
+}
+@keyframes website-studies-enter {
+  from { opacity:0; transform:translate3d(0,24px,0) scale(.975); }
+  to { opacity:1; transform:translate3d(0,0,0) scale(1); }
+}
+
 </style>
 </head>
 <body>
@@ -2286,24 +2324,39 @@ function installDesignNotes() {
     }
     const h = window.innerHeight || document.documentElement.clientHeight;
     const mobile = window.matchMedia('(max-width: 700px)').matches;
+    if (mobile) {
+      // A single focused artwork drives the phone composition. Previously,
+      // overlapping viewport thresholds opened several unrelated study blocks.
+      // Use only the principal art rect (not the expanding notes) to choose it.
+      const focusY = h * .48;
+      let chosen = null, best = Infinity;
+      groups.forEach(group => {
+        const art = group.querySelector(':scope > .visdev-slot');
+        const r = (art || group).getBoundingClientRect();
+        // Don't reveal while the artwork is merely entering at screen bottom.
+        if (r.top > h * .55 || r.bottom < h * .18) return;
+        const distance = Math.abs(Math.max(r.top, Math.min(focusY, r.bottom)) - focusY);
+        // Prefer the image whose area actually occupies the focus line.
+        const score = distance + Math.abs((r.top + r.bottom)/2 - focusY) * .06;
+        if (score < best) { best = score; chosen = group; }
+      });
+      groups.forEach(group => setActive(group, group === chosen));
+      return;
+    }
     groups.forEach(group => {
       const art = group.querySelector(':scope > .visdev-slot');
       const r = (art || group).getBoundingClientRect();
       const wasActive = state.get(group) === true;
-      // Reveal only after the principal artwork has clearly entered the viewport.
-      // Hysteresis prevents flicker while reversing scroll direction.
-      const entry = mobile ? .61 : .66;
-      const exit = mobile ? .79 : .78;
-      const upper = mobile ? .19 : .15;
       const active = wasActive
-        ? r.top < h * exit && r.bottom > h * (upper - .07)
-        : r.top < h * entry && r.bottom > h * upper;
+        ? r.top < h * .78 && r.bottom > h * .08
+        : r.top < h * .59 && r.bottom > h * .15;
       setActive(group, active);
     });
   }
   function schedule() { if (!frame) frame = requestAnimationFrame(update); }
   window.addEventListener('scroll', schedule, { passive: true });
   window.addEventListener('resize', schedule, { passive: true });
+  document.querySelectorAll('#story img').forEach(img => img.addEventListener('load', schedule, {passive:true}));
   reducedMotion.addEventListener?.('change', schedule);
   schedule();
 }
