@@ -930,6 +930,9 @@ footer {
 }
 
 
+/* Matching captions remain outside each video's media stage. */
+.fx-piece {margin:0;min-width:0;}
+.fx-caption {margin:10px 0 16px;color:var(--light);font:400 12px/1.6 var(--body);letter-spacing:.025em;}
 /* Independent pages retain shared components and editing data. */
 html[data-portfolio="story"] #fx, html[data-portfolio="fx"] #story {display:none!important;}
 .nav-link {text-decoration:none;}
@@ -1139,11 +1142,11 @@ html[data-portfolio="story"] #fx, html[data-portfolio="fx"] #story {display:none
 
   <!-- Large-scale FX pieces, full width, not the condensed grid -->
   <div class="visdev-stack">
-    <div class="visdev-slot"><video data-src="https://res.cloudinary.com/twplcz62/video/upload/v1784840945/4Arms_Body_Good_lircv0.mp4" loop muted playsinline preload="none" data-fxauto></video></div>
-    <div class="visdev-slot"><video data-src="https://res.cloudinary.com/twplcz62/video/upload/q_auto,w_1280/v1792510103/Green_explosion_invrs_ans05z.mp4" data-poster="https://res.cloudinary.com/twplcz62/video/upload/so_0/v1792510103/Green_explosion_invrs_ans05z.jpg" aria-label="Green explosion animation" loop muted playsinline preload="none" data-fxauto></video></div>
-    <div class="visdev-slot"><video data-src="https://res.cloudinary.com/twplcz62/video/upload/q_auto,w_1280/v1791211262/Saph_FOX_Fx_Master_inresg.mp4" data-poster="https://res.cloudinary.com/twplcz62/video/upload/so_0/v1791211262/Saph_FOX_Fx_Master_inresg.jpg" loop muted playsinline preload="none" data-fxauto></video></div>
-    <div class="visdev-slot"><video data-src="https://res.cloudinary.com/twplcz62/video/upload/q_auto,w_1280/v1791216219/tunnel_project_reel_gfh8eh.mp4" data-poster="https://res.cloudinary.com/twplcz62/video/upload/so_0/v1791216219/tunnel_project_reel_gfh8eh.jpg" loop muted playsinline preload="none" data-fxauto></video></div>
-    <div class="visdev-slot"><video data-src="https://res.cloudinary.com/twplcz62/video/upload/v1784665775/smell_fx_comparison_dzbs9g.mp4" loop muted playsinline preload="none" data-fxauto></video></div>
+    <figure class="fx-piece"><div class="visdev-slot"><video data-src="https://res.cloudinary.com/twplcz62/video/upload/v1784840945/4Arms_Body_Good_lircv0.mp4" loop muted playsinline preload="none" data-fxauto></video></div><figcaption class="fx-caption">The founder unleashes a devastating burst of Eldritch energy.</figcaption></figure>
+    <figure class="fx-piece"><div class="visdev-slot"><video data-src="https://res.cloudinary.com/twplcz62/video/upload/q_auto,w_1280/v1792510103/Green_explosion_invrs_ans05z.mp4" data-poster="https://res.cloudinary.com/twplcz62/video/upload/so_0/v1792510103/Green_explosion_invrs_ans05z.jpg" aria-label="Green explosion animation" loop muted playsinline preload="none" data-fxauto></video></div><figcaption class="fx-caption">Explosion animation test.</figcaption></figure>
+    <figure class="fx-piece"><div class="visdev-slot"><video data-src="https://res.cloudinary.com/twplcz62/video/upload/q_auto,w_1280/v1791211262/Saph_FOX_Fx_Master_inresg.mp4" data-poster="https://res.cloudinary.com/twplcz62/video/upload/so_0/v1791211262/Saph_FOX_Fx_Master_inresg.jpg" loop muted playsinline preload="none" data-fxauto></video></div><figcaption class="fx-caption">After Effects and animation test. All work by me.</figcaption></figure>
+    <figure class="fx-piece"><div class="visdev-slot"><video data-src="https://res.cloudinary.com/twplcz62/video/upload/q_auto,w_1280/v1791216219/tunnel_project_reel_gfh8eh.mp4" data-poster="https://res.cloudinary.com/twplcz62/video/upload/so_0/v1791216219/tunnel_project_reel_gfh8eh.jpg" loop muted playsinline preload="none" data-fxauto></video></div><figcaption class="fx-caption">A collection of my scenes from our WDKA Year 2 pitch project.</figcaption></figure>
+    <figure class="fx-piece"><div class="visdev-slot"><video data-src="https://res.cloudinary.com/twplcz62/video/upload/v1784665775/smell_fx_comparison_dzbs9g.mp4" loop muted playsinline preload="none" data-fxauto></video></div><figcaption class="fx-caption">My effects for the WDKA animation project Return.</figcaption></figure>
   </div>
 
   <div class="fx-grid" id="fx-grid">
@@ -1444,9 +1447,9 @@ const FX_REEL_SHOTS = [
 const storyConfig = JSON.parse(document.getElementById('VAROKARN_SEQUENCE').textContent);
 const falseGodsConfig = JSON.parse(document.getElementById('STORY_SEQUENCE').textContent);
 const REEL_SHOTS = portfolioPage === 'fx' ? FX_REEL_SHOTS.slice(0,3) : [
-  {src: storyConfig.video, poster: storyConfig.poster, start:0, hold:6000, endMargin:.1, wipeDuration:400},
+  {...FX_REEL_SHOTS[3], playToEnd:false, hold:6000},
   {src: falseGodsConfig.video, poster: falseGodsConfig.poster, start:0, hold:6000, endMargin:.1, wipeDuration:400},
-  {...FX_REEL_SHOTS[3], playToEnd:false, hold:6000}
+  {src: storyConfig.video, poster: storyConfig.poster, start:0, hold:6000, endMargin:.1, wipeDuration:400}
 ];
 document.getElementById('reel').setAttribute('aria-label', portfolioPage === 'fx' ? 'Fx & Animation opening reel' : 'Story & Project opening reel');
 // Keep shared contact information after the selected portfolio.
