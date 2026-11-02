@@ -935,20 +935,25 @@ footer {
 .fx-caption {margin:10px 0 16px;color:var(--light);font:400 12px/1.6 var(--body);letter-spacing:.025em;}
 /* Independent pages retain shared components and editing data. */
 html[data-portfolio="story"] #fx, html[data-portfolio="fx"] #story {display:none!important;}
-.nav-link {text-decoration:none;}
+.nav-link {text-decoration:none;display:flex;align-items:center;justify-content:center;}
 @media(max-width:700px) {
+  #story .concept-annotation {overflow:hidden;overflow:clip;}
+  .nav-links {align-items:stretch;}
+  .nav-links li {display:flex;min-width:0;}
+  .nav-links li .nav-link {width:100%;height:100%;line-height:1.45;}
+  .nav-links li:not(:last-child) .nav-link.active {border-bottom-color:transparent;background:#24221f;box-shadow:inset 0 -2px 0 var(--paper);}
   html #story .concept-annotation > .design-note,
   html #story .concept-annotation.annotation-active > .design-note {
     opacity:var(--note-progress,0)!important;
     visibility:visible!important;
-    transform:translate3d(calc((1 - var(--note-progress,0)) * -22px),calc((1 - var(--note-progress,0)) * -65px),0) scale(calc(.9 + var(--note-progress,0) * .1))!important;
+    transform:var(--note-transform,translate3d(-22px,-65px,0) scale(.9))!important;
     transition:none!important; animation:none!important;
     transform-origin:top center;
   }
   html #story .concept-annotation > .support-visuals:not(:empty),
   html #story .concept-annotation.annotation-active > .support-visuals:not(:empty) {
     opacity:var(--study-progress,0)!important;
-    transform:translate3d(calc((1 - var(--study-progress,0)) * 26px),calc((1 - var(--study-progress,0)) * -88px),0) rotate(calc((1 - var(--study-progress,0)) * 5deg)) scale(calc(.84 + var(--study-progress,0) * .16))!important;
+    transform:var(--study-transform,translate3d(26px,-88px,0) rotate(5deg) scale(.84))!important;
     transition:none!important; animation:none!important;
   }
   #story .concept-annotation > .visdev-slot {position:relative;z-index:2;}
@@ -2459,6 +2464,10 @@ function installDesignNotes() {
     const mobile = window.matchMedia('(max-width: 700px)').matches;
     // On desktop, accessible static notes are fine. On phones, this branch
     // previously showed ALL the notes and made every reveal permanently static.
+    if (!mobile) groups.forEach(group => group.querySelectorAll(':scope > .design-note').forEach(note => {
+      ['opacity','transform','transition','visibility','pointer-events'].forEach(property => note.style.removeProperty(property));
+      note.inert = false;
+    }));
     if (reducedMotion.matches && !mobile) {
       groups.forEach(group => setActive(group, true));
       refreshDebug();
@@ -2468,14 +2477,28 @@ function installDesignNotes() {
       groups.forEach(group => {
         const art = group.querySelector(':scope > .visdev-slot');
         const r = (art || group).getBoundingClientRect();
-        const progress = Math.max(0, Math.min(1, (h * .85 - r.bottom) / (h * .30)));
+        const progress = Math.max(0, Math.min(1, (h * .68 - r.bottom) / (h * .38)));
         const reduce = reducedMotion.matches && !document.documentElement.classList.contains('gallery-motion-override');
-        const p = reduce ? 1 : progress;
+        const p = progress;
         const eased = 1 - Math.pow(1 - p, 3);
         group.style.setProperty('--note-progress', eased);
         group.style.setProperty('--study-progress', Math.max(0, (eased - .14) / .86));
+        const study = Math.max(0, (eased - .14) / .86);
+        // Compute lengths in JavaScript, avoiding CSS multiplication unsupported by older Safari.
+        group.style.setProperty('--note-transform', reduce ? 'none' : 'translate3d(' + ((1-eased)*-22) + 'px,' + ((1-eased)*-65) + 'px,0) scale(' + (.9+eased*.1) + ')');
+        group.style.setProperty('--study-transform', reduce ? 'none' : 'translate3d(' + ((1-study)*26) + 'px,' + ((1-study)*-88) + 'px,0) rotate(' + ((1-study)*5) + 'deg) scale(' + (.84+study*.16) + ')');
         setActive(group, p > .01);
-        group.querySelectorAll('.design-note').forEach(note => { note.inert = p <= .01; });
+        group.querySelectorAll(':scope > .design-note').forEach(note => {
+          const supporting = note.classList.contains('support-visuals');
+          const amount = supporting ? study : eased;
+          note.inert = amount <= .01;
+          note.setAttribute('aria-hidden', String(amount <= .01));
+          note.style.setProperty('opacity', String(amount), 'important');
+          note.style.setProperty('transform', group.style.getPropertyValue(supporting ? '--study-transform' : '--note-transform'), 'important');
+          note.style.setProperty('transition', 'none', 'important');
+          note.style.setProperty('visibility', amount <= .001 ? 'hidden' : 'visible', 'important');
+          note.style.setProperty('pointer-events', amount <= .01 ? 'none' : 'auto', 'important');
+        });
       });
       refreshDebug();
       return;
@@ -2492,6 +2515,7 @@ function installDesignNotes() {
     refreshDebug();
   }
   function schedule() { if (!frame) frame = requestAnimationFrame(update); }
+  motionToggle?.addEventListener('click', schedule);
   window.addEventListener('scroll', schedule, { passive: true });
   window.addEventListener('resize', schedule, { passive: true });
   document.querySelectorAll('#story img').forEach(img => img.addEventListener('load', schedule, {passive:true}));
