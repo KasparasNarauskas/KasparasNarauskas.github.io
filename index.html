@@ -3,14 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kasparas Narauskas · Story Artist</title>
+<title>Kasparas Narauskas · Story &amp; Project</title>
 <meta name="description" content="Portfolio of Kasparas Narauskas, story artist working in concept art and 2D FX animation. WDKA Rotterdam.">
-<meta property="og:title" content="Kasparas Narauskas, Story Artist">
+<meta property="og:title" content="Kasparas Narauskas · Story &amp; Project">
 <meta property="og:description" content="Storyboards, animatics, concept art, and 2D FX animation.">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://res.cloudinary.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Jost:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<script>
+const portfolioPage = /(?:^|\/)fx(?:\/|$)/.test(location.pathname) || new URLSearchParams(location.search).get('page') === 'fx' || location.hash === '#fx' ? 'fx' : 'story';
+document.documentElement.dataset.portfolio = portfolioPage;
+</script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -904,55 +908,6 @@ footer {
   #story .concept-annotation:has(> .support-visuals > :nth-child(3)) > .support-visuals > :nth-child(3) {
     grid-column:1/-1; aspect-ratio:3.6/1;
   }
-  /* Active state: a visible, staggered entrance. No layout-affecting properties. */
-  #story .concept-annotation.annotation-active > .design-note:not(.support-visuals) {
-    opacity:1 !important; visibility:visible !important;
-    transform:translate3d(0,0,0) !important;
-    pointer-events:auto !important;
-    transition:opacity .48s ease-out,
-               transform .58s cubic-bezier(.16,1,.3,1),
-               visibility 0s linear 0s !important;
-  }
-  #story .concept-annotation.annotation-active > .support-visuals:not(:empty) {
-    opacity:1 !important; visibility:visible !important;
-    transform:translate3d(0,0,0) scale(1) !important;
-    pointer-events:auto !important;
-    transition:opacity .52s ease-out .10s,
-               transform .64s cubic-bezier(.16,1,.3,1) .10s,
-               visibility 0s linear 0s !important;
-  }
-}
-/* Respect the OS setting without abruptly revealing everything. A restrained
-   fade is still available. The on-page Enable Motion button opts back into
-   the full slide-and-fade on devices that request reduced motion. */
-@media (max-width:700px) and (prefers-reduced-motion:reduce) {
-  html:not(.gallery-motion-override) #story .concept-annotation > .design-note {
-    transform:none !important;
-    transition:opacity .22s ease, visibility 0s linear .22s !important;
-  }
-  html:not(.gallery-motion-override) #story .concept-annotation.annotation-active > .design-note {
-    transition:opacity .26s ease, visibility 0s linear 0s !important;
-  }
-  html.gallery-motion-override #story .concept-annotation > .design-note:not(.support-visuals) {
-    transition:opacity .42s ease,
-               transform .52s cubic-bezier(.16,1,.3,1),
-               visibility 0s linear .52s !important;
-  }
-  html.gallery-motion-override #story .concept-annotation > .support-visuals:not(:empty) {
-    transition:opacity .42s ease,
-               transform .56s cubic-bezier(.16,1,.3,1),
-               visibility 0s linear .56s !important;
-  }
-  html.gallery-motion-override #story .concept-annotation.annotation-active > .design-note:not(.support-visuals) {
-    transition:opacity .48s ease-out,
-               transform .58s cubic-bezier(.16,1,.3,1),
-               visibility 0s linear 0s !important;
-  }
-  html.gallery-motion-override #story .concept-annotation.annotation-active > .support-visuals:not(:empty) {
-    transition:opacity .52s ease-out .10s,
-               transform .64s cubic-bezier(.16,1,.3,1) .10s,
-               visibility 0s linear 0s !important;
-  }
 }
 /* Only visible on devices reporting reduced motion; user can opt back into
    gallery movement directly without changing their phone-wide setting. */
@@ -974,6 +929,28 @@ footer {
   color:#eee; font:11px/1.5 monospace; pointer-events:none; white-space:pre-wrap;
 }
 
+
+/* Independent pages retain shared components and editing data. */
+html[data-portfolio="story"] #fx, html[data-portfolio="fx"] #story {display:none!important;}
+.nav-link {text-decoration:none;}
+@media(max-width:700px) {
+  html #story .concept-annotation > .design-note,
+  html #story .concept-annotation.annotation-active > .design-note {
+    opacity:var(--note-progress,0)!important;
+    visibility:visible!important;
+    transform:translate3d(calc((1 - var(--note-progress,0)) * -22px),calc((1 - var(--note-progress,0)) * -65px),0) scale(calc(.9 + var(--note-progress,0) * .1))!important;
+    transition:none!important; animation:none!important;
+    transform-origin:top center;
+  }
+  html #story .concept-annotation > .support-visuals:not(:empty),
+  html #story .concept-annotation.annotation-active > .support-visuals:not(:empty) {
+    opacity:var(--study-progress,0)!important;
+    transform:translate3d(calc((1 - var(--study-progress,0)) * 26px),calc((1 - var(--study-progress,0)) * -88px),0) rotate(calc((1 - var(--study-progress,0)) * 5deg)) scale(calc(.84 + var(--study-progress,0) * .16))!important;
+    transition:none!important; animation:none!important;
+  }
+  #story .concept-annotation > .visdev-slot {position:relative;z-index:2;}
+}
+
 </style>
 </head>
 <body>
@@ -988,10 +965,10 @@ footer {
 
 <!-- NAV -->
 <nav>
-  <a class="nav-name" id="nav-home">KASPARAS NARAUSKAS</a>
+  <a class="nav-name" id="nav-home" href="#reel">KASPARAS NARAUSKAS</a>
   <ul class="nav-links">
-    <li><button class="nav-link active" data-target="story">Story / Concept</button></li>
-    <li><button class="nav-link" data-target="fx">FX &amp; Animation</button></li>
+    <li><a class="nav-link" data-page="story" href="?page=story">Story &amp; Project</a></li>
+    <li><a class="nav-link" data-page="fx" href="?page=fx">Fx &amp; Animation</a></li>
     <li><button class="nav-link nav-contact" data-target="about">About &amp; Contact</button></li>
   </ul>
 </nav>
@@ -1069,7 +1046,7 @@ footer {
 ══════════════════════════════════════════ -->
 <section class="port-section" id="story">
   <div class="s-head">
-    <h2 class="s-title">STORY / CONCEPT</h2>
+    <h2 class="s-title">Story &amp; Project</h2>
     <div class="s-rule"></div>
     <button type="button" id="gallery-motion-toggle" aria-pressed="false" aria-label="Enable gallery reveal animations">Enable motion</button>
   </div>
@@ -1156,7 +1133,7 @@ footer {
 ══════════════════════════════════════════ -->
 <section class="port-section" id="fx">
   <div class="s-head">
-    <h2 class="s-title">FX &amp; Animation</h2>
+    <h2 class="s-title">Fx &amp; Animation</h2>
     <div class="s-rule"></div>
   </div>
 
@@ -1426,8 +1403,8 @@ function playbackSource(source, portfolio = false) {
     }, 950);
   };
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let splashSeen = false;
-  try { splashSeen = !!sessionStorage.getItem('splashSeen'); } catch (_) {}
+  let splashSeen = /\/(story|fx)\//.test(location.pathname) || new URLSearchParams(location.search).has('page');
+  try { splashSeen = splashSeen || !!sessionStorage.getItem('splashSeen'); } catch (_) {}
   if (splashSeen || reducedMotion) {
     s.style.display = 'none';
     return;
@@ -1441,7 +1418,7 @@ function playbackSource(source, portfolio = false) {
 // Three separate Cloudinary clips. Keep the full animatics with audio below.
 // start is seconds into the original clip; startFraction is a share of its duration.
 // hold is time on screen in milliseconds.
-const REEL_SHOTS = [
+const FX_REEL_SHOTS = [
   {
     src: 'https://res.cloudinary.com/twplcz62/video/upload/v1784840945/4Arms_Body_Good_lircv0.mp4',
     poster: 'https://res.cloudinary.com/twplcz62/video/upload/so_0/v1784840945/4Arms_Body_Good_lircv0.jpg',
@@ -1464,6 +1441,28 @@ const REEL_SHOTS = [
   }
 ];
 
+const storyConfig = JSON.parse(document.getElementById('VAROKARN_SEQUENCE').textContent);
+const falseGodsConfig = JSON.parse(document.getElementById('STORY_SEQUENCE').textContent);
+const REEL_SHOTS = portfolioPage === 'fx' ? FX_REEL_SHOTS.slice(0,3) : [
+  {src: storyConfig.video, poster: storyConfig.poster, start:0, hold:6000, endMargin:.1, wipeDuration:400},
+  {src: falseGodsConfig.video, poster: falseGodsConfig.poster, start:0, hold:6000, endMargin:.1, wipeDuration:400},
+  {...FX_REEL_SHOTS[3], playToEnd:false, hold:6000}
+];
+document.getElementById('reel').setAttribute('aria-label', portfolioPage === 'fx' ? 'Fx & Animation opening reel' : 'Story & Project opening reel');
+// Keep shared contact information after the selected portfolio.
+document.getElementById('work-content').append(document.getElementById('about'));
+const pageName = portfolioPage === 'fx' ? 'Fx & Animation' : 'Story & Project';
+document.title = 'Kasparas Narauskas · ' + pageName;
+document.querySelector('[property="og:title"]').content = document.title;
+const description = portfolioPage === 'fx' ? 'Hand-drawn FX and animation by Kasparas Narauskas.' : 'Storyboards, animatics and project development by Kasparas Narauskas.';
+document.querySelector('meta[name="description"]').content = description;
+document.querySelector('[property="og:description"]').content = description;
+document.querySelectorAll('[data-page]').forEach(link => {
+  const root = new URL(/\/(story|fx)\/(?:index.html)?$/.test(location.pathname) ? '../' : './', location.href);
+  link.href = new URL(link.dataset.page + '/', root).href + (new URLSearchParams(location.search).has('edit') ? '?edit' : '');
+  link.classList.toggle('active', link.dataset.page === portfolioPage);
+  if (link.dataset.page === portfolioPage) link.setAttribute('aria-current','page');
+});
 // Cut points use media time. Keep each wipe within the outgoing clip's end point.
 function reelWindow(item, duration) {
   const base = item.startFraction == null ? item.start
@@ -1698,7 +1697,7 @@ document.getElementById('nav-home').addEventListener('click', () => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
-document.querySelectorAll('.nav-link').forEach(btn => {
+document.querySelectorAll('.nav-link[data-target]').forEach(btn => {
   btn.addEventListener('click', () => {
     const el = document.getElementById(btn.dataset.target);
     if (el) el.scrollIntoView({ behavior: 'smooth' });
@@ -1708,7 +1707,7 @@ document.querySelectorAll('.nav-link').forEach(btn => {
 const spy = new IntersectionObserver(entries => {
   entries.forEach(e => {
     if (e.isIntersecting) {
-      document.querySelectorAll('.nav-link').forEach(l =>
+      document.querySelectorAll('.nav-link[data-target]').forEach(l =>
         l.classList.toggle('active', l.dataset.target === e.target.id)
       );
     }
@@ -2410,7 +2409,7 @@ function installDesignNotes() {
   const groups = [...document.querySelectorAll('.concept-annotation')];
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
   const state = new WeakMap();
-  document.documentElement.dataset.galleryVersion = 'v5';
+  document.documentElement.dataset.galleryVersion = 'v6';
   const motionToggle = document.getElementById('gallery-motion-toggle');
   motionToggle?.addEventListener('click', () => {
     const enabled = document.documentElement.classList.toggle('gallery-motion-override');
@@ -2427,7 +2426,7 @@ function installDesignNotes() {
   }
   function refreshDebug() {
     if (!debugPanel) return;
-    debugPanel.textContent = 'Gallery v5 | mobile: ' + matchMedia('(max-width:700px)').matches +
+    debugPanel.textContent = 'Gallery v6 | mobile: ' + matchMedia('(max-width:700px)').matches +
       '\nOS reduce motion: ' + reducedMotion.matches +
       '\nMotion override: ' + document.documentElement.classList.contains('gallery-motion-override') +
       '\nActive artworks: ' + groups.filter(g => g.classList.contains('annotation-active')).length +
@@ -2463,22 +2462,18 @@ function installDesignNotes() {
       return;
     }
     if (mobile) {
-      // A single focused artwork drives the phone composition. Previously,
-      // overlapping viewport thresholds opened several unrelated study blocks.
-      // Use only the principal art rect (not the expanding notes) to choose it.
-      const focusY = h * .48;
-      let chosen = null, best = Infinity;
       groups.forEach(group => {
         const art = group.querySelector(':scope > .visdev-slot');
         const r = (art || group).getBoundingClientRect();
-        // Don't reveal while the artwork is merely entering at screen bottom.
-        if (r.top > h * .55 || r.bottom < h * .18) return;
-        const distance = Math.abs(Math.max(r.top, Math.min(focusY, r.bottom)) - focusY);
-        // Prefer the image whose area actually occupies the focus line.
-        const score = distance + Math.abs((r.top + r.bottom)/2 - focusY) * .06;
-        if (score < best) { best = score; chosen = group; }
+        const progress = Math.max(0, Math.min(1, (h * .85 - r.bottom) / (h * .30)));
+        const reduce = reducedMotion.matches && !document.documentElement.classList.contains('gallery-motion-override');
+        const p = reduce ? 1 : progress;
+        const eased = 1 - Math.pow(1 - p, 3);
+        group.style.setProperty('--note-progress', eased);
+        group.style.setProperty('--study-progress', Math.max(0, (eased - .14) / .86));
+        setActive(group, p > .01);
+        group.querySelectorAll('.design-note').forEach(note => { note.inert = p <= .01; });
       });
-      groups.forEach(group => setActive(group, group === chosen));
       refreshDebug();
       return;
     }
