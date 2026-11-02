@@ -1014,13 +1014,9 @@ html body #story .support-placeholder.has-process-image > span {position:absolut
 .support-copy p {font-size:14px;line-height:1.7;color:var(--light);}
 .reel-video.is-incoming.is-wiping {opacity:1;clip-path:polygon(0 0,0 0,-24% 100%,0 100%);animation:portfolio-slant var(--reel-wipe-duration,260ms) linear forwards!important;animation-duration:var(--reel-wipe-duration,260ms)!important;}
 @keyframes portfolio-slant {to{clip-path:polygon(0 0,140% 0,116% 100%,0 100%);}}
-@media(min-width:701px){
- html body #story .concept-annotation {display:grid;grid-template-columns:minmax(0,1fr) 250px;grid-template-rows:auto 1fr;gap:18px 28px;align-items:start;width:100%;max-width:1180px;min-height:0!important;margin:24px auto 44px;transform:none!important;}
- html body #story .concept-annotation > .visdev-slot {grid-column:1;grid-row:1/span 2;width:100%;max-width:none;}
- html body #story .concept-annotation > .design-note {position:relative;grid-column:2;grid-row:1;top:auto;left:auto;right:auto;width:100%;max-width:none;margin:0;}
- html body #story .concept-annotation > .support-visuals {grid-row:2;display:grid;grid-template-columns:1fr;gap:12px;padding:0;border:0;}
- html body #story .concept-annotation > .support-visuals:empty {display:none;}
- html body #story .design-note p {font-size:13px;line-height:1.65;}
+@media(min-width:1500px){
+ #story .concept-annotation > .design-note:not(.support-visuals) {top:20px;}
+ #story .concept-annotation > .support-visuals {top:var(--side-support-top,240px);}
 }
 @media(max-width:700px){html body #story .concept-annotation .support-visuals {grid-template-columns:minmax(0,1fr)!important;}html body #story .concept-annotation .support-visuals > :nth-child(3){grid-column:auto!important;}}
 
@@ -2660,6 +2656,24 @@ function installDesignNotes() {
   schedule();
 }
 installDesignNotes();
+// Retain the original large artwork layout; reserve enough side space for the longer copy.
+(function(){
+  const groups=[...document.querySelectorAll('.concept-annotation')];
+  function fitNotes(){groups.forEach(group=>{
+    if(!matchMedia('(min-width:1500px)').matches){group.style.removeProperty('min-height');return;}
+    const note=group.querySelector(':scope > .design-note:not(.support-visuals)');
+    const studies=group.querySelector(':scope > .support-visuals');
+    const art=group.querySelector(':scope > .visdev-slot');
+    if(!note||!art)return;
+    const top=20+note.offsetHeight+18;
+    group.style.setProperty('--side-support-top',top+'px');
+    const required=Math.ceil(Math.max(art.offsetHeight,top+(studies?.offsetHeight||0)+20));
+    group.style.setProperty('min-height',required+'px','important');
+  });}
+  const observer=new ResizeObserver(fitNotes);
+  groups.forEach(g=>g.querySelectorAll(':scope > .design-note, :scope > .visdev-slot').forEach(el=>observer.observe(el)));
+  addEventListener('resize',fitNotes,{passive:true});document.fonts.ready.then(fitNotes);fitNotes();
+})();
 initSequenceViewer('sequence', 'sequence-mount', 'STORY_SEQUENCE');
 initSequenceViewer('varokarn', 'vid-varokarn', 'VAROKARN_SEQUENCE', true);
 
