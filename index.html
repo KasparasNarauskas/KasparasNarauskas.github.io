@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kasparas Narauskas · Story &amp; Project</title>
+<title>Kasparas Narauskas · Story &amp; Project/Concept</title>
 <meta name="description" content="Portfolio of Kasparas Narauskas, story artist working in concept art and 2D FX animation. WDKA Rotterdam.">
-<meta property="og:title" content="Kasparas Narauskas · Story &amp; Project">
+<meta property="og:title" content="Kasparas Narauskas · Story &amp; Project/Concept">
 <meta property="og:description" content="Storyboards, animatics, concept art, and 2D FX animation.">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -998,6 +998,48 @@ html body #about .software-list li {font-size:10px;}
  #animatics > .project-block {margin-bottom:32px;}
 }
 
+
+#varokarn-gallery > .project-label h3 {font-size:clamp(42px,4.5vw,66px);-webkit-text-stroke:.65px #8e2929;paint-order:stroke fill;}
+#varokarn-gallery > .project-label .project-medium {font-size:14px;}
+#story .annotation-intro .design-note strong {font-size:26px;-webkit-text-stroke:.4px #8e2929;paint-order:stroke fill;}
+html body #story .concept-annotation .support-placeholder.has-process-image {display:block!important;width:100%!important;aspect-ratio:var(--process-ratio)!important;min-height:0!important;padding:0!important;margin:0!important;border:1px solid #514d45;}
+html body #story .support-placeholder.has-process-image > img {position:static;display:block;width:100%;height:auto;object-fit:contain;}
+html body #story .support-placeholder.has-process-image > span {position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip-path:inset(50%);}
+.board-modal.support-dialog {width:max-content;max-width:calc(100vw - 32px);max-height:calc(100dvh - 32px);padding:0;border:0;background:transparent;overflow:auto;}
+.support-dialog .support-preview {width:max-content;max-width:100%;margin:auto;}
+.support-dialog .support-preview > img {display:block;width:auto;height:auto;max-width:calc(100vw - 40px);max-height:calc(100dvh - 70px);border:1px solid #514d45;object-fit:contain;}
+.support-dialog .board-close {position:fixed;top:max(12px,env(safe-area-inset-top));right:14px;z-index:10;}
+.support-copy {width:560px;max-width:calc(100vw - 40px);padding:26px;background:var(--bg2);border:1px solid var(--rule);color:var(--paper);}
+.support-copy h3 {font-size:20px;margin-bottom:12px;}
+.support-copy p {font-size:14px;line-height:1.7;color:var(--light);}
+.reel-video.is-incoming.is-wiping {opacity:1;clip-path:polygon(0 0,0 0,-24% 100%,0 100%);animation:portfolio-slant var(--reel-wipe-duration,260ms) linear forwards!important;animation-duration:var(--reel-wipe-duration,260ms)!important;}
+@keyframes portfolio-slant {to{clip-path:polygon(0 0,140% 0,116% 100%,0 100%);}}
+@media(min-width:701px){
+ html body #story .concept-annotation {display:grid;grid-template-columns:minmax(0,1fr) 250px;grid-template-rows:auto 1fr;gap:18px 28px;align-items:start;width:100%;max-width:1180px;min-height:0!important;margin:24px auto 44px;transform:none!important;}
+ html body #story .concept-annotation > .visdev-slot {grid-column:1;grid-row:1/span 2;width:100%;max-width:none;}
+ html body #story .concept-annotation > .design-note {position:relative;grid-column:2;grid-row:1;top:auto;left:auto;right:auto;width:100%;max-width:none;margin:0;}
+ html body #story .concept-annotation > .support-visuals {grid-row:2;display:grid;grid-template-columns:1fr;gap:12px;padding:0;border:0;}
+ html body #story .concept-annotation > .support-visuals:empty {display:none;}
+ html body #story .design-note p {font-size:13px;line-height:1.65;}
+}
+@media(max-width:700px){html body #story .concept-annotation .support-visuals {grid-template-columns:minmax(0,1fr)!important;}html body #story .concept-annotation .support-visuals > :nth-child(3){grid-column:auto!important;}}
+
+
+.misc-work {margin-top:48px;padding-top:24px;border-top:1px solid var(--rule);}
+.misc-work h3 {font:500 13px/1.5 var(--body);letter-spacing:.1em;color:var(--light);margin-bottom:20px;}
+.misc-row {display:flex;align-items:center;gap:18px;}
+.misc-single {flex:1;min-width:0;margin:0;}
+.misc-sequence {flex:2.5;min-width:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;align-items:center;}
+.misc-work img {display:block;width:100%;height:auto;border:1px solid var(--rule);}
+@media(min-width:701px){.misc-single {flex:1.25;}}
+@media(max-width:700px){
+ .misc-row {overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x proximity;gap:14px;padding-bottom:14px;}
+ .misc-single {flex:0 0 65%;scroll-snap-align:start;}
+ .misc-sequence {flex:0 0 180%;scroll-snap-align:start;gap:8px;}
+ .nav-links li:not(:last-child) .nav-link {font-size:10px;letter-spacing:.055em;padding-left:7px;padding-right:7px;overflow-wrap:normal;}
+ .misc-work {margin-top:32px;}
+}
+
 </style>
 </head>
 <body>
@@ -1014,7 +1056,7 @@ html body #about .software-list li {font-size:10px;}
 <nav>
   <a class="nav-name" id="nav-home" href="#reel">KASPARAS NARAUSKAS</a>
   <ul class="nav-links">
-    <li><a class="nav-link" data-page="story" href="?page=story">Story &amp; Project</a></li>
+    <li><a class="nav-link" data-page="story" href="?page=story">Story &amp; Project/Concept</a></li>
     <li><a class="nav-link" data-page="fx" href="?page=fx">Fx &amp; Animation</a></li>
     <li><button class="nav-link nav-contact" data-target="about">About &amp; Contact</button></li>
   </ul>
@@ -1093,7 +1135,7 @@ html body #about .software-list li {font-size:10px;}
 ══════════════════════════════════════════ -->
 <section class="port-section" id="story">
   <div class="s-head">
-    <h2 class="s-title">Story &amp; Project</h2>
+    <h2 class="s-title">Story &amp; Project/Concept</h2>
     <div class="s-rule"></div>
     
   </div>
@@ -1173,6 +1215,7 @@ html body #about .software-list li {font-size:10px;}
     </div>
   </div>
 
+<section class="misc-work" id="miscellaneous" aria-labelledby="misc-title"><h3 id="misc-title">Miscellaneous work</h3><div class="misc-row" tabindex="0" aria-label="Miscellaneous artwork, scroll horizontally on mobile"><figure class="misc-single"><img loading="lazy" decoding="async" width="1517" height="1143" data-src="https://res.cloudinary.com/twplcz62/image/upload/v1793654879/Robot_arms_girl.jpg" alt="Girl with robotic arms"></figure><div class="misc-sequence" role="group" aria-label="Three-image sequence in reading order"><img loading="lazy" decoding="async" width="565" height="757" data-src="https://res.cloudinary.com/twplcz62/image/upload/v1793655003/Screenshot_2026-11-02_222927.png" alt="Sequence, first image"><img loading="lazy" decoding="async" width="566" height="760" data-src="https://res.cloudinary.com/twplcz62/image/upload/v1793655004/Screenshot_2026-11-02_222934.png" alt="Sequence, second image"><img loading="lazy" decoding="async" width="565" height="761" data-src="https://res.cloudinary.com/twplcz62/image/upload/v1793655005/Screenshot_2026-11-02_222941.png" alt="Sequence, third image"></div><figure class="misc-single"><img loading="lazy" decoding="async" width="3004" height="2096" data-src="https://res.cloudinary.com/twplcz62/image/upload/v1793654866/Creolith_-sabertooth_concept.jpg" alt="Creolith sabertooth concept"></figure></div></section>
 </section>
 
 <!-- ══════════════════════════════════════════
@@ -1426,7 +1469,7 @@ html body #about .software-list li {font-size:10px;}
   const story=document.getElementById('story');
   if(document.getElementById('animatics'))return;
   const gallery=story.querySelector('.project-block');gallery.id='varokarn-gallery';
-  gallery.querySelector('.project-medium').textContent='Concept art, worldbuilding & visual development';
+  gallery.querySelector('.project-medium').textContent='Personal Project currently in development.';
   const animatics=document.createElement('div');animatics.id='animatics';
   const lian=story.querySelector('[data-slot="p2-video"]').closest('.project-block');
   const returnVideo=story.querySelector('video[data-src*="smell_animatic"]');
@@ -1517,16 +1560,16 @@ const storyConfig = JSON.parse(document.getElementById('VAROKARN_SEQUENCE').text
 const falseGodsConfig = JSON.parse(document.getElementById('STORY_SEQUENCE').textContent);
 const REEL_SHOTS = portfolioPage === 'fx' ? FX_REEL_SHOTS.slice(0,3) : [
   {...FX_REEL_SHOTS[3], playToEnd:false, hold:6000},
-  {src:'https://res.cloudinary.com/twplcz62/video/upload/v1793639200/gameclip1.mov',start:0,hold:5000},
+  {src:'https://res.cloudinary.com/twplcz62/video/upload/v1793639200/gameclip1.mov',start:0,hold:5000,playToEnd:true,endMargin:0,fullDuration:true},
   {src: falseGodsConfig.video, poster: falseGodsConfig.poster, start:0, hold:8000, endMargin:.1, wipeDuration:400},
-  {src:'https://res.cloudinary.com/twplcz62/video/upload/v1793639248/Gameclip2.mov',start:0,hold:5000},
+  {src:'https://res.cloudinary.com/twplcz62/video/upload/v1793639248/Gameclip2.mov',start:0,hold:5000,playToEnd:true,endMargin:0,fullDuration:true},
   {src: storyConfig.video, poster: storyConfig.poster, start:0, hold:6000, endMargin:.1, wipeDuration:400},
-  {src: falseGodsConfig.video, poster: falseGodsConfig.poster, start:18, hold:6500, endMargin:.1, wipeDuration:400}
+  {src: falseGodsConfig.video, poster: falseGodsConfig.poster, start:19, hold:7500, endMargin:.1, wipeDuration:400}
 ];
 document.getElementById('reel').setAttribute('aria-label', portfolioPage === 'fx' ? 'Fx & Animation opening reel' : 'Story & Project opening reel');
 // Keep shared contact information after the selected portfolio.
 document.getElementById('work-content').prepend(document.getElementById('about'));
-const pageName = portfolioPage === 'fx' ? 'Fx & Animation' : 'Story & Project';
+const pageName = portfolioPage === 'fx' ? 'Fx & Animation' : 'Story & Project/Concept';
 document.title = 'Kasparas Narauskas · ' + pageName;
 document.querySelector('[property="og:title"]').content = document.title;
 const description = portfolioPage === 'fx' ? 'Hand-drawn FX and animation by Kasparas Narauskas.' : 'Storyboards, animatics and project development by Kasparas Narauskas.';
@@ -1544,7 +1587,7 @@ function reelWindow(item, duration) {
     : Math.min(duration * item.startFraction, Math.max(duration * 0.5, duration - item.hold / 1000 - 0.2));
   const end = Math.max(0.1, duration - (item.endMargin || 0));
   const start = Math.max(0, Math.min(base + (item.startOffset || 0), end - 0.1));
-  return { start, end, wipeAt: Math.max(start, end - (item.wipeDuration || 900) / 1000) };
+  return { start, end, wipeAt: item.fullDuration ? end : Math.max(start, end - (item.wipeDuration || 900) / 1000) };
 }
 
 (function() {
@@ -1592,6 +1635,7 @@ function reelWindow(item, duration) {
       }
     };
     video.ontimeupdate = () => {
+      if(item.fullDuration){if(video === videos[front] && visible && !busy && (video.ended || video.currentTime >= bounds.end)) nextShot();return;}
       if (video === videos[front] && visible && !busy && video.currentTime >= bounds.wipeAt) {
         nextShot();
       }
@@ -1602,6 +1646,7 @@ function reelWindow(item, duration) {
     };
     video.onended = () => {
       if (busy) return;
+      if(item.fullDuration){if(video === videos[front] && visible) nextShot();return;}
       if (video === videos[front] && visible && !busy) nextShot();
       video.currentTime = bounds.start;
       if (visible && (video === videos[front] || video.classList.contains('is-incoming'))) play(video);
@@ -1671,11 +1716,14 @@ function reelWindow(item, duration) {
 
   async function nextShot() {
     if (!visible || busy) return;
+    const current = videos[front];
+    if(REEL_SHOTS[shot].fullDuration && !current.ended && current.currentTime < current.duration - .01) return;
+    clearTimeout(timer);
     busy = true;
     const incomingIndex = (shot + 1) % REEL_SHOTS.length;
     const incoming = videos[incomingIndex];
     const nextIndex = (shot + 1) % REEL_SHOTS.length;
-    const wipeDuration = 0;
+    const wipeDuration = 260;
     reel.style.setProperty('--reel-wipe-duration', wipeDuration + 'ms');
     if (!incoming.getAttribute('src')) setShot(incoming, REEL_SHOTS[nextIndex]);
     else if (Number.isFinite(incoming.duration)) {
@@ -2407,36 +2455,29 @@ function installBoardStrip(root, video, config, prefix) {
 }
 
 function installDesignNotes() {
-  const notes = [
-    ['vk-clerics', 'Designing authority', 'Placeholder: connect one choice in the clerics’ silhouettes, materials or costume to the power dynamic explored in False Gods below.'],
-    ['vk-concept-2', 'Character into performance', 'Placeholder: describe how Gann’s proportions and posture inform the way he occupies the frame and reacts in the following scene.'],
-    ['vk-concept-4', 'A world made visible', 'Placeholder: explain how the soldiers’ equipment expresses the society behind it, and what that tells us about the world beyond this image.']
-  ];
+  const notes = [["vk-logo","The Varokarn","Personal Project currently in development."],["vk-concept-2","Gann","Gann is the protagonist of this story. A member of the Daurem, the half-giants, a people devastated by Imperial abuse, he has spent his entire life exploited by the Ironblood program, physically altered beyond natural limits to become the perfect imperial weapon. The story follows his journey to save the remaining Daurem and dismantle the Caladan Empire’s influence, while dealing with the ramifications of what he has been through."],["vk-clerics","The Exarchs","Decian Hestervane and Lucan “The Aurelian” Valcor are the only two current Exarchs of the Caladan Empire, enduring priests in charge of the Empire’s religious foreign policy. The series would explore the intricacies of their relationship, twisted politics and what operating at such a level really entails."],["vk-concept-4","The Caladan Empire","When the gods abandoned the common realm and magic waned, the discovery of refinable Ossyrium allowed the Caladan Empire to rise as a global power. An alloy capable of retaining magical energy and channelling it through faith, Ossyrium became the foundation of a flourishing civilization and a formidable military industry. With prosperity at home, the Empire turned outward, promising to bring the same progress to neighbouring lands."],["vk-concept-1","The Kharai","In the animatic, Gann chooses to seek out the Kharai, among the few he believes may not turn him away because of their old cultural connection with the Daurem. The Kharai practise Alignment, a rare discipline that requires a still mind to sense and direct force, stress and stored potential energy within objects and living bodies, shaping them into deliberate forms. The more stress an object endures, the more they are able to manipulate it."],["vk-concept-3","Gann’s armour","Gann’s immense physical strength and mental discipline let him exert extraordinary control over Kharai Alignment. During the rite, however, the armour’s growth triggered a traumatic response. The disturbance erupted through him in violent protrusions, and he nearly died trying to contain it. He managed to shape the force into the greatblades that would become his signature weapons."],["vk-concept-5","The Kharai vessel","After the Daurem and Kharai united against the Empire, their resistance became known as the Varokarn. This early vessel, powered by Alignment, reflects the culture formed by their alliance. It passes beside a sacred Keep, one of the ancient structures that became central to both peoples."],["vk-concept-6","The Keeps","Daurem legend says that when the gods withdrew from the world, their tears became pillars of light, reaching from deep beneath the lands into the sky. Strange structures later appeared around these pillars. Called Keeps, they became sacred places of trial, where those who seek the summit face tests of endurance and spirit. The material around the pillars becomes filled with residual magical essence, making it highly prized by the Empire and valuable for refining into Ossyrium."]];
   const supportingLabels = {
-    'vk-clerics': ['Cleric sketches', 'Caladan capital'],
-    'vk-concept-2': ['Pose studies', 'Size comparison'],
-    'vk-concept-4': ['Dominion & Legionnaires']
+    'vk-logo': [], 'vk-concept-2':['Pose studies','Size comparison'],
+    'vk-clerics':['Cleric sketches','Caladan capital',"An Exarch’s weaponized radiance"],
+    'vk-concept-4':['A Dominion'], 'vk-concept-1':['Kharai visual development'],
+    'vk-concept-3':['Armour studies','Silhouette exploration'],
+    'vk-concept-5':[], 'vk-concept-6':['Keep detail','Blender process']
   };
-  notes.push(
-    ['vk-logo', 'The Varokarn', 'A series of stories and concept developments for a proposed two-season series, exploring its world through characters, scenes and visual development.'],
-    ['vk-concept-1', 'The Kharai', 'Placeholder: a short connection between this culture, its visual language and its place in the story.'],
-    ['vk-concept-3', 'Character development', 'Placeholder: connect the armour, silhouette and design studies to the character’s history.'],
-    ['vk-concept-6', 'The Keeps', 'Placeholder: introduce what the Keeps are and why they matter to the people living around them.'],
-    ['vk-concept-5', 'The Kharai vessel', 'Placeholder: explain the vessel’s place in the world through a detail or development study.']
-  );
-  Object.assign(supportingLabels, {
-    'vk-logo': [], 'vk-concept-1': ['Kharai visual development'],
-    'vk-concept-3': ['Armour studies', 'Silhouette exploration'],
-    'vk-concept-6': ['Keep detail', 'Blender process'],
-    'vk-concept-5': []
-  });
+  const supportingCopy = {
+    "An Exarch’s weaponized radiance": 'An Exarch is the highest honor bestowed upon imperial practitioners. Their special connection to the Radiance allows for radiant constructs of immense power.',
+    'A Dominion': 'A Dominion is among the Caladan Empire’s highest forms of soldier. A single Dominion can turn the course of a battle. Through their ascent and devotion, they learn to perceive through their Ossyrium-lined helmets and channel their Radiance into protective barriers and devastating blows.',
+    'Kharai visual development': 'I developed the Kharai’s visual language through reference gathering and silhouette studies, exploring an almost alien, unfamiliar presence. I focused on sculptural forms, controlled shapes and layered clothing, then considered how those choices could connect their appearance to Alignment and their place in the world.'
+  };
+  const gann=document.querySelector('[data-slot="vk-concept-2"]');
+  const logo=document.querySelector('[data-slot="vk-logo"]');
+  if(gann && logo && !gann.closest('.concept-annotation')) logo.after(gann);
   notes.forEach(([slot,title,copy], index) => {
     const art = document.querySelector('[data-slot="' + slot + '"]'); if (!art || art.closest('.concept-annotation')) return;
     const group = document.createElement('div'); group.className = 'concept-annotation'; art.before(group); group.append(art);
     group.classList.add(index % 2 ? 'annotation-left' : 'annotation-right');
     if (slot === 'vk-logo') group.classList.add('annotation-intro');
     const note = document.createElement('aside'); note.className = 'design-note';
-    const label = document.createElement('small'); label.textContent = 'Draft design note';
+    const label = document.createElement('small'); label.textContent = 'World & characters';
     const heading = document.createElement('strong'); heading.textContent = title;
     const text = document.createElement('p'); text.textContent = copy;
     note.append(label,heading,text); group.append(note);
@@ -2445,6 +2486,7 @@ function installDesignNotes() {
       const figure = document.createElement('figure'); figure.className = 'support-placeholder';
       const caption = document.createElement('span'); caption.textContent = name;
       const hint = document.createElement('small'); hint.textContent = 'Image placeholder';
+      if (supportingCopy[name]) hint.textContent = 'Read more';
       figure.append(caption,hint); visuals.append(figure);
     });
     const processImages = {
@@ -2457,6 +2499,12 @@ function installDesignNotes() {
       const figure = visuals.children[i];
       const img = document.createElement('img'); img.src = src; img.alt = figure.querySelector('span').textContent;
       img.loading = 'lazy'; img.decoding = 'async';
+
+      const dimensions = {'Cleric sketches':[1831,942], 'Pose studies':[1617,1157], 'Size comparison':[1786,1141], 'Blender process':[1007,838]}[img.alt];
+      if(dimensions){img.width=dimensions[0];img.height=dimensions[1];figure.style.setProperty('--process-ratio',dimensions[0]+'/'+dimensions[1]);
+        figure.style.setProperty('aspect-ratio',dimensions[0]+'/'+dimensions[1],'important');
+        ['min-height','padding','margin'].forEach(property=>figure.style.setProperty(property,'0','important'));
+        figure.style.setProperty('width','100%','important');figure.style.setProperty('display','block','important');}
       figure.classList.add('has-process-image'); figure.prepend(img);
       figure.querySelector('small').remove();
     });
@@ -2467,9 +2515,17 @@ function installDesignNotes() {
       const open = () => {
         const modal = document.createElement('dialog'); modal.className = 'board-modal'; modal.setAttribute('aria-label', figure.querySelector('span').textContent);
         const close = document.createElement('button'); close.className = 'board-close'; close.textContent = '×'; close.setAttribute('aria-label', 'Close supporting image');
-        const preview = figure.cloneNode(true); preview.removeAttribute('role'); preview.removeAttribute('tabindex'); preview.style.cssText = 'width:100%;max-width:850px;min-height:40vh;margin:auto;transform:none;';
-        preview.style.cursor = 'zoom-out';
-        preview.title = 'Tap to close enlarged study';
+        modal.classList.add('support-dialog');
+        const preview = document.createElement('div'); preview.className='support-preview';
+        const sourceImage=figure.querySelector('img');
+        if(sourceImage){const full=sourceImage.cloneNode();full.loading='eager';preview.append(full);}
+        const title=figure.querySelector('span').textContent;
+        if(supportingCopy[title] || !sourceImage){
+          const copy=document.createElement('div');copy.className='support-copy';
+          const h=document.createElement('h3');h.textContent=title;copy.append(h);
+          if(supportingCopy[title]){const p=document.createElement('p');p.textContent=supportingCopy[title];copy.append(p);}
+          preview.append(copy);
+        }
         modal.append(close,preview); document.body.append(modal);
         const old = document.body.style.overflow; close.onclick = () => modal.close();
         modal.addEventListener('click', event => {
