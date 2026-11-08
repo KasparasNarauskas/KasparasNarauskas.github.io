@@ -3,16 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kasparas Narauskas · Story &amp; Project/Concept</title>
+<title>Kasparas Narauskas · Project &amp; Concept</title>
 <meta name="description" content="Portfolio of Kasparas Narauskas, story artist working in concept art and 2D FX animation. WDKA Rotterdam.">
-<meta property="og:title" content="Kasparas Narauskas · Story &amp; Project/Concept">
+<meta property="og:title" content="Kasparas Narauskas · Project &amp; Concept">
 <meta property="og:description" content="Storyboards, animatics, concept art, and 2D FX animation.">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://res.cloudinary.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Jost:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 <script>
-const portfolioPage = /(?:^|\/)fx(?:\/|$)/.test(location.pathname) || new URLSearchParams(location.search).get('page') === 'fx' || location.hash === '#fx' ? 'fx' : 'story';
+const pageQuery=new URLSearchParams(location.search).get('page');
+const portfolioPage = /(?:^|\/)fx(?:\/|$)/.test(location.pathname) || pageQuery==='fx' || location.hash==='#fx' ? 'fx' : /(?:^|\/)story(?:\/|$)/.test(location.pathname) || pageQuery==='story' ? 'story' : 'project';
 document.documentElement.dataset.portfolio = portfolioPage;
 </script>
 <style>
@@ -1036,6 +1037,49 @@ html body #story .support-placeholder.has-process-image > span {position:absolut
  .misc-work {margin-top:32px;}
 }
 
+
+html[data-portfolio="project"] #fx,html[data-portfolio="project"] #reel,html[data-portfolio="project"] #animatics {display:none!important;}
+html[data-portfolio="story"] #varokarn-gallery,html[data-portfolio="story"] #miscellaneous {display:none!important;}
+.portfolio-crosslink {display:inline-block;margin-top:14px;padding:10px 15px;color:var(--paper);border:1px solid #746557;text-decoration:none;font:500 12px/1.5 var(--body);letter-spacing:.06em;}
+.portfolio-crosslink:hover,.portfolio-crosslink:focus-visible {background:#302521;border-color:#b08773;}
+#varokarn-story,#varokarn-gallery,#varokarn-animatic {scroll-margin-top:110px;}
+@media(min-width:701px){
+ html body #story .concept-annotation > .support-visuals {display:flex!important;flex-direction:column;gap:16px;}
+ html body #story .concept-annotation > .support-visuals:empty {display:none!important;}
+ html body #story .concept-annotation .support-placeholder {width:100%!important;max-width:100%!important;min-width:0!important;margin:0!important;flex:none;}
+ html body #story .concept-annotation .support-placeholder:not(.has-process-image) {aspect-ratio:auto!important;min-height:84px!important;padding:14px!important;}
+ html body #story .concept-annotation .support-placeholder:hover {transform:translateY(-2px)!important;}
+ html body #story .concept-annotation:has(.support-placeholder:hover) > .visdev-slot {transform:none!important;}
+ .misc-row {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px;align-items:center;}
+ .misc-single:first-child {grid-column:1;grid-row:1;}
+ .misc-single:last-child {grid-column:2;grid-row:1;}
+ .misc-sequence {grid-column:1/-1;grid-row:2;gap:14px;}
+}
+@media(min-width:701px) and (max-width:1399px){
+ html body #story .concept-annotation {display:grid;width:100%;max-width:900px;margin:24px auto 40px;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:start;transform:none!important;min-height:0!important;}
+ html body #story .concept-annotation > .visdev-slot {width:100%;grid-column:1/-1;grid-row:1;}
+ html body #story .concept-annotation > .design-note {position:relative;top:auto;left:auto;right:auto;width:100%;grid-row:2;grid-column:1;}
+ html body #story .concept-annotation > .support-visuals {grid-column:2;}
+}
+@media(min-width:1400px){
+ html body #story .concept-annotation {display:block;width:900px;max-width:900px;margin:24px auto 40px;transform:none!important;}
+ html body #story .concept-annotation > .visdev-slot {width:900px;max-width:none;}
+ html body #story .concept-annotation > .design-note {position:absolute;width:min(320px,calc((100vw - 900px)/2 - 58px));max-width:none;top:20px;padding-top:0;}
+ html body #story .annotation-left > .design-note {left:928px;right:auto;}
+ html body #story .annotation-right > .design-note {right:928px;left:auto;}
+ html body #story .concept-annotation > .support-visuals {top:var(--side-support-top,240px);}
+ html body #story .concept-annotation > .design-note.note-pending {transform:translateY(14px)!important;}
+ html body #story .concept-annotation > .design-note:not(.note-pending) {transform:none!important;}
+}
+@media(max-width:700px){
+ nav {height:98px!important;}
+ main {padding-top:98px!important;}
+ .reel {top:98px!important;}
+ .nav-links {width:100%;display:grid;grid-template-columns:1.2fr .65fr 1.1fr 1.1fr;gap:5px;}
+ .nav-links li .nav-link,.nav-links li:not(:last-child) .nav-link,.nav-links li:last-child .nav-link {font-size:10px;letter-spacing:.04em;padding:7px 4px;line-height:1.4;min-height:43px;margin-left:0;}
+ #varokarn-story,#varokarn-gallery,#varokarn-animatic {scroll-margin-top:116px;}
+}
+
 </style>
 </head>
 <body>
@@ -1052,7 +1096,7 @@ html body #story .support-placeholder.has-process-image > span {position:absolut
 <nav>
   <a class="nav-name" id="nav-home" href="#reel">KASPARAS NARAUSKAS</a>
   <ul class="nav-links">
-    <li><a class="nav-link" data-page="story" href="?page=story">Story &amp; Project/Concept</a></li>
+    <li><a class="nav-link" data-page="project" href="?page=project">Project &amp; Concept</a></li><li><a class="nav-link" data-page="story" href="?page=story">Story</a></li>
     <li><a class="nav-link" data-page="fx" href="?page=fx">Fx &amp; Animation</a></li>
     <li><button class="nav-link nav-contact" data-target="about">About &amp; Contact</button></li>
   </ul>
@@ -1514,7 +1558,7 @@ function playbackSource(source, portfolio = false) {
     }, 950);
   };
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let splashSeen = /\/(story|fx)\//.test(location.pathname) || new URLSearchParams(location.search).has('page');
+  let splashSeen = /\/(project|story|fx)\//.test(location.pathname) || new URLSearchParams(location.search).has('page');
   try { splashSeen = splashSeen || !!sessionStorage.getItem('splashSeen'); } catch (_) {}
   if (splashSeen || reducedMotion) {
     s.style.display = 'none';
@@ -1565,14 +1609,14 @@ const REEL_SHOTS = portfolioPage === 'fx' ? FX_REEL_SHOTS.slice(0,3) : [
 document.getElementById('reel').setAttribute('aria-label', portfolioPage === 'fx' ? 'Fx & Animation opening reel' : 'Story & Project opening reel');
 // Keep shared contact information after the selected portfolio.
 document.getElementById('work-content').prepend(document.getElementById('about'));
-const pageName = portfolioPage === 'fx' ? 'Fx & Animation' : 'Story & Project/Concept';
+const pageName = portfolioPage === 'fx' ? 'Fx & Animation' : portfolioPage === 'story' ? 'Story' : 'Project & Concept';
 document.title = 'Kasparas Narauskas · ' + pageName;
 document.querySelector('[property="og:title"]').content = document.title;
 const description = portfolioPage === 'fx' ? 'Hand-drawn FX and animation by Kasparas Narauskas.' : 'Storyboards, animatics and project development by Kasparas Narauskas.';
 document.querySelector('meta[name="description"]').content = description;
 document.querySelector('[property="og:description"]').content = description;
 document.querySelectorAll('[data-page]').forEach(link => {
-  const root = new URL(/\/(story|fx)\/(?:index.html)?$/.test(location.pathname) ? '../' : './', location.href);
+  const root = new URL(/\/(project|story|fx)\/(?:index.html)?$/.test(location.pathname) ? '../' : './', location.href);
   link.href = new URL(link.dataset.page + '/', root).href + (new URLSearchParams(location.search).has('edit') ? '?edit' : '');
   link.classList.toggle('active', link.dataset.page === portfolioPage);
   if (link.dataset.page === portfolioPage) link.setAttribute('aria-current','page');
@@ -1588,6 +1632,7 @@ function reelWindow(item, duration) {
 
 (function() {
   const reel = document.getElementById('reel');
+  if(portfolioPage === 'project') return;
   const videos = [...reel.querySelectorAll('.reel-video')];
   // One persistent decoder per clip: never replace a healthy source on loop.
   while (videos.length < REEL_SHOTS.length) {
@@ -2486,7 +2531,8 @@ function installDesignNotes() {
       figure.append(caption,hint); visuals.append(figure);
     });
     const processImages = {
-      'vk-clerics': ['https://res.cloudinary.com/twplcz62/image/upload/v1793639163/cleric_iterations.png', null],
+      'vk-clerics': ['https://res.cloudinary.com/twplcz62/image/upload/v1793639163/cleric_iterations.png', null, 'https://res.cloudinary.com/twplcz62/image/upload/v1794151228/Screenshot_2026-11-08_161818.png'],
+      'vk-concept-4': ['https://res.cloudinary.com/twplcz62/image/upload/v1794151244/Screenshot_2026-11-08_161936.png'],
       'vk-concept-2': ['https://res.cloudinary.com/twplcz62/image/upload/v1793625683/gann_reference_thing.png', 'https://res.cloudinary.com/twplcz62/image/upload/v1793639163/size_comparrison.png'],
       'vk-concept-6': [null, 'https://res.cloudinary.com/twplcz62/image/upload/v1793639162/keep_blender.png']
     };
@@ -2496,7 +2542,7 @@ function installDesignNotes() {
       const img = document.createElement('img'); img.src = src; img.alt = figure.querySelector('span').textContent;
       img.loading = 'lazy'; img.decoding = 'async';
 
-      const dimensions = {'Cleric sketches':[1831,942], 'Pose studies':[1617,1157], 'Size comparison':[1786,1141], 'Blender process':[1007,838]}[img.alt];
+      const dimensions = {'Cleric sketches':[1831,942], 'Pose studies':[1617,1157], 'Size comparison':[1786,1141], 'Blender process':[1007,838], 'An Exarch’s weaponized radiance':[1448,1001], 'A Dominion':[1227,1137]}[img.alt];
       if(dimensions){img.width=dimensions[0];img.height=dimensions[1];figure.style.setProperty('--process-ratio',dimensions[0]+'/'+dimensions[1]);
         figure.style.setProperty('aspect-ratio',dimensions[0]+'/'+dimensions[1],'important');
         ['min-height','padding','margin'].forEach(property=>figure.style.setProperty(property,'0','important'));
@@ -2660,7 +2706,7 @@ installDesignNotes();
 (function(){
   const groups=[...document.querySelectorAll('.concept-annotation')];
   function fitNotes(){groups.forEach(group=>{
-    if(!matchMedia('(min-width:1500px)').matches){group.style.removeProperty('min-height');return;}
+    if(!matchMedia('(min-width:1400px)').matches){group.style.removeProperty('min-height');return;}
     const note=group.querySelector(':scope > .design-note:not(.support-visuals)');
     const studies=group.querySelector(':scope > .support-visuals');
     const art=group.querySelector(':scope > .visdev-slot');
@@ -2676,6 +2722,27 @@ installDesignNotes();
 })();
 initSequenceViewer('sequence', 'sequence-mount', 'STORY_SEQUENCE');
 initSequenceViewer('varokarn', 'vid-varokarn', 'VAROKARN_SEQUENCE', true);
+
+(function splitPortfolioPages(){
+ const root=new URL(/\/(project|story|fx)\/(?:index.html)?$/.test(location.pathname)?'../':'./',location.href);
+ const edit=new URLSearchParams(location.search).has('edit')?'?edit':'';
+ const gallery=document.getElementById('varokarn-gallery');
+ const animatics=document.getElementById('animatics');
+ const heading=document.querySelector('#story > .s-head .s-title');
+ heading.textContent=portfolioPage==='story'?'Story':'Project & Concept';
+ const falseGods=document.getElementById('sequence-mount').closest('.project-block');
+ const varokarn=document.getElementById('vid-varokarn').closest('.project-block');
+ falseGods.id='varokarn-story';varokarn.id='varokarn-animatic';
+ const addLink=(parent,text,destination,id)=>{
+   if(document.getElementById(id))return;
+   const a=document.createElement('a');a.id=id;a.className='portfolio-crosslink';
+   a.textContent=text+' →';a.href=new URL(destination.split('#')[0],root).href+edit+'#'+destination.split('#')[1];parent.append(a);
+ };
+ addLink(gallery.querySelector('.project-label'),'Supporting story animatics','story/#varokarn-story','concept-to-story');
+ [falseGods,varokarn].forEach((block,i)=>addLink(block.querySelector('.project-label'),'See supporting concept art','project/#varokarn-gallery','story-to-concept-'+i));
+ if(location.hash && location.hash!=='#fx') requestAnimationFrame(()=>requestAnimationFrame(()=>document.getElementById(location.hash.slice(1))?.scrollIntoView({behavior:'instant'})));
+})();
+
 
 </script>
 </body>
